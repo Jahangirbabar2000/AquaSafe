@@ -1,0 +1,50 @@
+[
+  {
+    "Country": "Pakistan",
+    "date": "7/4/14",
+    "time": "11:10",
+    "pH": 10.5,
+    "Turbidity": 1.7,
+    "Conductivity": 160
+  },
+  {
+    "Country": "Bangladesh",
+    "date": "23/05/15",
+    "time": "13:49",
+    "pH": 12.1,
+    "Turbidity": 0.4,
+    "Conductivity": 678
+  },
+  {
+    "Country": "Bangladesh",
+    "date": "16/06/11",
+    "time": "4:45",
+    "pH": 11.5,
+    "Turbidity": 0.4,
+    "Conductivity": 1070
+  },
+  {
+    "Country": "Pakistan",
+    "date": "28/04/18",
+    "time": "21:08",
+    "pH": 6.3,
+    "Turbidity": 1.7,
+    "Conductivity": 757
+  },
+  {
+    "Country": "Bangladesh",
+    "date": "30/03/13",
+    "time": "12:37",
+    "pH": 1.5,
+    "Turbidity": 1.4,
+    "Conductivity": 645
+  },
+  {
+    "Country": "Afghanistan",
+    "date": "8/6/04",
+    "time": "5:40",
+    "pH": 9.1,
+    "Turbidity": 0.8,
+    "Conductivity": 697
+  }
+]

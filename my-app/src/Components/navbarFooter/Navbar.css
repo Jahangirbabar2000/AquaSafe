@@ -1,0 +1,6 @@
+@media(min-width:600px) {
+    .navbar {
+        min-height: 8.5vh;
+        align-items: flex-start;
+    }
+}

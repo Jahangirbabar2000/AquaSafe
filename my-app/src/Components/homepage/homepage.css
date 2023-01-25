@@ -1,0 +1,233 @@
+/* orange in asicoonect: (238,130,32) */
+/* blue in asicoonet: (29,39,95) */
+
+
+.title {
+  background-color: white;
+  height: 14 cm;
+  display: flex;
+  /* border: 3px solid black; */
+}
+
+.orange{
+  color: rgb(238, 130, 32)
+}
+
+.blue{
+  color: rgb(29,39,95)
+}
+
+.title-child {
+  flex: 1;
+  /* border: 2px solid yellow */
+    /* border: 3px solid black; */
+}
+
+.title-child:first-child {
+  /* background-color: black; */
+  padding-left: 1cm;
+  padding-top: 6cm;
+  min-width: 63%;
+  /* border: 2px solid black; */
+}
+.title-child:last-child {
+  /* background-color: black; */
+}
+
+#title {
+  font-size: 1cm;
+}
+
+#title-sub {
+  /* border: 2px solid black; */
+  margin-top: 2%;
+  font-size: 0.8cm;
+  margin-bottom: 0;
+}
+#title-sub2{
+   /* border: 2px solid black; */
+  font-size: 0.5cm;
+  }
+
+#regards {
+  font-size: 0.3cm;
+}
+
+.more {
+  /* display: flex; */
+  background-color: white;
+  padding-top: 0.5cm;
+  border-top: 2px solid whitesmoke;
+  height: 14cm;
+  /* border: 2px solid yellow; */
+}
+
+.andmore {
+  border-top: 2px solid whitesmoke;
+  /* background-color: green; */
+  height: 15cm;
+  display: flex;
+}
+
+#third-title {
+  margin: 8vh;
+  width: 50%;
+}
+
+.pic-div {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin-top: 10vh;
+  margin-right: 5vh;
+  width: 70%;
+  height: 50vh;
+}
+.imgClass {
+  width: 100%;
+  height: 100%;
+}
+
+.pic-div:hover {
+  box-shadow: 5px 10px 15px 0 rgba(0, 0, 0, 0.2),
+   2px 8px 22px 0 rgba(0, 0, 0, 0.19);
+}
+
+#third-picture {
+  /* max-height: 5cm;*/
+  max-width: 5cm;
+  border: 5px solid black;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+/* .resize {
+    width: 300px;
+    height: auto;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+} */
+
+.about {
+  background-color: yellow;
+  height: 5cm;
+}
+
+.top-img {
+  height: 12cm;
+  padding-left: 34%;
+  padding-top: 9%;
+  /* margin-top: 1cm; */
+}
+
+#heading {
+  margin-top: 1vh;
+  /* border: 2px solid yellow; */
+  text-align: center;
+  color: cadetblue;
+}
+
+.Info-container {
+  margin: 6vh;
+  display: flex;
+  justify-content: space-between;
+}
+
+.Info:hover {
+  box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.2),
+    6px 6px 6px 0 rgba(0, 0, 0, 0.19);
+}
+.Info {
+  /* margin-top: 3cm; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  /* margin: auto; */
+  margin-top: 1cm;
+  margin-left: auto;
+  margin-right: auto;
+  height: 40vh;
+  max-width: 47vh;
+  /* min-width: 2cm; */
+  width: 50%;
+  background-color: white;
+  /* border: 10px solid yellow; */
+  text-align: center;
+  padding-top: 1cm;
+  /* display: block; */
+}
+
+/* The css below  is for the nav bar */
+.logo-img {
+  height: 70px;
+  /* border-right: 3px solid grey; */
+}
+.logo-img-login {
+  height: 70px;
+  /* border-right: 3px solid grey; */
+}
+
+.nav-container {
+  /* border-bottom:  100px solid black;  */
+  /* border:  10px solid black; */
+  display: flex;
+  height: 1.9cm;
+  border: 10px;
+  max-width: auto;
+  background-color: white;
+  border-bottom: 2px solid whitesmoke;
+  position: sticky;
+  top: 0;
+}
+
+.nav-ul {
+  display: flex;
+  list-style-type: none;
+  margin-left: 30px;
+  padding: 0;
+  /* position: absolute; */
+  right: 0;
+  max-width: auto;
+  height: 30px;
+  /* border: 3px solid blue; */
+}
+
+.nav-li {
+  margin: 5px;
+  height: 40px;
+}
+
+.Navbar-img {
+  height: 40px;
+  /* border-right: 3px solid grey; */
+  padding-right: 10px;
+  /* padding-left: 5px; */
+  /* margin-left: 5px; */
+}
+
+#user {
+  height: 55px;
+  position: absolute;
+  right: 0;
+  margin-top: 10px;
+  margin-right: 15px;
+  max-width: auto;
+}
+
+#login {
+  position: absolute;
+  right: 0;
+  margin-top: 0.8%;
+  margin-right: 0.6%;
+  max-width: auto;
+}
+
+#visitor {
+  position: absolute;
+  right: 0;
+  margin-top: 0.8%;
+  margin-right: 5.5%;
+  max-width: auto;
+}
+
+.look{
+  margin-top: 0.5cm;
+}
