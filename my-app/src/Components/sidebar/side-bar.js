@@ -22,7 +22,7 @@ export default function Sidebar() {
           </Link>
         </li>
         <li>
-          <Link to="/notifications">
+          <Link to="/sites">
             <ContentPasteRoundedIcon style={{ fontSize: 20 }} />
             <span className="sidebar-text">Projects</span>
           </Link>
@@ -34,13 +34,13 @@ export default function Sidebar() {
           </Link>
         </li>
         <li>
-          <Link to="/">
+          <Link to="/sites">
             <RouterRoundedIcon style={{ fontSize: 20 }} />
             <span className="sidebar-text">Devices</span>
           </Link>
         </li>
         <li>
-          <Link to="/notifications">
+          <Link to="/sites">
             <SensorsRoundedIcon style={{ fontSize: 20 }} />
             <span className="sidebar-text">Sensors</span>
           </Link>
