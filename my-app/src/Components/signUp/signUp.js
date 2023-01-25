@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './signUp.css';
 import axios from 'axios';
+import Navbar from "../navbar/navbar.js";
 
 function SignUp() {
     const [firstName, setFirstName] = useState('');
@@ -57,7 +58,9 @@ function SignUp() {
     };
 
     return (<div>
-        <h3>Sign Up</h3>
+        <Navbar />
+        <br/>
+        <h1>Create User</h1>
         <form onSubmit={handleSubmit}>
             <label htmlFor="first-name">First Name:</label><br />
             <input

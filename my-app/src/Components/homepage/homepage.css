@@ -1,7 +1,6 @@
 /* orange in asicoonect: (238,130,32) */
 /* blue in asicoonet: (29,39,95) */
 
-
 .title {
   background-color: white;
   height: 14 cm;
@@ -9,28 +8,25 @@
   /* border: 3px solid black; */
 }
 
-.orange{
-  color: rgb(238, 130, 32)
+.orange {
+  color: rgb(238, 130, 32);
 }
 
-.blue{
-  color: rgb(29,39,95)
+.blue {
+  color: rgb(29, 39, 95);
 }
 
 .title-child {
   flex: 1;
   /* border: 2px solid yellow */
-    /* border: 3px solid black; */
+  /* border: 3px solid black; */
 }
 
 .title-child:first-child {
-
   padding-left: 1cm;
   padding-top: 6cm;
   min-width: 63%;
-
 }
-
 
 #title {
   font-size: 1cm;
@@ -41,9 +37,9 @@
   font-size: 0.8cm;
   margin-bottom: 0;
 }
-#title-sub2{
+#title-sub2 {
   font-size: 0.5cm;
-  }
+}
 
 #regards {
   font-size: 0.3cm;
@@ -81,25 +77,16 @@
 
 .pic-div:hover {
   box-shadow: 5px 10px 15px 0 rgba(0, 0, 0, 0.2),
-   2px 8px 22px 0 rgba(0, 0, 0, 0.19);
+    2px 8px 22px 0 rgba(0, 0, 0, 0.19);
 }
 
 #third-picture {
-  /* max-height: 5cm;*/
   max-width: 5cm;
   border: 5px solid black;
   object-fit: contain;
   width: 100%;
   height: 100%;
 }
-
-/* .resize {
-    width: 300px;
-    height: auto;
-    object-fit: contain;
-    width: 100%;
-    height: 100%;
-} */
 
 .about {
   background-color: yellow;
@@ -131,24 +118,21 @@
     6px 6px 6px 0 rgba(0, 0, 0, 0.19);
 }
 .Info {
-  /* margin-top: 3cm; */
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  /* margin: auto; */
   margin-top: 1cm;
   margin-left: auto;
   margin-right: auto;
   height: 40vh;
   max-width: 47vh;
-  /* min-width: 2cm; */
   width: 50%;
   background-color: white;
-  /* border: 10px solid yellow; */
   text-align: center;
   padding-top: 1cm;
   /* display: block; */
 }
 
-/* The css below  is for the nav bar */
+/* THIS CSS IS FOR HOMEPAGE NAVBAR */
+
 .logo-img {
   height: 70px;
   /* border-right: 3px solid grey; */
@@ -160,10 +144,11 @@
 
 .nav-container {
   /* border-bottom:  100px solid black;  */
-  /* border:  10px solid black; */
+  /* border: 10px solid black; */
   display: flex;
   height: 1.9cm;
   border: 10px;
+  width: auto;
   max-width: auto;
   background-color: white;
   border-bottom: 2px solid whitesmoke;
@@ -178,12 +163,14 @@
   padding: 0;
   /* position: absolute; */
   right: 0;
-  max-width: auto;
+  max-width: 1cm;
   height: 30px;
-  /* border: 3px solid blue; */
+  border: 3px solid blue;
 }
 
 .nav-li {
+  border: 3px solid blue;
+
   margin: 5px;
   height: 40px;
 }
@@ -221,6 +208,6 @@
   max-width: auto;
 }
 
-.look{
+.look {
   margin-top: 0.5cm;
 }

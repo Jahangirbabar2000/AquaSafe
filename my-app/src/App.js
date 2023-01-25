@@ -7,7 +7,6 @@ import Routes from './Components/routes';
 function App() {
   return (
     <div className="main">
-      {/* <Navbar /> */}
       <Routes />
       <Footer />
     </div >
