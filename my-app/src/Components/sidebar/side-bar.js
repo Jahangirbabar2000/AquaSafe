@@ -52,7 +52,7 @@ export default function Sidebar() {
           </Link>
         </li>
         <li id="logout">
-          <Link to="/userstable">
+          <Link to="/homepage">
             <LogoutRoundedIcon style={{ fontSize: 20 }} />
             <span className="sidebar-text">Logout</span>
           </Link>

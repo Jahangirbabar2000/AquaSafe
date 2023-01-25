@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './signUp.css';
 import axios from 'axios';
 import Navbar from "../navbar/navbar.js";
+import Sidebar from "../sidebar/side-bar.js";
 
 function SignUp() {
     const [firstName, setFirstName] = useState('');
@@ -59,6 +60,7 @@ function SignUp() {
 
     return (<div>
         <Navbar />
+        <Sidebar />
         <br/>
         <h1>Create User</h1>
         <form onSubmit={handleSubmit}>

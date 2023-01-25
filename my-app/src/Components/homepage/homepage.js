@@ -8,6 +8,7 @@ import Footer from "./footer.js";
 import Sidebar from "../sidebar/side-bar";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -17,8 +18,7 @@ function Home() {
       <Second />
 
       <Third />
-      <div className="">
-      </div>
+      <div className=""></div>
     </div>
   );
 }
@@ -27,18 +27,18 @@ export default Home;
 
 function Navbarhome() {
   return (
-    // <div className="nav-container">
     <nav className="nav-container">
       <img className="logo-img" src={logo} alt="logo" />
       {/* <a id="login" href="url">login</a> */}
+      <Link to="/sites">
       <Button id="login" variant="primary">
         Login
       </Button>{" "}
+      </Link>
       {/* <Button id="visitor" variant="primary">
         Take a peek
       </Button>{" "} */}
     </nav>
-    // </div>
   );
 }
 
