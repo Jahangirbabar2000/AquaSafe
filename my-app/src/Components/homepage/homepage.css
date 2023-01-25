@@ -24,28 +24,24 @@
 }
 
 .title-child:first-child {
-  /* background-color: black; */
+
   padding-left: 1cm;
   padding-top: 6cm;
   min-width: 63%;
-  /* border: 2px solid black; */
+
 }
-.title-child:last-child {
-  /* background-color: black; */
-}
+
 
 #title {
   font-size: 1cm;
 }
 
 #title-sub {
-  /* border: 2px solid black; */
   margin-top: 2%;
   font-size: 0.8cm;
   margin-bottom: 0;
 }
 #title-sub2{
-   /* border: 2px solid black; */
   font-size: 0.5cm;
   }
 
@@ -54,17 +50,14 @@
 }
 
 .more {
-  /* display: flex; */
   background-color: white;
   padding-top: 0.5cm;
   border-top: 2px solid whitesmoke;
   height: 14cm;
-  /* border: 2px solid yellow; */
 }
 
 .andmore {
   border-top: 2px solid whitesmoke;
-  /* background-color: green; */
   height: 15cm;
   display: flex;
 }
