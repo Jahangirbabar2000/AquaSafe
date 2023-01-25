@@ -1,11 +1,15 @@
+import "./footer.css";
+
 const footer = () => {
   return (
     <footer
+    className="container"
       style={{
         backgroundColor: "#474647",
         color: "#fff",
         height: "auto",
-        display: "flex"
+        display: "flex",
+        // zIndex:"3"
       }}
     >
       <div
@@ -14,7 +18,8 @@ const footer = () => {
           paddingTop: "2%",
           sticky: "bottom",
           display: "inline-block",
-          paddingBottom: "2%"
+          paddingBottom: "2%",
+          // zIndex: "2"
         }}
       >
         <h2>About Us</h2>

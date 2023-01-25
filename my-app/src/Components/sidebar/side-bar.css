@@ -33,10 +33,10 @@
 }
 
 .sidenav {
+    /* z-index: -1; */
     height: 100%;
-    width: 33vh;
+    width: 32vh;
     position: fixed;
-    /* z-index: -1;   */
     top: 1;
     left: 0;
     background-color: #2A3247;

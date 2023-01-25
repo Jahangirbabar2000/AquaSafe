@@ -5,6 +5,7 @@
   background-color: white;
   height: 14 cm;
   display: flex;
+  padding-bottom: 1%;
   /* border: 3px solid black; */
 }
 
@@ -27,6 +28,8 @@
   padding-top: 6cm;
   min-width: 63%;
 }
+
+
 
 #title {
   font-size: 1cm;
@@ -95,7 +98,7 @@
 
 .top-img {
   height: 12cm;
-  padding-left: 34%;
+  padding-left: 30%;
   padding-top: 9%;
   /* margin-top: 1cm; */
 }
@@ -134,7 +137,7 @@
 /* THIS CSS IS FOR HOMEPAGE NAVBAR */
 
 .logo-img {
-  height: 70px;
+  height: 50px;
   /* border-right: 3px solid grey; */
 }
 .logo-img-login {
@@ -146,7 +149,7 @@
   /* border-bottom:  100px solid black;  */
   /* border: 10px solid black; */
   display: flex;
-  height: 1.9cm;
+  height: 1.5cm;
   border: 10px;
   width: auto;
   max-width: auto;
@@ -197,7 +200,7 @@
   right: 0;
   margin-top: 0.8%;
   margin-right: 0.6%;
-  max-width: auto;
+  width: 5%;
 }
 
 #visitor {
