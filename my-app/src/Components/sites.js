@@ -11,6 +11,8 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import Sidebar from './sidebar/side-bar';
 import "./sites.css";
+import Navbar from "./navbar/navbar.js"
+
 function App(props) {
 
     React.useEffect(() => {     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -34,6 +36,7 @@ function App(props) {
 
     return (
         <div>
+            <Navbar />
             <Sidebar />
             <Grid container pl={40} pt={6} pb={10} >
                 <Grid item xs={3} > {/* Left small section*/}
