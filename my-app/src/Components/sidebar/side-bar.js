@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./side-bar.css";
+import { Link } from "react-router-dom";
+
 import TvRoundedIcon from "@mui/icons-material/TvRounded";
 import ContentPasteRoundedIcon from "@mui/icons-material/ContentPasteRounded";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
@@ -8,7 +10,7 @@ import SensorsRoundedIcon from "@mui/icons-material/SensorsRounded";
 import WifiRoundedIcon from "@mui/icons-material/WifiRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
-import { Link } from "react-router-dom";
+import GroupIcon from "@mui/icons-material/Group";
 
 export default function Sidebar() {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -49,6 +51,12 @@ export default function Sidebar() {
           <Link to="/notifications">
             <NotificationsRoundedIcon style={{ fontSize: 20 }} />
             <span className="sidebar-text">Notifications</span>
+          </Link>
+        </li>
+        <li>
+          <Link to="/userstable">
+            <GroupIcon style={{ fontSize: 20 }} />
+            <span className="sidebar-text">Users</span>
           </Link>
         </li>
         <li id="logout">

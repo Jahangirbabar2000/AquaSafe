@@ -4,11 +4,10 @@ import First from "./first.js";
 import Second from "./second";
 import Third from "./third";
 import logo from "./logo.jpg";
-import Footer from "./footer.js";
-import Sidebar from "../sidebar/side-bar";
+// import Sidebar from "../sidebar/side-bar";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 
 function Home() {
   return (
