@@ -35,15 +35,16 @@ function SignUp() {
     };
 
     const config = {
-        "headers":{
-          "Content-Type":"application/json"
-        }}
-    const postData = async (data) => { await axios.post('http://localhost:5000', data,config); }
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+    const postData = async (data) => { await axios.post('http://localhost:5000', data, config); }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         // validate form and submit data
-        
+
         const formData = JSON.stringify({
             firstName,
             lastName,
@@ -60,8 +61,7 @@ function SignUp() {
 
     return (<div>
         <Navbar />
-        <Sidebar />
-        <br/>
+        <br />
         <h1>Create User</h1>
         <form onSubmit={handleSubmit}>
             <label htmlFor="first-name">First Name:</label><br />

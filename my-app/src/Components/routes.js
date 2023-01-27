@@ -21,6 +21,7 @@ function routes() {
         <Route path="/dashboard" element={<Visualization />} />
         <Route path="/sites" element={<Sites />} />
         <Route path="/homepage" element={<Homepage />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </div>
 
