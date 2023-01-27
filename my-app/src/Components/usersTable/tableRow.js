@@ -5,12 +5,12 @@ function TableRow(props) {
   return (
     <>
       <tr>
-        <td>{data.firstName}</td>
-        <td>{data.lastName}</td>
-        <td>{data.email}</td>
-        <td>{data.designation}</td>
-        <td>{data.country}</td>
-        <td>{data.site}</td>
+        <td>{data.FirstName}</td>
+        <td>{data.LastName}</td>
+        <td>{data.Email}</td>
+        <td>{data.Designation}</td>
+        <td>{data.Country}</td>
+        <td>{data.Site}</td>
       </tr>
     </>
   );

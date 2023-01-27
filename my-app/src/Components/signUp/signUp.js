@@ -62,8 +62,11 @@ function SignUp() {
     return (<div>
         <Navbar />
         <br />
-        <h1>Create User</h1>
         <form onSubmit={handleSubmit}>
+            <h1>Create User</h1>
+            <br />
+            <br />
+            <br />
             <label htmlFor="first-name">First Name:</label><br />
             <input
                 type="text"

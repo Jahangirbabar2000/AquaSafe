@@ -22,7 +22,7 @@ import "./visualization.css";
 import Navbar from "./navbar/navbar.js";
 
 function App(props) {
-  setTimeout(function() {
+  setTimeout(function () {
     window.dispatchEvent(new Event("resize"));
   }, 1000);
 
@@ -35,6 +35,9 @@ function App(props) {
       console.log(error);
     });
 
+  const [data, setData] = React.useState([]);
+  const [inputText, setInputText] = React.useState("");
+
   React.useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP
     const L = require("leaflet");
@@ -44,9 +47,13 @@ function App(props) {
       iconUrl: require("leaflet/dist/images/marker-icon.png"),
       shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
+
+    axios.get("http://localhost:8080/data")
+      .then(response => setData(response.data))
+      .catch(error => console.log(error));
+
   }, []);
 
-  const [inputText, setInputText] = React.useState("");
   let inputHandler = e => {
     // CODE FOR IMPLEMENTATOIN OF SEARCH BAR
     //convert input text to lower case
@@ -188,7 +195,7 @@ function App(props) {
               <h3>pH</h3>
               <h6>(Scale 0-14)</h6>
               <ResponsiveContainer height={160}>
-                <BarGraph data={dummyData} />
+                <BarGraph data={data} />
               </ResponsiveContainer>
               <h3>Turbidity (NTU)</h3>
               <h6>(Nephelometric Turbidity Units)</h6>

@@ -10,7 +10,8 @@ function UsersTable() {
   const [usersData, setUsersData] = useState([]);
 
   const getUsersData = async (req, res) => {
-    res = await axios.get("http://localhost:5000/users");
+    res = await axios.get("http://localhost:8080/activeUsers");
+    console.log(res.data);
     setUsersData(res.data);
   };
 
@@ -40,7 +41,7 @@ function UsersTable() {
           </thead>
           <tbody>
             {usersData.map(user => {
-              return <TableRow user={user} />;
+              return <TableRow key={user.Id} user={user} />;
             })}
           </tbody>
         </Grid>

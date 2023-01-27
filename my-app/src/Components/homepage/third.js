@@ -3,6 +3,7 @@ import "./homepage.css";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import visual from "./visualization2.png";
+import { Link } from "react-router-dom";
 
 export default function Third() {
   return (
@@ -12,7 +13,10 @@ export default function Third() {
         <p id="title-sub">
           Visitors can access public data of their local water bodies.
         </p>
-        <Button className="look" variant="primary">Take a Look</Button>{" "}
+        <Link to="/dashboard">
+          <Button className="look" variant="primary">Take a Look</Button>{" "}
+        </Link>
+
       </div>
 
       <div className="pic-div">

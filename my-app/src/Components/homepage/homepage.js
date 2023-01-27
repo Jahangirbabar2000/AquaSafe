@@ -15,7 +15,6 @@ function Home() {
       <Navbarhome />
       <First />
       <Second />
-
       <Third />
       <div className=""></div>
     </div>
@@ -29,7 +28,7 @@ function Navbarhome() {
     <nav className="nav-container">
       <img className="logo-img" src={logo} alt="logo" />
       {/* <a id="login" href="url">login</a> */}
-      <Link to="/sites">
+      <Link to="/Login">
       <Button id="login" variant="primary">
         Login
       </Button>{" "}

@@ -32,6 +32,14 @@ app.get('/data', (req, res) => {
     });
 });
 
+app.get('/activeUsers', (req, res) => {
+    connection.query('SELECT * from users;', (err, rows) => {
+        if (err) throw err;
+
+        res.send(rows);
+    });
+});
+
 // Start the server
 app.listen(8080, () => {
     console.log('Server is running on port 8080');

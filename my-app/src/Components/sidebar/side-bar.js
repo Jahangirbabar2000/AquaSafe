@@ -42,7 +42,7 @@ export default function Sidebar() {
           </Link>
         </li>
         <li>
-          <Link to="/signupgit ">
+          <Link to="/signup">
             <SensorsRoundedIcon style={{ fontSize: 20 }} />
             <span className="sidebar-text">Sensors</span>
           </Link>
