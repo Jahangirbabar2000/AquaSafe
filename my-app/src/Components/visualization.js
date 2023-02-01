@@ -19,6 +19,8 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import "./visualization.css";
+import NewButton from './button/button';
+import { Link } from 'react-router-dom';
 import Navbar from "./navbar/navbar.js";
 
 function App(props) {
@@ -224,7 +226,14 @@ function App(props) {
             </Grid>
           </Grid>
         </Grid>
+        <Grid container pl={150}>
+          <Link to="/sites">
+            <NewButton text={"Back"}>
+            </NewButton>
+          </Link>
+        </Grid>
       </Grid>
+      
     </div>
   );
 }
