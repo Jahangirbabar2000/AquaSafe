@@ -3,12 +3,13 @@ import Footer from './Components/navbarFooter/Footer'
 import "./App.css";
 import Routes from './Components/routes';
 import Device from "./Components/devices/devices.js"
+import AddSensor from "./Components/Sensor/addSensor";
 
 
 function App() {
   return (
     <div className="main">
-    <Device />
+    <AddSensor />
       {/* <Routes /> */}
       {/* <Footer /> */}
     </div >
