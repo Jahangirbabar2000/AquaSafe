@@ -1,7 +1,7 @@
-
-form{
-text-align: center;
+form {
+    text-align: center;
 }
+
 input,
 select {
     width: 30%;
@@ -19,12 +19,11 @@ button {
     font-size: medium;
 }
 
-button:hover{
-    background-color:rgb(0, 104, 104);
+button:hover {
+    background-color: rgb(0, 104, 104);
 }
 
 label {
     font-family: sans-serif;
-    
-}
 
+}

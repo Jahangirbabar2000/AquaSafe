@@ -39,7 +39,7 @@ function SignUp() {
             "Content-Type": "application/json"
         }
     }
-    const postData = async (data) => { await axios.post('http://localhost:5000', data, config); }
+    const postData = async (data) => { await axios.post('http://localhost:8080/signup', data, config); }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -61,9 +61,10 @@ function SignUp() {
 
     return (<div>
         <Navbar />
+        <Sidebar />        
         <br />
         <form onSubmit={handleSubmit}>
-            <h1>Create User</h1>
+            <h1>Create a new User</h1>
             <br />
             <br />
             <br />
@@ -125,18 +126,13 @@ function SignUp() {
             <select
                 id="country"
                 value={country}
+                defaultValue="Pakistan"
                 onChange={(event) => setCountry(event.target.value)}
             >
                 <option value="China">China</option>
-                <option value="India">India</option>
-                <option value="Indonesia">Indonesia</option>
-                <option value="Japan">Japan</option>
-                <option value="South Korea">South Korea</option>
-                <option value="Malaysia">Malaysia</option>
                 <option value="Pakistan">Pakistan</option>
-                <option value="Philippines">Philippines</option>
-                <option value="Singapore">Singapore</option>
-                <option value="Thailand">Thailand</option>
+                <option value="Turkey">Philippines</option>
+                <option value="Iran">Singapore</option>
             </select><br />  <label htmlFor="site">Select site:</label><br />
             <select
                 id="site"
@@ -151,5 +147,4 @@ function SignUp() {
         </form></div>
     );
 }
-
 export default SignUp;

@@ -1,10 +1,38 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import TableRow from "./tableRow";
 import "./tableRow.css";
 import Sidebar from "../sidebar/side-bar";
 import { Grid } from "@mui/material";
 import Navbar from "../navbar/navbar.js";
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 function UsersTable() {
   const [usersData, setUsersData] = useState([]);
@@ -22,28 +50,41 @@ function UsersTable() {
     <div>
       <Navbar />
       <Grid container>
-        <Grid item xs={4} sm={5} md={3}>
+        <Grid item xs={4} sm={5} md={2}>
           <Sidebar />
         </Grid>
         <Grid item xs={8} sm={7} md={9}>
+          <br />
+          <br />
           <h1>Active Users</h1>
-          <input type="text"></input>
-          <button>Search</button>
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Designation</th>
-              <th>Country</th>
-              <th>Site</th>
-            </tr>
-          </thead>
-          <tbody>
-            {usersData.map(user => {
-              return <TableRow key={user.Id} user={user} />;
-            })}
-          </tbody>
+          <br />
+          <br />
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell align="right">Email</StyledTableCell>
+                  <StyledTableCell align="right">Designation</StyledTableCell>
+                  <StyledTableCell align="right">Country</StyledTableCell>
+                  <StyledTableCell align="right">Site</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {usersData.map((row) => (
+                  <StyledTableRow key={row.Id}>
+                    <StyledTableCell component="th" scope="row">
+                      {row.FirstName}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">{row.Email}</StyledTableCell>
+                    <StyledTableCell align="right">{row.Designation}</StyledTableCell>
+                    <StyledTableCell align="right">{row.Country}</StyledTableCell>
+                    <StyledTableCell align="right">{row.Site}</StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </Grid>
     </div>

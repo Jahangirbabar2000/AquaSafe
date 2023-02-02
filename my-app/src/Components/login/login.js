@@ -10,7 +10,7 @@ function Login() {
     const [password, setPassword] = useState('');
 
     const handleEmailValidation = (email) => {
-        const emailRegex = /@/;
+        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (!emailRegex.test(email)) {
             // alert("Please enter a valid email address.");
         }
@@ -28,7 +28,7 @@ function Login() {
             "Content-Type": "application/json"
         }
     }
-    const postData = async (data) => { await axios.post('http://localhost:5000', data, config); }
+    const postData = async (data) => { await axios.post('http://localhost:8080', data, config); }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -42,41 +42,41 @@ function Login() {
         postData(formData);
     };
 
-    return (<div>
-        <Navbar />
-        <br />
-        <form onSubmit={handleSubmit}>
-            <h1>Login</h1>
+    return (
+        <div>
+            <Navbar />
             <br />
-            <br />
-            <br />
-            <label htmlFor="email">Email:</label><br />
-            <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                onBlur={(event) => handleEmailValidation(event.target.value)}
-            />
-            <br />
-            <br />
-            <label htmlFor="password">Password:</label><br />
-            <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                onBlur={(event) => handlePasswordValidation(event.target.value)}
-            />
-            <br />
-            <br />
-            <br />
-            <Link to="/sites">
-                <button type="submit">Login</button>
-            </Link>
-
-
-        </form></div>
+            <form onSubmit={handleSubmit}>
+                <h1>Login</h1>
+                <br />
+                <br />
+                <br />
+                <label htmlFor="email">Email:</label><br />
+                <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    onBlur={(event) => handleEmailValidation(event.target.value)}
+                />
+                <br />
+                <br />
+                <label htmlFor="password">Password:</label><br />
+                <input
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    onBlur={(event) => handlePasswordValidation(event.target.value)}
+                />
+                <br />
+                <br />
+                <br />                
+                <Link to="/sites">
+                    <button type="submit">Login</button>
+                </Link>
+            </form>
+        </div>
     );
 }
 
