@@ -61,7 +61,7 @@ function SignUp() {
 
     return (<div>
         <Navbar />
-        <Sidebar />        
+        <Sidebar />
         <br />
         <form onSubmit={handleSubmit}>
             <h1>Create a new User</h1>
