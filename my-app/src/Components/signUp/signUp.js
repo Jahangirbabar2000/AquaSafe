@@ -1,10 +1,84 @@
 import React, { useState } from 'react';
-import './signUp.css';
 import axios from 'axios';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from "../navbar/navbar.js";
 import Sidebar from "../sidebar/side-bar.js";
+import MenuItem from '@mui/material/MenuItem';
 
-function SignUp() {
+function Copyright(props) {
+    return (
+        <Typography variant="h5" color="text.secondary" align="center" {...props}>
+            {'Copyright © AsiaConnect '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
+
+const theme = createTheme();
+
+export default function SignUp() {
+    const designations = [
+        {
+            value: 'IoT Engineer',
+            label: 'IoT Engineer',
+        },
+        {
+            value: 'Local Admin',
+            label: 'Local Admin',
+        },
+        {
+            value: 'Government Admin',
+            label: 'Government Admin',
+        },
+    ];
+
+    const countries = [
+        {
+            value: 'China',
+            label: 'China',
+        },
+        {
+            value: 'Pakistan',
+            label: 'Pakistan',
+        },
+        {
+            value: 'Turkey',
+            label: 'Turkey',
+        },
+        {
+            value: 'Iran',
+            label: 'Iran',
+        },
+    ];
+
+    const sites = [
+        {
+            value: 'Rawal Dam',
+            label: 'Rawal Dam',
+        },
+        {
+            value: 'Tarbela Dam',
+            label: 'Tarbela Dam',
+        },
+        {
+            value: 'Mangla Dam',
+            label: 'Mangla Dam',
+        },
+    ];
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -15,7 +89,7 @@ function SignUp() {
     const [site, setSite] = useState('');
 
     const handleEmailValidation = (email) => {
-        const emailRegex = /@/;
+        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (!emailRegex.test(email)) {
             // alert("Please enter a valid email address.");
         }
@@ -59,92 +133,151 @@ function SignUp() {
         postData(formData);
     };
 
-    return (<div>
-        <Navbar />
-        <Sidebar />
-        <br />
-        <form onSubmit={handleSubmit}>
-            <h1>Create a new User</h1>
-            <br />
-            <br />
-            <br />
-            <label htmlFor="first-name">First Name:</label><br />
-            <input
-                type="text"
-                id="first-name"
-                value={firstName}
-                onChange={(event) => setFirstName(event.target.value)}
-            />
-            <br />
-            <label htmlFor="last-name">Last Name:</label><br />
-            <input
-                type="text"
-                id="last-name"
-                value={lastName}
-                onChange={(event) => setLastName(event.target.value)}
-            />
-            <br />
-            <label htmlFor="email">Email:</label><br />
-            <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                onBlur={(event) => handleEmailValidation(event.target.value)}
-            />
-            <br />
-            <label htmlFor="password">Password:</label><br />
-            <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                onBlur={(event) => handlePasswordValidation(event.target.value)}
-            />
-            <br />
-            <label htmlFor="confirm-password">Confirm Password:</label><br />
-            <input
-                type="password"
-                id="confirm-password"
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-                onBlur={(event) => handleConfirmPasswordValidation(password, event.target.value)}
-            />
-            <br />
-            <label htmlFor="designation">Select your designation:</label><br />
-            <select
-                id="designation"
-                value={designation}
-                onChange={(event) => setDesignation(event.target.value)}
-            >
-                <option value="IoT Engineer">IoT Engineer</option>
-                <option value="Local Admin">Local Admin</option>
-                <option value="Government Admin">Government Admin</option>
-            </select>
-            <br />
-            <label htmlFor="country">Select country:</label><br />
-            <select
-                id="country"
-                value={country}
-                defaultValue="Pakistan"
-                onChange={(event) => setCountry(event.target.value)}
-            >
-                <option value="China">China</option>
-                <option value="Pakistan">Pakistan</option>
-                <option value="Turkey">Philippines</option>
-                <option value="Iran">Singapore</option>
-            </select><br />  <label htmlFor="site">Select site:</label><br />
-            <select
-                id="site"
-                value={site}
-                onChange={(event) => setSite(event.target.value)}
-            >
-                <option value="Rawal Dam">Rawal Dam</option>
-                <option value="Tarbela Dam">Tarbela Dam</option>
-                <option value="Mangla Dam">Mangla Dam</option>
-            </select><br /><br />
-            <button type="submit">Sign Up</button>
-        </form></div>
+    return (
+        <div>
+            <Navbar />
+            <Sidebar />
+            <ThemeProvider theme={theme}>
+                <Container component="main" maxWidth="sm">
+                    {/* <CssBaseline /> */}
+                    <Box
+                        sx={{
+                            marginLeft: 5,
+                            marginTop: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Avatar sx={{ m: 2, bgcolor: 'primary.main', width: 55, height: 55 }}>
+                            <LockOutlinedIcon fontSize="large" />
+                        </Avatar>
+                        <Typography component="h1" variant="h4">
+                            Create a new user
+                        </Typography>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="given-name"
+                                        name="firstName"
+                                        inputProps={{ style: { fontSize: 16 } }}
+                                        required
+                                        fullWidth
+                                        id="firstName"
+                                        label="First Name"
+                                        autoFocus
+                                        value={firstName}
+                                        onChange={(event) => setFirstName(event.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        inputProps={{ style: { fontSize: 16 } }}
+                                        id="lastName"
+                                        label="Last Name"
+                                        name="lastName"
+                                        autoComplete="family-name"
+                                        value={lastName}
+                                        onChange={(event) => setLastName(event.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        inputProps={{ style: { fontSize: 16 } }}
+                                        fullWidth
+                                        id="email"
+                                        label="Email Address"
+                                        name="email"
+                                        autoComplete="email"
+                                        onChange={(event) => setEmail(event.target.value)}
+                                        onBlur={(event) => handleEmailValidation(event.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        inputProps={{ style: { fontSize: 16 } }}
+                                        fullWidth
+                                        name="password"
+                                        label="Password"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="new-password"
+                                        onChange={(event) => setPassword(event.target.value)}
+                                        onBlur={(event) => handlePasswordValidation(event.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="designation"
+                                        fullWidth
+                                        select
+                                        name="designation"
+                                        label="designation"
+                                        type="designation"
+                                        onChange={(event) => setDesignation(event.target.value)}
+                                    >
+                                        {designations.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        id="country"
+                                        fullWidth
+                                        select
+                                        name="country"
+                                        label="country"
+                                        type="country"
+                                        onChange={(event) => setCountry(event.target.value)}
+                                    >
+                                        {countries.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        id="site"
+                                        fullWidth
+                                        select
+                                        name="site"
+                                        label="site"
+                                        type="site"
+                                        onChange={(event) => setSite(event.target.value)}
+                                    >
+                                        {sites.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                            </Grid>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 5, mb: 2, fontSize: 13 }}
+                            >
+                                Sign Up
+                            </Button>
+                        </Box>
+                    </Box>
+                    <Copyright justif sx={{ mt: 2, ml: 5 }} />
+
+                </Container>
+            </ThemeProvider>
+        </div>
+
     );
 }
-export default SignUp;

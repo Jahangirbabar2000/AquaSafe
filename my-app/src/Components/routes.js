@@ -10,7 +10,6 @@ import Visualization from './visualization';
 import Sites from './sites';
 import Homepage from './homepage/homepage'
 
-
 function routes() {
   return (
     <Routes>

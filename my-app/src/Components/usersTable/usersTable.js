@@ -12,7 +12,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
+import NewButton from "../button/button";
+import { Link } from 'react-router-dom';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -86,6 +87,12 @@ function UsersTable() {
               </TableBody>
             </Table>
           </TableContainer>
+        </Grid>
+        <Grid container pt={5} pl={150}>
+          <Link to="/signup">
+            <NewButton text={"Add new user"}>
+            </NewButton>
+          </Link>
         </Grid>
       </Grid>
     </div>
