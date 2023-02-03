@@ -9,23 +9,20 @@ import { Route, Routes } from 'react-router-dom'
 import Visualization from './visualization';
 import Sites from './sites';
 import Homepage from './homepage/homepage'
-
+import SignInSide from './login/signIn';
 
 function routes() {
   return (
-    <div
-    >
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/userstable" element={<UsersTable data={usersData} />} />
-        <Route path="/notifications" element={<Notifications data={dummyData} />} />
-        <Route path="/dashboard" element={<Visualization />} />
-        <Route path="/sites" element={<Sites />} />
-        <Route path="/homepage" element={<Homepage />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<Homepage />} />
+      <Route path="/userstable" element={<UsersTable data={usersData} />} />
+      <Route path="/notifications" element={<Notifications data={dummyData} />} />
+      <Route path="/dashboard" element={<Visualization />} />
+      <Route path="/sites" element={<Sites />} />
+      <Route path="/homepage" element={<Homepage />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/login" element={<SignInSide />} />
+    </Routes>
 
   );
 }

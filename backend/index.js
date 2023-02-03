@@ -92,6 +92,24 @@ app.post('/signup', (req, res) => {
         }
     );
 });
+
+app.post('/signin', (req, res) => {
+    const data = req.body;
+    console.log(data);
+    // connection.query(
+    //     "INSERT INTO Users (FirstName, LastName, Email, Password, Designation, Country, Site) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    //     [data.firstName, data.lastName, data.email, data.password, data.designation, data.country, data.site],
+    //     (error, results) => {
+    //         if (error) {
+    //             console.log(error);
+    //         } else {
+    //             console.log("Data inserted successfully");
+    //         }
+    //     }
+    // );
+});
+
+
 // Create route to retrieve data from database
 app.get('/data', (req, res) => {
     connection.query('SELECT r.Time, r.Reading, sc.Parameter FROM aquasafe.readings as r, aquasafe.sensorscatalogue as sc where r.Sensor = sc.Id;', (err, rows) => {
