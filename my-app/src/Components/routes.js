@@ -9,7 +9,7 @@ import { Route, Routes } from 'react-router-dom'
 import Visualization from './visualization';
 import Sites from './sites';
 import Homepage from './homepage/homepage'
-import SignInSide from './login/signIn';
+
 
 function routes() {
   return (
@@ -21,7 +21,7 @@ function routes() {
       <Route path="/sites" element={<Sites />} />
       <Route path="/homepage" element={<Homepage />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/login" element={<SignInSide />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
 
   );
