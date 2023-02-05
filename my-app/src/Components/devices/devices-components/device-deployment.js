@@ -1,145 +1,83 @@
 import React, { useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import NewButton from "../../button/Button.js";
+import "./device-deploy.css";
+import { Formik, Form, Field, useFormik } from "formik";
+import * as Yup from "yup";
+import {
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Checkbox,
+  FormControlLabel
+} from "@material-ui/core";
+// import Button from "@mui/material/Button";
+import TextField from "./components-form/textfield.js";
+import Select from "./components-form/select.js";
+import Button from "./components-form/button.js";
 
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+const sensors = ["Temperature", "Turbidity", "pH", "PO4", "Conductivity"];
+const CommunicationModes = ["GSM Module", "LoraWan"];
 
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
+const INITIAL_FORM_STATES = {
+  deviceID: "",
+  description: "",
+  location: "",
+  DeviceNum: "",
+  frequency: "",
+  timeUnit: ""
+};
+
+// This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
+const FORM_VALIDATION = Yup.object().shape({
+  deviceID: Yup.string().required("Enter a device ID"),
+  description: Yup.string()
+    .max(124)
+    .required("description is required"),
+  location: Yup.string()
+    .required("Location is required")
+    .max("100", "Location should not exceed 100"),
+  deviceNum: Yup.number("Must be a number.").required("Enter a device number"),
+  frequency: Yup.number().required("Enter a frequency"),
+  timeUnit: Yup.string().required("Required")
+});
+
+const checkboxOptions = ["Minute", "Hour", "Day", "month"];
 
 const DeviceDeployment = () => {
-  const [sensors, setSensors] = useState([]);
-  const [frequency, setFrequency] = useState("");
-  const [mode, setMode] = useState("");
-
-  const handleSensorChange = e => {
-    const selectedSensor = e.target.value;
-    if (sensors.includes(selectedSensor)) {
-      setSensors(sensors.filter(sensor => sensor !== selectedSensor));
-    } else {
-      setSensors([...sensors, selectedSensor]);
-    }
-  };
-
   return (
-    <div>
-      {/* <h1>Device Deployment</h1> */}
-      <h2>Select Sensors</h2>
-
-      <div style={{ padding: 15 }}>
-        <FormGroup style={{fontSize: 30}}>
-          <FormControlLabel control={<Checkbox />} label="Temperature" />
-          <FormControlLabel control={<Checkbox />} label="Turbidity" />
-          <FormControlLabel control={<Checkbox />} label="pH" />
-          <FormControlLabel control={<Checkbox />} label="PO4" />
-          <FormControlLabel control={<Checkbox />} label="Conductivity" />
-        </FormGroup>
-        {/* <div>
-          <input
-            type="checkbox"
-            value="Sensor 1"
-            onChange={handleSensorChange}
-            checked={sensors.includes("Sensor 1")}
-          />
-          Temperature
+    <div className="grid-container">
+      <div className="left">
+        <div className="container">
+          <h2>General Device Details</h2>
+          <Formik
+            initialValues={{
+              ...INITIAL_FORM_STATES
+            }}
+            validationSchema={FORM_VALIDATION}
+            onSubmit={values => {
+              console.log(values);
+            }}
+          >
+            <Form>
+              <TextField name="deviceID" label="Device ID" />
+              <TextField name="description" label="Description" />
+              <TextField name="location" label="Location" />
+              <TextField name="deviceNum" label="Device Number" />
+              {/* <div style={{display: "flex"}}> */}
+              <TextField
+                name="frequency"
+                label="Frequency"
+                helperText="Choose frequency of receving data"
+              />
+              <Select name="timeUnit" label="Unit" options={checkboxOptions} />
+              {/* </div> */}
+              <Button>Add Device</Button>
+            </Form>
+          </Formik>
         </div>
-        <div>
-          <input
-            type="checkbox"
-            value="Sensor 2"
-            onChange={handleSensorChange}
-            checked={sensors.includes("Sensor 2")}
-          />
-          Conductivity
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            value="Sensor 3"
-            onChange={handleSensorChange}
-            checked={sensors.includes("Sensor 3")}
-          />
-          PO4
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            value="Sensor 4"
-            onChange={handleSensorChange}
-            checked={sensors.includes("Sensor 4")}
-          />
-          Ph
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            value="Sensor 5"
-            onChange={handleSensorChange}
-            checked={sensors.includes("Sensor 5")}
-          />
-          Turbidity
-        </div> */}
       </div>
-      <h2>Frequency of Monitoring</h2>
-      <div style={{ padding: 15 }}>
-        {/* <input
-          type="text"
-          value={frequency}
-          onChange={e => setFrequency(e.target.value)}
-        /> */}
-        <DropdownButton id="dropdown-basic-button" title="Select a time">
-          <Dropdown.Item href="#/action-1">15 minutes</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">30 minutes</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">60 minutes</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">60 minutes</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">6 hours</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">12 hours</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">24 hours</Dropdown.Item>
-        </DropdownButton>
+      <div className="right">
+        <h1>Add leaflet map here</h1>
       </div>
-
-      <h2>Mode of Communication</h2>
-      <div style={{ padding: 15 }}>
-
-              <FormControl>
-                  <FormLabel id="demo-radio-buttons-group-label"></FormLabel>
-                  <RadioGroup
-                      aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="female"
-                      name="radio-buttons-group"
-                  >
-                      <FormControlLabel value="female" control={<Radio />} label="GSM Module" />
-                      <FormControlLabel value="male" control={<Radio />} label="LoRaWAN" />
-                  </RadioGroup>
-              </FormControl>
-        {/* <div>
-          <input
-            type="radio"
-            value="Radio 1"
-            onChange={e => setMode(e.target.value)}
-            checked={mode === "Radio 1"}
-          />
-          Radio 1
-        </div>
-        <div>
-          <input
-            type="radio"
-            value="Radio 2"
-            onChange={e => setMode(e.target.value)}
-            checked={mode === "Radio 2"}
-          />
-          Radio 2
-        </div> */}
-      </div>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <NewButton text="Deploy Device" />
-          </div>
-
     </div>
   );
 };

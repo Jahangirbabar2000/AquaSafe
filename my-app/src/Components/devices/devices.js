@@ -12,14 +12,13 @@ function Device() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "32vh auto",
-          gridGap: "2px"
+          gridTemplateColumns: "32vh auto"
         }}
       >
         <div>
           <Sidebar />
         </div>
-        <div style={{ background: "lightblue", padding: "16px" }}>
+        <div style={{ background: "#f2f2f2", padding: "16px" }}>
           <div>
             <h1 style={{ textAlign: "center", paddingBottom: "20px", paddingTop: "10px" }}>
               Device Deployment

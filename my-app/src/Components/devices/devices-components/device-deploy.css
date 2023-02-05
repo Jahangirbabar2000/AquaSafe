@@ -1,0 +1,38 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 100vh;
+}
+
+.left {
+  background-color: #f2f2f2;
+}
+
+.right {
+  background-color: #f2f2f2;
+}
+
+.container {
+  /* border: solid black 2px; */
+  min-width: 500px;
+  /* height: 100%; */
+  padding-top: 3%;
+  padding-bottom: 3%;
+  background: whitesmoke;
+  border-radius: 5%;
+  margin-top: 20px;
+  padding: 3%;
+  box-shadow: 0px 0px 10px #888888;
+  margin-left: 1rem;
+}
+
+.field {
+  border: solid black 5px;
+  padding: 100px;
+}
+
+.line {
+  height: 1px;
+  width: auto;
+  background-color: black;
+}
