@@ -6,8 +6,8 @@ import Login from './login/login';
 import Notifications from './notifications/notifications';
 import dummyData from './dummyData/dummy.json'
 import { Route, Routes } from 'react-router-dom'
-import Visualization from './visualization';
-import Sites from './sites';
+import Visualization from './visualization/visualization'
+import Sites from './sites/sites';
 import Homepage from './homepage/homepage'
 
 function routes() {

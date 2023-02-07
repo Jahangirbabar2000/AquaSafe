@@ -119,7 +119,7 @@ app.get('/data', (req, res) => {
 });
 
 app.get('/activeUsers', (req, res) => {
-    connection.query('SELECT * from users;', (err, rows) => {
+    connection.query('SELECT FirstName, Email, Designation, Country, Name as Site from users join WorksOn on users.Id = workson.user join projects on projects.id = workson.project;', (err, rows) => {
         if (err) throw err;
 
         res.send(rows);

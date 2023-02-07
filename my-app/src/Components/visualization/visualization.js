@@ -1,11 +1,11 @@
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import dummyData from "./dummyData/dummy.json";
-import List from "./dummyData/List";
-import Parameters from "./ParamCard";
-import LineGraph from "./graphs/LineChart";
-import BarGraph from "./graphs/BarGraph";
+import dummyData from "../dummyData/dummy.json";
+import List from "../dummyData/List";
+import Parameters from "../ParamCard";
+import LineGraph from "../graphs/LineChart";
+import BarGraph from "../graphs/BarGraph";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import Box from "@mui/material/Box";
@@ -19,9 +19,9 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import "./visualization.css";
-import NewButton from './button/button';
+import NewButton from '../button/button';
 import { Link } from 'react-router-dom';
-import Navbar from "./navbar/navbar.js";
+import Navbar from "../navbar/navbar.js";
 
 function App(props) {
   setTimeout(function () {
