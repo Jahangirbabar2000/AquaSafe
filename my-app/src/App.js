@@ -10,7 +10,7 @@ import NewProject from "./Components/NewProjectForm/NewProject.js"
 function App() {
   return (
     <div className="main">
-    <Device />
+    <AddSensor />
       {/* <Routes /> */}
       {/* <Footer /> */}
     </div >
