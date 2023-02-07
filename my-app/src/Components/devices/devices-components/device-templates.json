@@ -1,0 +1,24 @@
+{
+  "options": [
+    {
+      "id": "template-1",
+      "value": "template-1",
+      "label": "Template 1"
+    },
+    {
+      "id": "template-2",
+      "value": "template-2",
+      "label": "Template 2"
+    },
+    {
+      "id": "template-3",
+      "value": "template-3",
+      "label": "Template 3"
+    },
+    {
+      "id": "template-4",
+      "value": "template-4",
+      "label": "Template 4"
+    }
+  ]
+}
