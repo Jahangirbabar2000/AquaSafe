@@ -1,5 +1,7 @@
-td,th{
+td,
+th {
    width: 200px;
-   text-align: center;
+   text-align: left;
    margin: auto;
+   font-size: large;
 }

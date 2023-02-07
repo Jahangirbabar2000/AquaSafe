@@ -6,10 +6,10 @@ function BarGraph(props) {
       <BarChart margin={{
         top: 0,
       }} width={150} height={40} data={props.data}>
-        <XAxis dataKey="date" />
-        <YAxis dataKey="pH" />
+        <XAxis dataKey="Time" />
+        <YAxis dataKey="Reading" />
         <Tooltip />
-        <Bar dataKey="pH" fill="#8884d8" />
+        <Bar dataKey="Reading" fill="#8884d8" />
       </BarChart>
     </ResponsiveContainer>
   );
