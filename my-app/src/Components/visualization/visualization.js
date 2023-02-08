@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import dummyData from "../dummyData/dummy.json";
 import List from "../dummyData/List";
-import Parameters from "../ParamCard";
+import Parameters from "./ParamCard";
 import LineGraph from "../graphs/LineChart";
 import BarGraph from "../graphs/BarGraph";
 import SearchIcon from "@mui/icons-material/Search";
@@ -72,9 +72,8 @@ function App(props) {
   return (
     <div>
       <Navbar />
-      <Grid container spacing={2} p={12} pt={0} pb={5}>
+      <Grid container spacing={2} p={12} pt={4}>
         <Grid item xs={3}>
-          {" "}
           {/* Left small section*/}
           <h2 className="projectName">Project Rawal Lake</h2>
           <div className="search">
@@ -233,7 +232,7 @@ function App(props) {
           </Link>
         </Grid>
       </Grid>
-      
+
     </div>
   );
 }

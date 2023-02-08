@@ -9,6 +9,9 @@ import { Route, Routes } from 'react-router-dom'
 import Visualization from './visualization/visualization'
 import Sites from './sites/sites';
 import Homepage from './homepage/homepage'
+import DeviceDeployment from './devices/devices-components/device-deployment';
+import NewProject from './NewProjectForm/NewProject';
+import AddSensor from './Sensor/addSensor';
 
 function routes() {
   return (
@@ -21,6 +24,9 @@ function routes() {
       <Route path="/homepage" element={<Homepage />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/deviceDeployment" element={<DeviceDeployment />} />
+      <Route path="/newProject" element={<NewProject />} />
+      <Route path="/addSensor" element={<AddSensor />} />
     </Routes>
 
   );

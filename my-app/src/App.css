@@ -3,34 +3,3 @@
   width: 100%;
   row-gap: 20px;
 }
-
-h1 {
-  margin: 10px;
-  color: rgb(1, 1, 59);
-}
-
-.projectName {
-  margin: 10px;
-  padding-bottom: 10px;
-  color: rgb(1, 1, 59);
-  background-image: linear-gradient(to right, #30b1d9, #7bb844);
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-}
-
-.search {
-  width: 60%;
-}
-
-ul li {
-  font-size: 20px;
-}
-
-.ul {
-  text-decoration: underline;
-}
-
-.inputRounded .MuiOutlinedInput-root {
-  border-radius: 10px;
-}

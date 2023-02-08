@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import "./device-deploy.css";
+import Sidebar from "../../sidebar/side-bar";
+import Navbar from "../../navbar/navbar";
 import { Formik, Form, Field, useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Checkbox,
-  FormControlLabel
-} from "@material-ui/core";
-// import Button from "@mui/material/Button";
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import TextField from "./components-form/textfield.js";
 import Select from "./components-form/select.js";
 import Button from "./components-form/button.js";
+
 
 const sensors = ["Temperature", "Turbidity", "pH", "PO4", "Conductivity"];
 const CommunicationModes = ["GSM Module", "LoraWan"];
@@ -41,42 +37,70 @@ const FORM_VALIDATION = Yup.object().shape({
 });
 
 const checkboxOptions = ["Minute", "Hour", "Day", "month"];
-
 const DeviceDeployment = () => {
+
+  React.useEffect(() => {     // CODE FOR FIXING MARKER PROBLEM ON MAP
+    const L = require("leaflet");
+
+    delete L.Icon.Default.prototype._getIconUrl;
+
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+      iconUrl: require("leaflet/dist/images/marker-icon.png"),
+      shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+    });
+  }, []);
+
   return (
-    <div className="grid-container">
-      <div className="left">
-        <div className="container">
-          <h2>General Device Details</h2>
-          <Formik
-            initialValues={{
-              ...INITIAL_FORM_STATES
-            }}
-            validationSchema={FORM_VALIDATION}
-            onSubmit={values => {
-              console.log(values);
-            }}
-          >
-            <Form>
-              <TextField name="deviceID" label="Device ID" />
-              <TextField name="description" label="Description" />
-              <TextField name="location" label="Location" />
-              <TextField name="deviceNum" label="Device Number" />
-              {/* <div style={{display: "flex"}}> */}
-              <TextField
-                name="frequency"
-                label="Frequency"
-                helperText="Choose frequency of receving data"
-              />
-              <Select name="timeUnit" label="Unit" options={checkboxOptions} />
-              {/* </div> */}
-              <Button>Add Device</Button>
-            </Form>
-          </Formik>
+
+    <div>
+      <Navbar></Navbar>
+      <Sidebar />
+      <div className="grid-container">
+        <div className="containerr">
+          <div className="card">
+            <h2>General Device Details</h2>
+            <Formik
+              initialValues={{
+                ...INITIAL_FORM_STATES
+              }}
+              validationSchema={FORM_VALIDATION}
+              onSubmit={values => {
+                console.log(values);
+              }}
+            >
+              <Form>
+                <TextField name="deviceID" label="Device ID" />
+                <TextField name="description" label="Description" />
+                <TextField name="location" label="Location" />
+                <TextField name="deviceNum" label="Device Number" />
+                {/* <div style={{display: "flex"}}> */}
+                <TextField
+                  name="frequency"
+                  label="Frequency"
+                  helperText="Choose frequency of receving data"
+                />
+                <Select name="timeUnit" label="Unit" options={checkboxOptions} />
+                {/* </div> */}
+                <Button>Add Device</Button>
+              </Form>
+            </Formik>
+          </div>
         </div>
-      </div>
-      <div className="right">
-        <h1>Add leaflet map here</h1>
+        <div className="map">
+          <h2>Select location from map:</h2>
+          <MapContainer className="deviceMap" center={[33.702299, 73.130]} zoom={14} scrollWheelZoom={true}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
+               contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {/* <Marker position={[33.702299, 73.130]}>
+              <Popup>
+                Location of this Project: <br /> Rawal Lake, Islamabad
+              </Popup>
+            </Marker> */}
+          </MapContainer>
+        </div>
       </div>
     </div>
   );

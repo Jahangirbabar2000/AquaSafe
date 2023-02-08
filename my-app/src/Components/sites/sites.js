@@ -14,6 +14,7 @@ import "./sites.css";
 import Navbar from "../navbar/navbar.js"
 import NewButton from '../button/button';
 import { Link } from 'react-router-dom';
+
 function App(props) {
 
     React.useEffect(() => {     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -87,7 +88,7 @@ function App(props) {
                 </Grid>
                 <Grid item sm={9} alignItems="flex=end"
                     justifyContent="flex=end">
-                    <MapContainer center={[33.702299, 73.130]} zoom={10.5} scrollWheelZoom={true}>
+                    <MapContainer className='siteMap' center={[33.702299, 73.130]} zoom={11} scrollWheelZoom={true}>
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

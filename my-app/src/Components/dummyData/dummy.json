@@ -11,7 +11,7 @@
     "Country": "Bangladesh",
     "date": "23/05/15",
     "time": "13:49",
-    "pH": 12.1,
+    "pH": 8.1,
     "Turbidity": 0.4,
     "Conductivity": 678
   },
@@ -38,13 +38,5 @@
     "pH": 1.5,
     "Turbidity": 1.4,
     "Conductivity": 645
-  },
-  {
-    "Country": "Afghanistan",
-    "date": "8/6/04",
-    "time": "5:40",
-    "pH": 9.1,
-    "Turbidity": 0.8,
-    "Conductivity": 697
   }
 ]

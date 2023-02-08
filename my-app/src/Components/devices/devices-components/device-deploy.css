@@ -2,17 +2,15 @@
   display: grid;
   grid-template-columns: 50% 50%;
   height: 100vh;
-}
-
-.left {
   background-color: #f2f2f2;
 }
 
-.right {
-  background-color: #f2f2f2;
+.containerr {
+  margin-top: 70px;
+  margin-left: 300px;
 }
 
-.container {
+.card {
   /* border: solid black 2px; */
   min-width: 500px;
   /* height: 100%; */
@@ -21,9 +19,19 @@
   background: whitesmoke;
   border-radius: 5%;
   margin-top: 20px;
-  padding: 3%;
+  padding: 10%;
   box-shadow: 0px 0px 10px #888888;
   margin-left: 1rem;
+}
+
+.map {
+  padding-top: 90px;
+  padding-left: 180px;
+}
+
+.map h2 {
+  padding-left: 120px;
+  padding-bottom: 15px;
 }
 
 .field {
@@ -35,4 +43,10 @@
   height: 1px;
   width: auto;
   background-color: black;
+}
+
+.deviceMap {
+  margin-left: 0vh;
+  width: 70vh;
+  height: 45vh;
 }
