@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import dummyData from "../dummyData/dummy.json";
 import List from "../dummyData/List";
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Parameters from "./ParamCard";
 import LineGraph from "../graphs/LineChart";
 import BarGraph from "../graphs/BarGraph";
@@ -22,23 +23,20 @@ import "./visualization.css";
 import NewButton from '../button/button';
 import { Link } from 'react-router-dom';
 import Navbar from "../navbar/navbar.js";
+import Sidebar from "../sidebar/side-bar";
+import { Paper } from "@mui/material";
+
+
+const mdTheme = createTheme();
 
 function App(props) {
   setTimeout(function () {
     window.dispatchEvent(new Event("resize"));
   }, 1000);
 
-  axios
-    .get("http://localhost:8080/data")
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-
   const [data, setData] = React.useState([]);
   const [inputText, setInputText] = React.useState("");
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -50,10 +48,13 @@ function App(props) {
       shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
 
-    axios.get("http://localhost:8080/data")
-      .then(response => setData(response.data))
+    axios.get("http://localhost:8080/hkdata")
+      .then(response => {
+        setData(response.data);
+        setLoading(false);
+        console.log(response.data);
+      })
       .catch(error => console.log(error));
-
   }, []);
 
   let inputHandler = e => {
@@ -63,150 +64,105 @@ function App(props) {
     setInputText(lowerCase);
   };
 
-  const leafletContainerStyles = {
-    marginLeft: "5vh",
-    width: "50vh",
-    height: "50vh"
-  };
+  if (loading) {
+    return <div>
+      <Navbar />
+      <Sidebar />
+      Loading...
+    </div>;
+  }
 
   return (
-    <div>
+    <ThemeProvider theme={mdTheme}>
       <Navbar />
-      <Grid container spacing={2} p={12} pt={4}>
-        <Grid item xs={3}>
-          {/* Left small section*/}
-          <h2 className="projectName">Project Rawal Lake</h2>
-          <div className="search">
-            <TextField
-              fullWidth
-              className="inputRounded"
-              onChange={inputHandler}
-              id="input-with-icon-textfield"
-              label="Search Device"
-              size="small"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon />
-                  </InputAdornment>
-                )
-              }}
-              variant="outlined"
-            />
-          </div>
-          {/************ DEVICES ************/}
-          <Box sx={{ paddingTop: 5, maxWidth: 220 }}>
-            <Card
-              variant="outlined"
-              sx={{
-                maxWidth: 200,
-                border: "3px solid #30b1d9",
-                borderRadius: "8px",
-                ":hover": {
-                  boxShadow: 20 // theme.shadows[20]
-                }
-              }}
-            >
-              <React.Fragment>
-                <CardContent>
-                  <h3 class="ul">Devices</h3>
-
-                  <List
-                    sx={{
-                      width: "100%",
-                      maxWidth: 360,
-                      bgcolor: "background.paper"
-                    }}
-                    input={inputText}
-                  />
-                </CardContent>
-              </React.Fragment>
-            </Card>
-          </Box>
-          {/************ VISUALIZTOIN ************/}
-          <Box sx={{ paddingTop: 5, maxWidth: 220 }}>
-            <Card
-              variant="outlined"
-              sx={{
-                maxWidth: 200,
-                border: "3px solid #30b1d9",
-                borderRadius: "8px",
-                ":hover": {
-                  boxShadow: 20 // theme.shadows[20]
-                }
-              }}
-            >
-              <React.Fragment>
-                <CardContent>
-                  <h3 class="ul">Visualization</h3>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={<Checkbox defaultChecked />}
-                      label={
-                        <Box component="div" fontSize={17}>
-                          Turbidity
-                        </Box>
-                      }
-                    />
-                    <FormControlLabel
-                      control={<Checkbox defaultChecked />}
-                      label={
-                        <Box component="div" fontSize={17}>
-                          pH
-                        </Box>
-                      }
-                    />
-                  </FormGroup>
-                </CardContent>
-              </React.Fragment>
-            </Card>
-          </Box>
-        </Grid>
-        <Grid item xs={9}>
-          {" "}
+      <Sidebar />
+      <Grid container spacing={0} p={8} pt={2} sx={{
+        backgroundColor: (theme) => theme.palette.grey[100]
+      }}>
+        <Grid item xs={9} sx={{ ml: 40 }}>
           {/* Right big section*/}
-          <h3>TOP PARAMETERS</h3>
-          <Grid container justifyContent="space-around" sm={12}>
-            {" "}
-            {/* PARAMETERS */}
-            <Parameters parameterName="Temperature" value={28 + "°C"} />
-            <Parameters
-              parameterName="Conductivity"
-              value={dummyData[1].Conductivity + " mS/cm"}
-            />
-            <Parameters
-              parameterName="Turbidity(NTU)"
-              value={dummyData[1].Turbidity}
-            />
-            <Parameters parameterName="TSS" value={20 + "mg/L"} />
-            <Parameters parameterName="DO" value={8 + "mg/L"} />
-            <Parameters parameterName="pH" value={dummyData[1].pH} />
-            <Parameters parameterName="BOD5" value={7 + "mg/L"} />
-            <Parameters parameterName="NO3-(N)" value={10 + "mg/L"} />
-            <Parameters parameterName="PO4" value={0.03 + "mg/L"} />
-            {/* <Parameters parameterName="NO2-N" value={dummyData[1].Turbidity + 'mg/L'} /> */}
-            <Parameters parameterName="NH3-N" value={30 + "mg/L"} />
-          </Grid>
-          <Grid container alignItems="center" spacing={6}>
-            {" "}
+
+          <Paper
+            sx={{
+              p: 2
+            }}
+          >
+            <h3>TOP PARAMETERS</h3>
+            <Grid container justifyContent="space-around" sm={12} >
+              {/* PARAMETERS */}
+
+              <Parameters color={data[6]["Water Temperature (°C)"] >= 4 &&
+                data[6]["Water Temperature (°C)"] <= 22 ? '#7bb844' : '#DD3939'}
+                parameterName="Temperature" value={data[6]["Water Temperature (°C)"] + " °C"} />
+
+              <Parameters color={data[6]["pH"] >= 6.5 &&
+                data[6]["pH"] <= 8.5 ? '#7bb844' : '#DD3939'}
+                parameterName="pH" value={data[6]["pH"]} />
+
+              <Parameters color={data[6]["Dissolved Oxygen (mg/L)"] >= 5 &&
+                data[6]["Dissolved Oxygen (mg/L)"] <= 11 ? '#7bb844' : '#DD3939'}
+                parameterName="Dissolved Oxygen" value={data[6]["Dissolved Oxygen (mg/L)"] + " mg/L"} />
+
+              <Parameters color={data[6]["Conductivity (µS/cm)"] >= 100 &&
+                data[6]["Conductivity (µS/cm)"] <= 1000 ? '#7bb844' : '#DD3939'}
+                parameterName="Conductivity" value={data[6]["Conductivity (µS/cm)"] + " µS/cm"} />
+
+              <Parameters color={data[6]["Nitrite-Nitrogen (mg/L)"] >= 0 &&
+                data[6]["Nitrite-Nitrogen (mg/L)"] <= 1 ? '#7bb844' : '#DD3939'}
+                parameterName="Nitrite-Nitrogen" value={data[6]["Nitrite-Nitrogen (mg/L)"] + "mg/L"} />
+
+              <Parameters color={data[6]["5-Day Biochemical Oxygen Demand (mg/L)"] >= 1 &&
+                data[6]["5-Day Biochemical Oxygen Demand (mg/L)"] <= 5 ? '#7bb844' : '#DD3939'}
+                parameterName="BOD5" value={data[6]["5-Day Biochemical Oxygen Demand (mg/L)"] + " mg/L"} />
+
+              <Parameters color={data[6]["Total Phosphorus (mg/L)"] >= 0 &&
+                data[6]["Total Phosphorus (mg/L)"] <= 3 ? '#7bb844' : '#DD3939'}
+                parameterName="Total Phosphorus" value={data[6]["Total Phosphorus (mg/L)"] + "mg/L"} />
+
+              <Parameters color={data[6]["Ammonia-Nitrogen (mg/L)"] >= 0.25 &&
+                data[6]["Ammonia-Nitrogen (mg/L)"] <= 20 ? '#7bb844' : '#DD3939'}
+                parameterName="Ammonia-Nitrogen" value={data[6]["Ammonia-Nitrogen (mg/L)"] + " mg/L"} />
+
+            </Grid>
+          </Paper>
+
+
+
+          <Grid container alignItems="center" spacing={2}>
             {/* GRAPHS and MAP*/}
             <Grid item sm={7}>
-              {" "}
               {/* GRAPHS*/}
-              <h3>pH</h3>
-              <h6>(Scale 0-14)</h6>
-              <ResponsiveContainer height={160}>
-                <BarGraph data={data} />
-              </ResponsiveContainer>
-              <h3>Turbidity (NTU)</h3>
-              <h6>(Nephelometric Turbidity Units)</h6>
-              <ResponsiveContainer height={160}>
-                <LineGraph data={dummyData} />
-              </ResponsiveContainer>
+              <Paper sx={{
+                pl: 3,
+                pr: 5,
+                pt: 2,
+                mt: 2
+              }}>
+                <h3>pH</h3>
+                <h5>(Scale 0-14)</h5>
+                <ResponsiveContainer height={140}>
+                  <BarGraph data={data} datakey={'pH'} />
+                </ResponsiveContainer>
+              </Paper>
+              <Paper sx={{
+                pl: 3,
+                pr: 5,
+                pt: 2,
+                mt: 2
+              }}>
+                <h3>Dissolved Oxygen</h3>
+                <h5>(mg/L)</h5>
+                <ResponsiveContainer height={140}>
+                  <LineGraph data={data} datakey={'Dissolved Oxygen (mg/L)'} />
+                </ResponsiveContainer>
+              </Paper>
+
+
+
             </Grid>
-            <Grid item sm={5} alignItems="flex=end" justifyContent="flex=end">
-              {" "}
+            <Grid item sm={5} alignItems="flex=end" justifyContent="flex=end" sx={{ mt: 4 }} >
               {/* MAP*/}
+
               <MapContainer
                 center={[33.711199, 73.13]}
                 zoom={13}
@@ -222,18 +178,122 @@ function App(props) {
                   </Popup>
                 </Marker>
               </MapContainer>
+              {/* <Box container pl={32} pt={3}>
+                <Link to="/sites">
+                  <NewButton text={"Back"}>
+                  </NewButton>
+                </Link>
+              </Box> */}
             </Grid>
           </Grid>
-        </Grid>
-        <Grid container pl={150}>
-          <Link to="/sites">
-            <NewButton text={"Back"}>
-            </NewButton>
-          </Link>
+
+          <Paper sx={{
+            pl: 3,
+            pr: 5,
+            pt: 2,
+            mt: 3
+          }}>
+            <h3>Ammonia-Nitrogen</h3>
+            <h5>(mg/L)</h5>
+            <ResponsiveContainer height={140}>
+              <BarGraph data={data} datakey={'Ammonia-Nitrogen (mg/L)'} />
+            </ResponsiveContainer>
+          </Paper>
+
+          <Paper sx={{
+            pl: 3,
+            pr: 5,
+            pt: 2,
+            mt: 2
+          }}>
+            <h3>Total Phosphorus (mg/L)</h3>
+            <h5>(mg/L)</h5>
+            <ResponsiveContainer height={140}>
+              <LineGraph data={data} datakey={'Total Phosphorus (mg/L)'} />
+            </ResponsiveContainer>
+          </Paper>
+
+          <Paper sx={{
+            pl: 3,
+            pr: 5,
+            pt: 2,
+            mt: 2
+          }}>
+            <h3>5-Day Biochemical Oxygen Demand</h3>
+            <h5>(mg/L)</h5>
+            <ResponsiveContainer height={140}>
+              <BarGraph data={data} datakey={'5-Day Biochemical Oxygen Demand (mg/L)'} />
+            </ResponsiveContainer>
+          </Paper>
+
+          <Paper sx={{
+            pl: 3,
+            pr: 5,
+            pt: 2,
+            mt: 2
+          }}>
+            <h3>Water Temperature</h3>
+            <h5>(°C)</h5>
+            <ResponsiveContainer height={140}>
+              <LineGraph data={data} datakey={'Water Temperature (°C)'} />
+            </ResponsiveContainer>
+          </Paper>
+
+          <Paper sx={{
+            pl: 3,
+            pr: 5,
+            pt: 2,
+            mt: 2
+          }}>
+            <h3>Suspended solids</h3>
+            <h5>(mg/L)</h5>
+            <ResponsiveContainer height={140}>
+              <BarGraph data={data} datakey={'Suspended solids (mg/L)'} />
+            </ResponsiveContainer>
+          </Paper>
+
+          <Paper sx={{
+            pl: 3,
+            pr: 5,
+            pt: 2,
+            mt: 2
+          }}>
+            <h3>Conductivity</h3>
+            <h5>(µS/cm)</h5>
+            <ResponsiveContainer height={140}>
+              <LineGraph data={data} datakey={'Conductivity (µS/cm)'} />
+            </ResponsiveContainer>
+          </Paper>
+          
+          <Paper sx={{
+            pl: 3,
+            pr: 5,
+            pt: 2,
+            mt: 2
+          }}>
+            <h3>Nitrate-Nitrogen</h3>
+            <h5>(mg/L)</h5>
+            <ResponsiveContainer height={140}>
+              <BarGraph data={data} datakey={'Nitrate-Nitrogen (mg/L)'} />
+            </ResponsiveContainer>
+          </Paper>
+
+          <Paper sx={{
+            pl: 3,
+            pr: 5,
+            pt: 2,
+            mt: 2
+          }}>
+            <h3>Nitrite-Nitrogen</h3>
+            <h5>(mg/L)</h5>
+            <ResponsiveContainer height={140}>
+              <LineGraph data={data} datakey={'Nitrite-Nitrogen (mg/L)'} />
+            </ResponsiveContainer>
+          </Paper>
+
         </Grid>
       </Grid>
-
-    </div>
+    </ThemeProvider>
   );
 }
 

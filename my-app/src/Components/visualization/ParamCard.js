@@ -11,9 +11,9 @@ function Parameters(props) {
         boxShadow: 20,
       },
       borderRadius: '8px',
-      backgroundColor: '#7bb844',
+      backgroundColor: props.color,
       color: "white",
-      
+      boxShadow: 5,
     }}>
       <CardContent style={{ padding: 12 }}>
         <Typography variant='h5' component="div">

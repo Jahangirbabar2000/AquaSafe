@@ -1,6 +1,6 @@
 import { React } from 'react'
 // import data from "./ListDevices.json"
-import data from "./ListProjects.json"
+import data from "./ListDevices.json"
 
 function List(props) {
     //create a new array by filtering the original array

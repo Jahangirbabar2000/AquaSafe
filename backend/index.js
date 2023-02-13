@@ -118,6 +118,15 @@ app.get('/data', (req, res) => {
     });
 });
 
+
+// Create route to retrieve data from  hong kong dataset
+app.get('/hkdata', (req, res) => {
+    connection.query('SELECT * from hongkongdataset where Dates between "2018-01-01" and "2018-01-15";', (err, rows) => {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
 app.get('/activeUsers', (req, res) => {
     connection.query('SELECT FirstName, Email, Designation, Country, Name as Site from users join WorksOn on users.Id = workson.user join projects on projects.id = workson.project;', (err, rows) => {
         if (err) throw err;
