@@ -6,9 +6,9 @@ export default function Navbar() {
     return (
         // <div className="nav-container">
         <nav className="nav-container">
-        <Link to="/homepage">
-            <img className="logo-img" src={logo} alt="logo" />
-        </Link>
+            <Link to="/homepage">
+                <img className="logo-img" src={logo} alt="logo" />
+            </Link>
         </nav>
         // </div>
     );

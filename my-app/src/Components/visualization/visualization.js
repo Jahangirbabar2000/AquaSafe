@@ -1,8 +1,7 @@
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import dummyData from "../dummyData/dummy.json";
-import List from "../dummyData/List";
+import moment from 'moment';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Parameters from "./ParamCard";
 import LineGraph from "../graphs/LineChart";
@@ -20,11 +19,12 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import "./visualization.css";
-import NewButton from '../button/button';
 import { Link } from 'react-router-dom';
 import Navbar from "../navbar/navbar.js";
 import Sidebar from "../sidebar/side-bar";
 import { Paper } from "@mui/material";
+import Datepicker from "./datepicker";
+import Button from '@mui/material/Button';
 
 
 const mdTheme = createTheme();
@@ -35,8 +35,9 @@ function App(props) {
   }, 1000);
 
   const [data, setData] = React.useState([]);
-  const [inputText, setInputText] = React.useState("");
   const [loading, setLoading] = React.useState(true);
+  const [startDate, setStartDate] = React.useState(moment('2017-08-10T21:11:54'));
+  const [endDate, setEndDate] = React.useState(moment('2017-08-20T21:11:54'));
 
   React.useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -47,31 +48,35 @@ function App(props) {
       iconUrl: require("leaflet/dist/images/marker-icon.png"),
       shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
-
-    axios.get("http://localhost:8080/hkdata")
+    axios.get(`http://localhost:8080/hkdata`)
       .then(response => {
         setData(response.data);
         setLoading(false);
-        console.log(response.data);
       })
       .catch(error => console.log(error));
   }, []);
 
-  let inputHandler = e => {
-    // CODE FOR IMPLEMENTATOIN OF SEARCH BAR
-    //convert input text to lower case
-    var lowerCase = e.target.value.toLowerCase();
-    setInputText(lowerCase);
-  };
+  const getData = () => {
+    const sd = moment(startDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
+    const ed = moment(endDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
+    axios.get(`http://localhost:8080/hkdata2?start_date=${sd}&end_date=${ed}`)
+      .then(response => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch(error => console.log(error));
+  }
 
   if (loading) {
     return <div>
       <Navbar />
       <Sidebar />
-      Loading...
+      <Grid item xs={9} sx={{ ml: 25, mt: 10 }}>
+        <h1>Loading...</h1>
+      </Grid>
+
     </div>;
   }
-
   return (
     <ThemeProvider theme={mdTheme}>
       <Navbar />
@@ -82,11 +87,25 @@ function App(props) {
         <Grid item xs={9} sx={{ ml: 40 }}>
           {/* Right big section*/}
 
+
+          <Paper sx={{
+            p: 2,
+            m: 2,
+            mr: 40
+          }}
+          >
+            <Datepicker startDate={startDate} setStartDate={setStartDate}
+              endDate={endDate} setEndDate={setEndDate} />
+            <Button variant="contained" onClick={getData} size="large"
+              sx={{ ml: 4, mt: 1 }}>Submit</Button>
+          </Paper>
+
           <Paper
             sx={{
               p: 2
             }}
           >
+
             <h3>TOP PARAMETERS</h3>
             <Grid container justifyContent="space-around" sm={12} >
               {/* PARAMETERS */}
@@ -264,7 +283,7 @@ function App(props) {
               <LineGraph data={data} datakey={'Conductivity (µS/cm)'} />
             </ResponsiveContainer>
           </Paper>
-          
+
           <Paper sx={{
             pl: 3,
             pr: 5,
