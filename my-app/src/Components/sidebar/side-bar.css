@@ -56,13 +56,13 @@
     color: whitesmoke;
 }
 
-.sidenav a:focus {
-    color: #EF7E18;
-}
-
-/* .highlight {
+/* .sidenav a:focus {
     color: #EF7E18;
 } */
+
+.highlight {
+    color: #EF7E18;
+}
 
 @media screen and (max-height: 450px) {
     .sidenav {

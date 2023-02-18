@@ -299,7 +299,7 @@ const NewProject = () => (
       }}
     >
       <div>
-        <Sidebar />
+        <Sidebar name="newproject" />
       </div>
       <div className="box">
         <div className="container">
@@ -353,7 +353,7 @@ const NewProject = () => (
                     as={TextField}
                     fullWidth
                     label="Province"
-                    style={{ fontSize: '30px' }}
+                    style={{ fontSize: "30px" }}
                     name="province"
                     type="text"
                     error={Boolean(touched.province && errors.province)}
@@ -379,7 +379,6 @@ const NewProject = () => (
                     as={TextField}
                     fullWidth
                     label="Description"
- 
                     variant="standard"
                     multiline
                     name="description"
@@ -412,7 +411,9 @@ const NewProject = () => (
                     error={Boolean(
                       touched.waterbodytype && errors.waterbodytype
                     )}
-                    helperText={touched.waterbodytype ? errors.waterbodytype : ""}
+                    helperText={
+                      touched.waterbodytype ? errors.waterbodytype : ""
+                    }
                   >
                     {waterbodyTypes.map(types => (
                       <option key={types} value={types}>

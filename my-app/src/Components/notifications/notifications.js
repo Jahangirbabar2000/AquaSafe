@@ -9,7 +9,7 @@ const notifications = props => {
     <div>
       <Navbar />
       <Grid container>
-        <Sidebar />
+        <Sidebar name="notification" />
         <Grid item xs={8} sm={7} md={12}>
           <h1>Notifications History</h1>
           <div className="notifications">

@@ -16,7 +16,7 @@ function Device() {
         }}
       >
         <div>
-          <Sidebar />
+          <Sidebar name="" />
         </div>
         <div style={{ background: "#f2f2f2", padding: "16px" }}>
           <div>

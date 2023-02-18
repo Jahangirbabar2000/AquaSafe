@@ -70,7 +70,7 @@ function App(props) {
   if (loading) {
     return <div>
       <Navbar />
-      <Sidebar />
+      <Sidebar name="dashboard" />
       <Grid item xs={9} sx={{ ml: 25, mt: 10 }}>
         <h1>Loading...</h1>
       </Grid>

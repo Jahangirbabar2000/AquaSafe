@@ -42,7 +42,7 @@ const AddSensor = () => (
       }}
     >
       <div>
-        <Sidebar />
+        <Sidebar name="sensor"/>
       </div>
       <div className="box">
         <div className="container">

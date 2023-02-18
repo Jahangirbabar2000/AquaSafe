@@ -12,51 +12,85 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import GroupIcon from "@mui/icons-material/Group";
 
-export default function Sidebar() {
-  const [selectedButton, setSelectedButton] = useState(null);
+export default function Sidebar(props) {
+  const [selectedButton, setSelectedButton] = useState("");
   return (
     <div className="sidenav">
       <ul className="">
         <li>
           <Link to="/dashboard">
-            <TvRoundedIcon style={{ fontSize: 20 }} />
-            <span className="sidebar-text">Dashboard</span>
+            <div
+              // onClick={() => setSelectedButton("dashboard")}
+              className={`${props.name === "dashboard" ? "highlight" : ""}`}
+            >
+              <TvRoundedIcon style={{ fontSize: 20 }} />
+              <span className="sidebar-text">Dashboard</span>
+            </div>
           </Link>
         </li>
         <li>
           <Link to="/newProject">
-            <ContentPasteRoundedIcon style={{ fontSize: 20 }} />
-            <span className="sidebar-text">Projects</span>
+            <div
+              // onClick={() => setSelectedButton("newproject")}
+              className={`${props.name === "newproject" ? "highlight" : ""}`}
+            >
+              <ContentPasteRoundedIcon style={{ fontSize: 20 }} />
+              <span className="sidebar-text">Projects</span>
+            </div>
           </Link>
         </li>
         <li>
           <Link to="/sites">
-            <LocationOnRoundedIcon style={{ fontSize: 20 }} />
-            <span className="sidebar-text">Sites</span>
+            <div
+              // onClick={() => setSelectedButton("sites")}
+              className={`${props.name === "sites" ? "highlight" : ""}`}
+            >
+              <LocationOnRoundedIcon style={{ fontSize: 20 }} />
+              <span className="sidebar-text">Sites</span>
+            </div>
           </Link>
         </li>
         <li>
           <Link to="/deviceDeployment">
-            <RouterRoundedIcon style={{ fontSize: 20 }} />
-            <span className="sidebar-text">Devices</span>
+            <div
+              // onClick={() => setSelectedButton("device")}
+              className={`${props.name === "device" ? "highlight" : ""}`}
+            >
+              <RouterRoundedIcon style={{ fontSize: 20 }} />
+              <span className="sidebar-text">Devices</span>
+            </div>
           </Link>
         </li>
         <li>
           <Link to="/addSensor">
-            <SensorsRoundedIcon style={{ fontSize: 20 }} />
-            <span className="sidebar-text">Sensors</span>
+            <div
+              // onClick={() => setSelectedButton("sensor")}
+              className={`${"sensor" === props.name ? "highlight" : ""}`}
+            >
+              <SensorsRoundedIcon style={{ fontSize: 20 }} />
+              <span className="sidebar-text">Sensors</span>
+            </div>
           </Link>
         </li>
         <li>
           <Link to="/notifications">
-            <NotificationsRoundedIcon style={{ fontSize: 20 }} />
-            <span className="sidebar-text">Notifications</span>
+            <div
+              className={`${"notification" === props.name ? "highlight" : ""}`}
+            >
+              <NotificationsRoundedIcon style={{ fontSize: 20 }} />
+              <span className="sidebar-text">Notifications</span>
+            </div>
           </Link>
         </li>
         <li>
           <Link to="/userstable">
-            <GroupIcon style={{ fontSize: 20 }} />
-            <span className="sidebar-text">Users</span>
+            <div
+              // onClick={() => setSelectedButton("users")}
+              className={`${props.name === "users" ? "highlight" : ""}`}
+            >
+              <GroupIcon style={{ fontSize: 20 }} />
+              <span className="sidebar-text">Users</span>
+            </div>
           </Link>
         </li>
         <li id="logout">
