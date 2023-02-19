@@ -12,6 +12,7 @@ import Homepage from './homepage/homepage'
 import DeviceDeployment from './devices/devices-components/device-deployment';
 import NewProject from './NewProjectForm/NewProject';
 import AddSensor from './Sensor/addSensor';
+import WaterQualityPage from './parameters/parameters';
 
 function routes() {
   return (
@@ -27,6 +28,7 @@ function routes() {
       <Route path="/deviceDeployment" element={<DeviceDeployment />} />
       <Route path="/newProject" element={<NewProject />} />
       <Route path="/addSensor" element={<AddSensor />} />
+      <Route path="/WaterQualityPage" element={<WaterQualityPage />} />
     </Routes>
 
   );

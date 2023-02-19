@@ -1,19 +1,11 @@
 import * as React from "react";
-import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import moment from 'moment';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Parameters from "./ParamCard";
 import LineGraph from "../graphs/LineChart";
 import BarGraph from "../graphs/BarGraph";
-import SearchIcon from "@mui/icons-material/Search";
-import InputAdornment from "@mui/material/InputAdornment";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Checkbox from "@mui/material/Checkbox";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { ResponsiveContainer } from "recharts";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -25,7 +17,6 @@ import Sidebar from "../sidebar/side-bar";
 import { Paper } from "@mui/material";
 import Datepicker from "./datepicker";
 import Button from '@mui/material/Button';
-
 
 const mdTheme = createTheme();
 
@@ -80,14 +71,12 @@ function App(props) {
   return (
     <ThemeProvider theme={mdTheme}>
       <Navbar />
-      <Sidebar />
+      <Sidebar name="dashboard" />
       <Grid container spacing={0} p={8} pt={2} sx={{
         backgroundColor: (theme) => theme.palette.grey[100]
       }}>
         <Grid item xs={9} sx={{ ml: 40 }}>
           {/* Right big section*/}
-
-
           <Paper sx={{
             p: 2,
             m: 2,
@@ -97,56 +86,50 @@ function App(props) {
             <Datepicker startDate={startDate} setStartDate={setStartDate}
               endDate={endDate} setEndDate={setEndDate} />
             <Button variant="contained" onClick={getData} size="large"
-              sx={{ ml: 4, mt: 1 }}>Submit</Button>
+              sx={{ ml: 4, mt: 1 }}>View </Button>
           </Paper>
-
           <Paper
             sx={{
               p: 2
             }}
           >
-
             <h3>TOP PARAMETERS</h3>
             <Grid container justifyContent="space-around" sm={12} >
               {/* PARAMETERS */}
 
               <Parameters color={data[6]["Water Temperature (°C)"] >= 4 &&
-                data[6]["Water Temperature (°C)"] <= 22 ? '#7bb844' : '#DD3939'}
+                data[6]["Water Temperature (°C)"] <= 22 ? '#83b854' : '#de4545'}
                 parameterName="Temperature" value={data[6]["Water Temperature (°C)"] + " °C"} />
-
               <Parameters color={data[6]["pH"] >= 6.5 &&
-                data[6]["pH"] <= 8.5 ? '#7bb844' : '#DD3939'}
+                data[6]["pH"] <= 8.5 ? '#83b854' : '#de4545'}
                 parameterName="pH" value={data[6]["pH"]} />
 
               <Parameters color={data[6]["Dissolved Oxygen (mg/L)"] >= 5 &&
-                data[6]["Dissolved Oxygen (mg/L)"] <= 11 ? '#7bb844' : '#DD3939'}
+                data[6]["Dissolved Oxygen (mg/L)"] <= 11 ? '#83b854' : '#de4545'}
                 parameterName="Dissolved Oxygen" value={data[6]["Dissolved Oxygen (mg/L)"] + " mg/L"} />
 
               <Parameters color={data[6]["Conductivity (µS/cm)"] >= 100 &&
-                data[6]["Conductivity (µS/cm)"] <= 1000 ? '#7bb844' : '#DD3939'}
+                data[6]["Conductivity (µS/cm)"] <= 1000 ? '#83b854' : '#de4545'}
                 parameterName="Conductivity" value={data[6]["Conductivity (µS/cm)"] + " µS/cm"} />
 
               <Parameters color={data[6]["Nitrite-Nitrogen (mg/L)"] >= 0 &&
-                data[6]["Nitrite-Nitrogen (mg/L)"] <= 1 ? '#7bb844' : '#DD3939'}
+                data[6]["Nitrite-Nitrogen (mg/L)"] <= 1 ? '#83b854' : '#de4545'}
                 parameterName="Nitrite-Nitrogen" value={data[6]["Nitrite-Nitrogen (mg/L)"] + "mg/L"} />
 
               <Parameters color={data[6]["5-Day Biochemical Oxygen Demand (mg/L)"] >= 1 &&
-                data[6]["5-Day Biochemical Oxygen Demand (mg/L)"] <= 5 ? '#7bb844' : '#DD3939'}
+                data[6]["5-Day Biochemical Oxygen Demand (mg/L)"] <= 5 ? '#83b854' : '#de4545'}
                 parameterName="BOD5" value={data[6]["5-Day Biochemical Oxygen Demand (mg/L)"] + " mg/L"} />
 
               <Parameters color={data[6]["Total Phosphorus (mg/L)"] >= 0 &&
-                data[6]["Total Phosphorus (mg/L)"] <= 3 ? '#7bb844' : '#DD3939'}
+                data[6]["Total Phosphorus (mg/L)"] <= 3 ? '#83b854' : '#de4545'}
                 parameterName="Total Phosphorus" value={data[6]["Total Phosphorus (mg/L)"] + "mg/L"} />
 
               <Parameters color={data[6]["Ammonia-Nitrogen (mg/L)"] >= 0.25 &&
-                data[6]["Ammonia-Nitrogen (mg/L)"] <= 20 ? '#7bb844' : '#DD3939'}
+                data[6]["Ammonia-Nitrogen (mg/L)"] <= 20 ? '#83b854' : '#de4545'}
                 parameterName="Ammonia-Nitrogen" value={data[6]["Ammonia-Nitrogen (mg/L)"] + " mg/L"} />
 
             </Grid>
           </Paper>
-
-
-
           <Grid container alignItems="center" spacing={2}>
             {/* GRAPHS and MAP*/}
             <Grid item sm={7}>
@@ -183,7 +166,7 @@ function App(props) {
               {/* MAP*/}
 
               <MapContainer
-                center={[33.711199, 73.13]}
+                center={[22.292733, 114.168354]}
                 zoom={13}
                 scrollWheelZoom={true}
               >
@@ -191,18 +174,19 @@ function App(props) {
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={[33.711199, 73.13]}>
+                <Marker position={[22.292733, 114.168354]}>
                   <Popup>
                     Location of this Device: <br /> North corner
                   </Popup>
                 </Marker>
               </MapContainer>
-              {/* <Box container pl={32} pt={3}>
-                <Link to="/sites">
-                  <NewButton text={"Back"}>
-                  </NewButton>
+              <Box container pl={20} pt={3}>
+                <Link to="/WaterQualityPage" underline="none" sx={{ textDecoration: "none" }}>
+                  <Button>
+                    Water Quality Page
+                  </Button>
                 </Link>
-              </Box> */}
+              </Box>
             </Grid>
           </Grid>
 
