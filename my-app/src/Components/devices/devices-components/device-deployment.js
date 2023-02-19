@@ -55,7 +55,7 @@ const DeviceDeployment = () => {
 
     <div>
       <Navbar></Navbar>
-      <Sidebar />
+      <Sidebar name="device" />
       <div className="grid-container">
         <div className="containerr">
           <div className="card">

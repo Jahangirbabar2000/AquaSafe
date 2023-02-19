@@ -53,7 +53,7 @@ function UsersTable() {
       <Navbar />
       <Grid container>
         <Grid item xs={4} sm={5} md={2}>
-          <Sidebar />
+          <Sidebar name="users"/>
         </Grid>
         <Grid item xs={8} sm={7} md={9}>
           <br />

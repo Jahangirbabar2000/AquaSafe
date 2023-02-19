@@ -39,7 +39,7 @@ function App(props) {
     return (
         <div>
             <Navbar />
-            <Sidebar />
+            <Sidebar name="sites"/>
             <Grid container pl={40} pt={6} pb={10} >
                 <Grid item xs={3} > {/* Left small section*/}
                     <h2 className="projectName">Sites / Projects </h2>
