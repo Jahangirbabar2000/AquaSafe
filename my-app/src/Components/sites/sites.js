@@ -14,7 +14,6 @@ import "./sites.css";
 import Navbar from "../navbar/navbar.js"
 import NewButton from '../button/button';
 import { Link } from 'react-router-dom';
-import ProjectMenu from '../projects-menu/projects.js';
 
 function App(props) {
 
@@ -41,10 +40,8 @@ function App(props) {
         <div>
             <Navbar />
             <Sidebar name="sites"/>
-            {/* <ProjectMenu /> */}
             <Grid container pl={40} pt={6} pb={10} >
                 <Grid item xs={3} > {/* Left small section*/}
-
                     <h2 className="projectName">Sites / Projects </h2>
                     <div className="search" >
                         <TextField
