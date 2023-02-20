@@ -1,0 +1,136 @@
+{
+  "countries": [
+    {
+      "name": "Pakistan",
+      "cities": [
+        {
+          "name": "Lahore",
+          "devices": [
+            {
+              "name": "Device 1",
+              "type": "Smart Home"
+            },
+            {
+              "name": "Device 2",
+              "type": "Smart Watch"
+            }
+          ]
+        },
+        {
+          "name": "Karachi",
+          "devices": [
+            {
+              "name": "Device 3",
+              "type": "Smart TV"
+            },
+            {
+              "name": "Device 4",
+              "type": "Smart Phone"
+            }
+          ]
+        },
+        {
+          "name": "Islamabad",
+          "devices": [
+            {
+              "name": "Device 5",
+              "type": "Smart Speaker"
+            },
+            {
+              "name": "Device 6",
+              "type": "Smart Lock"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "India",
+      "cities": [
+        {
+          "name": "Delhi",
+          "devices": [
+            {
+              "name": "Device 7",
+              "type": "Smart Home"
+            },
+            {
+              "name": "Device 8",
+              "type": "Smart Watch"
+            }
+          ]
+        },
+        {
+          "name": "Mumbai",
+          "devices": [
+            {
+              "name": "Device 9",
+              "type": "Smart TV"
+            },
+            {
+              "name": "Device 10",
+              "type": "Smart Phone"
+            }
+          ]
+        },
+        {
+          "name": "Bangalore",
+          "devices": [
+            {
+              "name": "Device 11",
+              "type": "Smart Speaker"
+            },
+            {
+              "name": "Device 12",
+              "type": "Smart Lock"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bangladesh",
+      "cities": [
+        {
+          "name": "Dhaka",
+          "devices": [
+            {
+              "name": "Device 13",
+              "type": "Smart Home"
+            },
+            {
+              "name": "Device 14",
+              "type": "Smart Watch"
+            }
+          ]
+        },
+        {
+          "name": "Chittagong",
+          "devices": [
+            {
+              "name": "Device 15",
+              "type": "Smart TV"
+            },
+            {
+              "name": "Device 16",
+              "type": "Smart Phone"
+            }
+          ]
+        },
+        {
+          "name": "Rajshahi",
+          "devices": [
+            {
+              "name": "Device 17",
+              "type": "Smart Speaker"
+            },
+            {
+              "name": "Device 18",
+              "type": "Smart Lock"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
