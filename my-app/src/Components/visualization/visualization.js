@@ -80,7 +80,7 @@ function App(props) {
   return (
     <ThemeProvider theme={mdTheme}>
       <Navbar />
-      <Sidebar />
+      <Sidebar name="dashboard" />
       <Grid container spacing={0} p={8} pt={2} sx={{
         backgroundColor: (theme) => theme.palette.grey[100]
       }}>
