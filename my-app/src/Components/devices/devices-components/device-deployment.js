@@ -52,10 +52,10 @@ const DeviceDeployment = () => {
   }, []);
 
   return (
-
     <div>
       <Navbar></Navbar>
       <Sidebar name="device" />
+    
       <div className="grid-container">
         <div className="containerr">
           <div className="card">
@@ -80,7 +80,11 @@ const DeviceDeployment = () => {
                   label="Frequency"
                   helperText="Choose frequency of receving data"
                 />
-                <Select name="timeUnit" label="Unit" options={checkboxOptions} />
+                <Select
+                  name="timeUnit"
+                  label="Unit"
+                  options={checkboxOptions}
+                />
                 {/* </div> */}
                 <Button>Add Device</Button>
               </Form>
@@ -89,10 +93,16 @@ const DeviceDeployment = () => {
         </div>
         <div className="map">
           <h2>Select location from map:</h2>
-          <MapContainer className="deviceMap" center={[33.702299, 73.130]} zoom={14} scrollWheelZoom={true}>
+          <MapContainer
+            className="deviceMap"
+            center={[33.702299, 73.13]}
+            zoom={14}
+            scrollWheelZoom={true}
+          >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
-               contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+               contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {/* <Marker position={[33.702299, 73.130]}>
               <Popup>

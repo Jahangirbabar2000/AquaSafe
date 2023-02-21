@@ -3,3 +3,11 @@
     width: 100vh;
     height: 50vh;
 }
+
+.menuContainer{
+    height:5.5vh;
+    width: 100%;
+    padding-left: 15%; 
+   box-sizing: border-box;
+   
+}
