@@ -12,8 +12,8 @@ import 'leaflet/dist/leaflet.css';
 import Sidebar from '../sidebar/side-bar';
 import "./sites.css";
 import Navbar from "../navbar/navbar.js"
-import NewButton from '../button/button';
 import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 function App(props) {
 
@@ -39,7 +39,7 @@ function App(props) {
     return (
         <div>
             <Navbar />
-            <Sidebar name="sites"/>
+            <Sidebar name="sites" />
             <Grid container pl={40} pt={6} pb={10} >
                 <Grid item xs={3} > {/* Left small section*/}
                     <h2 className="projectName">Sites / Projects </h2>
@@ -104,8 +104,9 @@ function App(props) {
             </Grid>
             <Grid container pl={150}>
                 <Link to="/dashboard">
-                    <NewButton text={"View Devices"}>
-                    </NewButton>
+                    <Button variant="contained">
+                        View Devices
+                    </Button>
                 </Link>
             </Grid>
         </div>

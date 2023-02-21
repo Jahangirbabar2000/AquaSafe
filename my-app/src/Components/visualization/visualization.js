@@ -29,6 +29,7 @@ function App(props) {
   const [loading, setLoading] = React.useState(true);
   const [startDate, setStartDate] = React.useState(moment('2017-08-10T21:11:54'));
   const [endDate, setEndDate] = React.useState(moment('2017-08-20T21:11:54'));
+  const [zx, zxz] = React.useState(true);
 
   React.useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -143,7 +144,7 @@ function App(props) {
                 <h3>pH</h3>
                 <h5>(Scale 0-14)</h5>
                 <ResponsiveContainer height={140}>
-                  <BarGraph data={data} datakey={'pH'} />
+                  <BarGraph data={data} datakey={'pH'} min={'6.5'} max={'8.5'} />
                 </ResponsiveContainer>
               </Paper>
               <Paper sx={{
@@ -155,7 +156,7 @@ function App(props) {
                 <h3>Dissolved Oxygen</h3>
                 <h5>(mg/L)</h5>
                 <ResponsiveContainer height={140}>
-                  <LineGraph data={data} datakey={'Dissolved Oxygen (mg/L)'} />
+                  <LineGraph data={data} datakey={'Dissolved Oxygen (mg/L)'} min={'5'} max={'11'} />
                 </ResponsiveContainer>
               </Paper>
 
@@ -199,7 +200,7 @@ function App(props) {
             <h3>Ammonia-Nitrogen</h3>
             <h5>(mg/L)</h5>
             <ResponsiveContainer height={140}>
-              <BarGraph data={data} datakey={'Ammonia-Nitrogen (mg/L)'} />
+              <BarGraph data={data} datakey={'Ammonia-Nitrogen (mg/L)'} min={'0.25'} max={'3'} />
             </ResponsiveContainer>
           </Paper>
 
@@ -212,7 +213,7 @@ function App(props) {
             <h3>Total Phosphorus (mg/L)</h3>
             <h5>(mg/L)</h5>
             <ResponsiveContainer height={140}>
-              <LineGraph data={data} datakey={'Total Phosphorus (mg/L)'} />
+              <LineGraph data={data} datakey={'Total Phosphorus (mg/L)'} min={'0'} max={'3'} />
             </ResponsiveContainer>
           </Paper>
 
@@ -225,7 +226,7 @@ function App(props) {
             <h3>5-Day Biochemical Oxygen Demand</h3>
             <h5>(mg/L)</h5>
             <ResponsiveContainer height={140}>
-              <BarGraph data={data} datakey={'5-Day Biochemical Oxygen Demand (mg/L)'} />
+              <BarGraph data={data} datakey={'5-Day Biochemical Oxygen Demand (mg/L)'} min={'1'} max={'5'} />
             </ResponsiveContainer>
           </Paper>
 
@@ -238,7 +239,7 @@ function App(props) {
             <h3>Water Temperature</h3>
             <h5>(°C)</h5>
             <ResponsiveContainer height={140}>
-              <LineGraph data={data} datakey={'Water Temperature (°C)'} />
+              <LineGraph data={data} datakey={'Water Temperature (°C)'} min={'4'} max={'22'} />
             </ResponsiveContainer>
           </Paper>
 
@@ -251,7 +252,7 @@ function App(props) {
             <h3>Suspended solids</h3>
             <h5>(mg/L)</h5>
             <ResponsiveContainer height={140}>
-              <BarGraph data={data} datakey={'Suspended solids (mg/L)'} />
+              <BarGraph data={data} datakey={'Suspended solids (mg/L)'} min={'1'} max={'5'} />
             </ResponsiveContainer>
           </Paper>
 
@@ -264,7 +265,7 @@ function App(props) {
             <h3>Conductivity</h3>
             <h5>(µS/cm)</h5>
             <ResponsiveContainer height={140}>
-              <LineGraph data={data} datakey={'Conductivity (µS/cm)'} />
+              <LineGraph data={data} datakey={'Conductivity (µS/cm)'} min={'100'} max={'1000'} />
             </ResponsiveContainer>
           </Paper>
 
@@ -277,7 +278,7 @@ function App(props) {
             <h3>Nitrate-Nitrogen</h3>
             <h5>(mg/L)</h5>
             <ResponsiveContainer height={140}>
-              <BarGraph data={data} datakey={'Nitrate-Nitrogen (mg/L)'} />
+              <BarGraph data={data} datakey={'Nitrate-Nitrogen (mg/L)'} min={'0'} max={'10'} />
             </ResponsiveContainer>
           </Paper>
 
@@ -290,7 +291,7 @@ function App(props) {
             <h3>Nitrite-Nitrogen</h3>
             <h5>(mg/L)</h5>
             <ResponsiveContainer height={140}>
-              <LineGraph data={data} datakey={'Nitrite-Nitrogen (mg/L)'} />
+              <LineGraph data={data} datakey={'Nitrite-Nitrogen (mg/L)'} min={'0'} max={'1'} />
             </ResponsiveContainer>
           </Paper>
 
