@@ -61,7 +61,7 @@ export default function ProjectMenu() {
 
   return (
     <div id="container">
-      <p style={{ color: "white", fontSize: "3em", paddingRight: 50 }}>
+      <p style={{ color: "white", fontSize: "2em", paddingRight: 75 }}>
         Search Project
       </p>
       <div>
@@ -146,7 +146,7 @@ export default function ProjectMenu() {
       <Button
         variant="contained"
         size="large"
-        sx={{ marginTop: 0.5, marginLeft: "2%" }}
+        sx={{ marginTop: 0.5, marginLeft: "1%" }}
         onClick={handleClick}
       >
         Search

@@ -6,13 +6,25 @@ import Device from "./Components/devices/devices.js"
 import AddSensor from "./Components/Sensor/addSensor";
 import NewProject from "./Components/NewProjectForm/NewProject.js"
 import ProjectMenu from "./Components/projects-menu/projects.js";
-// import NestedList from "./Components/projects-menu/projectmenuTest.js";
+<<<<<<< HEAD
+
+=======
+>>>>>>> project-menu
 
 function App() {
   return (
     <div className="main">
       {/* <AddSensor /> */}
-      <ProjectMenu />
+<<<<<<< HEAD
+      <Routes />
+=======
+
+      <div className="container1">
+      <div>
+      <Routes />
+      </div>
+      </div >
+>>>>>>> project-menu
       {/* <Footer /> */}
     </div>
   );
