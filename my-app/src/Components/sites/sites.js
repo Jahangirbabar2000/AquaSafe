@@ -38,81 +38,89 @@ function App(props) {
     };
 
     return (
-        <div>
-            <Navbar />
-            <Sidebar name="sites"/>
-            {/* <ProjectMenu /> */}
-            <Grid container pl={40} pt={6} pb={10} >
-                <Grid item xs={3} > {/* Left small section*/}
+      <div>
+        <Navbar />
+        <Sidebar name="sites" />
+        {/* <ProjectMenu /> */}
+            <div className="menuContainer"><ProjectMenu /> </div>
+        <Grid container pl={40} pt={6} pb={10}>
+          <Grid item xs={3}>
+            {" "}
+            {/* Left small section*/}
+            <h2 className="projectName">Sites / Projects </h2>
+            <div className="search">
+              <TextField
+                fullWidth
+                className="inputRounded"
+                onChange={inputHandler}
+                id="input-with-icon-textfield"
+                label="Search Project"
+                size="small"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <SearchIcon />
+                    </InputAdornment>
+                  )
+                }}
+                variant="outlined"
+              />
+            </div>
+            {/************ Countries/Pakistan ************/}
+            <Box sx={{ paddingTop: 5, maxWidth: 220 }}>
+              <Card
+                variant="outlined"
+                sx={{
+                  maxWidth: 200,
+                  border: "3px solid #30b1d9",
+                  borderRadius: "8px",
+                  ":hover": {
+                    boxShadow: 20 // theme.shadows[20]
+                  }
+                }}
+              >
+                <React.Fragment>
+                  <CardContent>
+                    <h3 class="ul">Pakistan</h3>
 
-                    <h2 className="projectName">Sites / Projects </h2>
-                    <div className="search" >
-                        <TextField
-                            fullWidth
-                            className="inputRounded"
-                            onChange={inputHandler}
-                            id="input-with-icon-textfield"
-                            label="Search Project"
-                            size='small'
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                ),
-                            }}
-                            variant="outlined"
-                        />
-                    </div>
-
-                    {/************ Countries/Pakistan ************/}
-
-                    <Box sx={{ paddingTop: 5, maxWidth: 220, }}>
-                        <Card variant="outlined" sx={{
-                            maxWidth: 200,
-                            border: '3px solid #30b1d9',
-                            borderRadius: '8px',
-                            ':hover': {
-                                boxShadow: 20, // theme.shadows[20]
-                            },
-                        }}>
-                            <React.Fragment>
-                                <CardContent>
-                                    <h3 class="ul">Pakistan</h3>
-
-                                    <List sx={{
-                                        width: '100%', maxWidth: 360,
-                                        bgcolor: 'background.paper'
-                                    }} input={inputText} />
-                                </CardContent>
-                            </React.Fragment>
-                        </Card>
-                    </Box>
-                </Grid>
-                <Grid item sm={9} alignItems="flex=end"
-                    justifyContent="flex=end">
-                    <MapContainer className='siteMap' center={[33.702299, 73.130]} zoom={11} scrollWheelZoom={true}>
-                        <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <Marker position={[33.702299, 73.130]}>
-                            <Popup>
-                                Location of this Project: <br /> Rawal Lake, Islamabad
-                            </Popup>
-                        </Marker>
-                    </MapContainer>
-
-                </Grid>
-            </Grid>
-            <Grid container pl={150}>
-                <Link to="/dashboard">
-                    <NewButton text={"View Devices"}>
-                    </NewButton>
-                </Link>
-            </Grid>
-        </div>
-
+                    <List
+                      sx={{
+                        width: "100%",
+                        maxWidth: 360,
+                        bgcolor: "background.paper"
+                      }}
+                      input={inputText}
+                    />
+                  </CardContent>
+                </React.Fragment>
+              </Card>
+            </Box>
+          </Grid>
+          <Grid item sm={9} alignItems="flex=end" justifyContent="flex=end">
+            <MapContainer
+              className="siteMap"
+              center={[33.702299, 73.13]}
+              zoom={11}
+              scrollWheelZoom={true}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[33.702299, 73.13]}>
+                <Popup>
+                  Location of this Project: <br /> Rawal Lake, Islamabad
+                </Popup>
+              </Marker>
+            </MapContainer>
+          </Grid>
+        </Grid>
+        <Grid container pl={150}>
+          <Link to="/dashboard">
+            <NewButton text={"View Devices"}></NewButton>
+          </Link>
+        </Grid>
+      </div>
     );
 }
 
