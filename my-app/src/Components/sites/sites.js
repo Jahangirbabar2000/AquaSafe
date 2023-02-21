@@ -43,10 +43,10 @@ function App(props) {
         <Sidebar name="sites" />
             <div className="menuContainer"><ProjectMenu /> </div>
         <Grid container pl={40} pt={6} pb={10}>
-          <Grid item xs={3}>
-            {" "}
+          {/* <Grid item xs={3}>
+            {" "} */}
             {/* Left small section*/}
-            <h2 className="projectName">Sites / Projects </h2>
+            {/* <h2 className="projectName">Sites / Projects </h2>
             <div className="search">
               <TextField
                 fullWidth
@@ -64,9 +64,9 @@ function App(props) {
                 }}
                 variant="outlined"
               />
-            </div>
+            </div> */}
             {/************ Countries/Pakistan ************/}
-            <Box sx={{ paddingTop: 5, maxWidth: 220 }}>
+            {/* <Box sx={{ paddingTop: 5, maxWidth: 220 }}>
               <Card
                 variant="outlined"
                 sx={{
@@ -94,7 +94,7 @@ function App(props) {
                 </React.Fragment>
               </Card>
             </Box>
-          </Grid>
+          </Grid> */}
           <Grid item sm={9} alignItems="flex=end" justifyContent="flex=end">
             <MapContainer
               className="siteMap"
@@ -114,9 +114,9 @@ function App(props) {
             </MapContainer>
           </Grid>
         </Grid>
-        <Grid container pl={150}>
+        <Grid container pl={85}>
           <Link to="/dashboard">
-          <Button fullWidth variant="contained">View Devices</Button>
+          <Button sx={{fontSize:16}} fullWidth variant="contained">View Devices</Button>
             {/* <NewButton text={"View Devices"}></NewButton> */}
           </Link>
         </Grid>

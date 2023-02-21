@@ -61,9 +61,9 @@ export default function ProjectMenu() {
 
   return (
     <div id="container">
-      <p style={{ color: "white", fontSize: "2em", paddingRight: 75 }}>
+      {/* <p style={{ color: "white", fontSize: "2em", paddingRight: 75 }}>
         Search Project
-      </p>
+      </p> */}
       <div>
     
 
