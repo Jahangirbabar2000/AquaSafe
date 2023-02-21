@@ -12,10 +12,10 @@ import 'leaflet/dist/leaflet.css';
 import Sidebar from '../sidebar/side-bar';
 import "./sites.css";
 import Navbar from "../navbar/navbar.js"
-import NewButton from '../button/button';
+// import NewButton from '../button/button';
 import { Link } from 'react-router-dom';
 import ProjectMenu from '../projects-menu/projects.js';
-
+import Button from "@mui/material/Button";
 function App(props) {
 
     React.useEffect(() => {     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -116,7 +116,8 @@ function App(props) {
         </Grid>
         <Grid container pl={150}>
           <Link to="/dashboard">
-            <NewButton text={"View Devices"}></NewButton>
+          <Button fullWidth variant="contained">View Devices</Button>
+            {/* <NewButton text={"View Devices"}></NewButton> */}
           </Link>
         </Grid>
       </div>
