@@ -4,10 +4,10 @@
     height: 50vh;
 }
 
-.menuContainer{
-    height:5.5vh;
+.menuContainer {
+    height: 5.5vh;
     width: 100%;
-    padding-left: 15%; 
-   box-sizing: border-box;
-   
+    padding-left: 14%;
+    box-sizing: border-box;
+
 }
