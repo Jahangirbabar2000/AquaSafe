@@ -43,7 +43,7 @@ export default function ProjectMenu() {
   const [selectedProject, setSelectedProject] = React.useState();
 
   const availableState = data.countries.find((c) => c.name === selectedCountry);
-  const availableProjects = availableState ?.states ?.find(
+  const availableProjects = availableState?.states?.find(
     (s) => s.name === selectedCity
   );
 

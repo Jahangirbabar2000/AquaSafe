@@ -1,12 +1,5 @@
 import * as React from 'react';
-import TextField from "@mui/material/TextField";
 import Grid from '@mui/material/Grid';
-import List from "../dummyData/List";
-import SearchIcon from '@mui/icons-material/Search';
-import InputAdornment from '@mui/material/InputAdornment';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import Sidebar from '../sidebar/side-bar';
@@ -28,13 +21,6 @@ function App(props) {
             shadowUrl: require("leaflet/dist/images/marker-shadow.png")
         });
     }, []);
-
-    const [inputText, setInputText] = React.useState("");
-    let inputHandler = (e) => { // CODE FOR IMPLEMENTATOIN OF SEARCH BAR
-        //convert input text to lower case
-        var lowerCase = e.target.value.toLowerCase();
-        setInputText(lowerCase);
-    };
 
     return (        
       <div>
