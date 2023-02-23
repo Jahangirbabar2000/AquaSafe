@@ -17,7 +17,6 @@ import Sidebar from "../sidebar/side-bar";
 import { Paper } from "@mui/material";
 import Datepicker from "./datepicker";
 import Button from '@mui/material/Button';
-
 const mdTheme = createTheme();
 
 function App(props) {
@@ -29,7 +28,6 @@ function App(props) {
   const [loading, setLoading] = React.useState(true);
   const [startDate, setStartDate] = React.useState(moment('2017-08-10T21:11:54'));
   const [endDate, setEndDate] = React.useState(moment('2017-08-20T21:11:54'));
-  const [zx, zxz] = React.useState(true);
 
   React.useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP

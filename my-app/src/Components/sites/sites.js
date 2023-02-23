@@ -13,9 +13,8 @@ import Sidebar from '../sidebar/side-bar';
 import "./sites.css";
 import Navbar from "../navbar/navbar.js"
 import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import ProjectMenu from '../projects-menu/projects.js';
-
+import { Button } from '@mui/material';
+import ProjectMenu from '../projects-menu/projects';
 function App(props) {
 
     React.useEffect(() => {     // CODE FOR FIXING MARKER PROBLEM ON MAP
