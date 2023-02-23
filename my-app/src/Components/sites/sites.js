@@ -51,7 +51,6 @@ function App(props) {
             </Grid>
             <Grid container pl={85}>
                 <Link to="/dashboard">
-                    <Button sx={{ fontSize: 16 }} fullWidth variant="contained">View Devices</Button>
                 </Link>
             </Grid>
         </div>
