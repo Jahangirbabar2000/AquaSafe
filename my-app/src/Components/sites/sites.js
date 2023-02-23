@@ -51,6 +51,7 @@ function App(props) {
             </Grid>
             <Grid container pl={85}>
                 <Link to="/dashboard">
+                    <Button>dsd</Button>
                 </Link>
             </Grid>
         </div>
