@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { ReferenceLine, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function LineGraph(props) {
   return (
@@ -12,7 +12,9 @@ function LineGraph(props) {
         <XAxis dataKey="Dates" />
         <YAxis dataKey={props.datakey} />
         <Tooltip />
-        <Line type="monotone" dataKey={props.datakey} stroke="#82ca9d" />
+        <Line type="Monotone" dataKey={props.datakey} stroke="#82ca9d" />
+        <ReferenceLine y={props.min} stroke="#de4545" strokeDasharray="3 3" />
+        <ReferenceLine y={props.max} stroke="#de4545" strokeDasharray="3 3" />
       </LineChart>
     </ResponsiveContainer>
   );
