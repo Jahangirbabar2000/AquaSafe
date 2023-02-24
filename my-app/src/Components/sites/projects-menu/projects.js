@@ -48,37 +48,36 @@ export default function ProjectMenu() {
   );
 
   function handleClick() {
-    console.log("Country: ",selectedCountry);
-    console.log("City: ",selectedCity);
-    console.log("Project: ",selectedProject);
+    console.log("Country: ", selectedCountry);
+    console.log("City: ", selectedCity);
+    console.log("Project: ", selectedProject);
   }
 
-  function handleClick1(){
+  function handleClick1() {
     setSelectedCity("");
     setSelectedCountry("");
     setSelectedProject("");
   }
 
   return (
-    <div id="container">
+    <div id="container-projects">
       {/* <p style={{ color: "white", fontSize: "2em", paddingRight: 75 }}>
         Search Project
       </p> */}
       <div>
-    
-
         <select
+          className="select-projects"
           placeholder="Country"
           value={selectedCountry}
           onChange={e => setSelectedCountry(e.target.value)}
           style={{ fontSize: 12 }}
         >
-          <option value="" disabled selected>
+          <option className="option-projects" value="" disabled selected>
             Select Country
           </option>
           {data.countries.map((value, key) => {
             return (
-              <option value={value.name} key={key}>
+              <option className="option-projects" value={value.name} key={key}>
                 {value.name}
               </option>
             );
@@ -89,17 +88,18 @@ export default function ProjectMenu() {
       <div>
         {/* <label>City</label> */}
         <select
+          className="select-projects"
           style={{ fontSize: 12 }}
           placeholder="City"
           value={selectedCity}
           onChange={e => setSelectedCity(e.target.value)}
         >
-          <option value="" disabled selected>
+          <option className="option-projects" value="" disabled selected>
             Select City
           </option>
           {availableState?.states.map((e, key) => {
             return (
-              <option value={e.name} key={key}>
+              <option className="option-projects" value={e.name} key={key}>
                 {e.name}
               </option>
             );
@@ -111,17 +111,18 @@ export default function ProjectMenu() {
         {/* <label>Project</label> */}
 
         <select
+          className="select-projects"
           style={{ fontSize: 12 }}
           placeholder="Project"
           value={selectedProject}
           onChange={e => setSelectedProject(e.target.value)}
         >
-          <option value="" disabled selected>
+          <option className="option-projects" value="" disabled selected>
             Select Project
           </option>
           {availableProjects?.cities.map((e, key) => {
             return (
-              <option value={e.name} key={key}>
+              <option className="option-projects" value={e.name} key={key}>
                 {e}
               </option>
             );
@@ -132,7 +133,7 @@ export default function ProjectMenu() {
         id="clearButton"
         style={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "row"
         }}
       >
         <IconButton aria-label="delete" onClick={handleClick1}>
@@ -146,12 +147,11 @@ export default function ProjectMenu() {
       <Button
         variant="contained"
         size="large"
-        sx={{ marginTop: 0.5, marginLeft: "1%" }}
+        sx={{ marginTop: 0.1, marginLeft: "1%", fontSize: 12 }}
         onClick={handleClick}
       >
-        Search
+        Search Project
       </Button>
-
     </div>
   );
 }

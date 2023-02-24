@@ -1,6 +1,5 @@
 import React from 'react';
 import UsersTable from './usersTable/usersTable';
-import usersData from './dummyData/UsersDummy.json'
 import SignUp from './signUp/signUp';
 import Login from './login/login';
 import Notifications from './notifications/notifications';
@@ -18,7 +17,7 @@ function routes() {
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
-      <Route path="/userstable" element={<UsersTable data={usersData} />} />
+      <Route path="/userstable" element={<UsersTable/>} />
       <Route path="/notifications" element={<Notifications data={dummyData} />} />
       <Route path="/dashboard" element={<Visualization />} />
       <Route path="/sites" element={<Sites />} />
