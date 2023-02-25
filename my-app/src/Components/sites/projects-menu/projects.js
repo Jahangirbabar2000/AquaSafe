@@ -61,6 +61,9 @@ export default function ProjectMenu() {
 
   return (
     <div id="container-projects">
+      {/* <p style={{ color: "white", fontSize: "2em", paddingRight: 75 }}>
+        Search Project
+      </p> */}
       <div>
         <select
           className="select-projects"
@@ -86,7 +89,6 @@ export default function ProjectMenu() {
         {/* <label>City</label> */}
         <select
           className="select-projects"
-          style={{ fontSize: 12 }}
           placeholder="City"
           value={selectedCity}
           onChange={e => setSelectedCity(e.target.value)}
@@ -109,7 +111,6 @@ export default function ProjectMenu() {
 
         <select
           className="select-projects"
-          style={{ fontSize: 12 }}
           placeholder="Project"
           value={selectedProject}
           onChange={e => setSelectedProject(e.target.value)}
@@ -143,7 +144,6 @@ export default function ProjectMenu() {
       </div>
       <Button
         variant="primary"
-        // size="large"
         className="project-search btn-lg"
         onClick={handleClick}
       >
