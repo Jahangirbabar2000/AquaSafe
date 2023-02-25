@@ -1,22 +1,19 @@
 import * as React from 'react';
-import TextField from "@mui/material/TextField";
 import Grid from '@mui/material/Grid';
-import List from "../dummyData/List";
-import SearchIcon from '@mui/icons-material/Search';
-import InputAdornment from '@mui/material/InputAdornment';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import Sidebar from '../sidebar/side-bar';
 import "./sites.css";
 import Navbar from "../navbar/navbar.js"
-// import NewButton from '../button/button';
 import { Link } from 'react-router-dom';
+<<<<<<< HEAD
 import ProjectMenu from './projects-menu/projects.js';
 // import Button from "@mui/material/Button";
 import Button from "react-bootstrap/Button";
+=======
+import { Button } from '@mui/material';
+import ProjectMenu from '../projects-menu/projects';
+>>>>>>> upstream/master
 function App(props) {
 
     React.useEffect(() => {     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -31,17 +28,11 @@ function App(props) {
         });
     }, []);
 
-    const [inputText, setInputText] = React.useState("");
-    let inputHandler = (e) => { // CODE FOR IMPLEMENTATOIN OF SEARCH BAR
-        //convert input text to lower case
-        var lowerCase = e.target.value.toLowerCase();
-        setInputText(lowerCase);
-    };
-
-    return (
+    return (        
       <div>
         <Navbar />
         <Sidebar name="sites" />
+<<<<<<< HEAD
         <div className="menuContainer">
           <ProjectMenu />{" "}
         </div>
@@ -98,6 +89,10 @@ function App(props) {
               </Card>
             </Box>
           </Grid> */}
+=======
+            <div className="menuContainer"><ProjectMenu /> </div>
+        <Grid container pl={40} pt={6} pb={10}>          
+>>>>>>> upstream/master
           <Grid item sm={9} alignItems="flex=end" justifyContent="flex=end">
             <MapContainer
               className="siteMap"
@@ -119,6 +114,7 @@ function App(props) {
         </Grid>
         <Grid container pl={85}>
           <Link to="/dashboard">
+<<<<<<< HEAD
             <Button
               size="lg"
               style={{ fontSize: "20px" }}
@@ -128,6 +124,9 @@ function App(props) {
               View Devices
             </Button>
             {/* <NewButton text={"View Devices"}></NewButton> */}
+=======
+          <Button sx={{fontSize:16}} fullWidth variant="contained">View Devices</Button>
+>>>>>>> upstream/master
           </Link>
         </Grid>
       </div>

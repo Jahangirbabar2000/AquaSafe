@@ -43,17 +43,17 @@ export default function ProjectMenu() {
   const [selectedProject, setSelectedProject] = React.useState();
 
   const availableState = data.countries.find((c) => c.name === selectedCountry);
-  const availableProjects = availableState ?.states ?.find(
+  const availableProjects = availableState?.states?.find(
     (s) => s.name === selectedCity
   );
 
   function handleClick() {
-    console.log("Country: ",selectedCountry);
-    console.log("City: ",selectedCity);
-    console.log("Project: ",selectedProject);
+    console.log("Country: ", selectedCountry);
+    console.log("City: ", selectedCity);
+    console.log("Project: ", selectedProject);
   }
 
-  function handleClick1(){
+  function handleClick1() {
     setSelectedCity("");
     setSelectedCountry("");
     setSelectedProject("");
