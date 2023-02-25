@@ -1,10 +1,10 @@
 import "./projects.css";
 import * as React from "react";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import Typography from "@material-ui/core/Typography";
-
+import Button from "react-bootstrap/Button";
 const data = {
   countries: [
     {
@@ -89,7 +89,6 @@ export default function ProjectMenu() {
         {/* <label>City</label> */}
         <select
           className="select-projects"
-          style={{ fontSize: 12 }}
           placeholder="City"
           value={selectedCity}
           onChange={e => setSelectedCity(e.target.value)}
@@ -112,7 +111,6 @@ export default function ProjectMenu() {
 
         <select
           className="select-projects"
-          style={{ fontSize: 12 }}
           placeholder="Project"
           value={selectedProject}
           onChange={e => setSelectedProject(e.target.value)}
@@ -145,9 +143,8 @@ export default function ProjectMenu() {
         </IconButton>
       </div>
       <Button
-        variant="contained"
-        size="large"
-        sx={{ marginTop: 0.1, marginLeft: "1%", fontSize: 12 }}
+        variant="primary"
+        className="project-search btn-lg"
         onClick={handleClick}
       >
         Search Project
