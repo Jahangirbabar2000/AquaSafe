@@ -1,10 +1,10 @@
 import "./projects.css";
 import * as React from "react";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import Typography from "@material-ui/core/Typography";
-
+import Button from "react-bootstrap/Button";
 const data = {
   countries: [
     {
@@ -60,25 +60,21 @@ export default function ProjectMenu() {
   }
 
   return (
-    <div id="container">
-      {/* <p style={{ color: "white", fontSize: "2em", paddingRight: 75 }}>
-        Search Project
-      </p> */}
+    <div id="container-projects">
       <div>
-    
-
         <select
+          className="select-projects"
           placeholder="Country"
           value={selectedCountry}
           onChange={e => setSelectedCountry(e.target.value)}
           style={{ fontSize: 12 }}
         >
-          <option value="" disabled selected>
+          <option className="option-projects" value="" disabled selected>
             Select Country
           </option>
           {data.countries.map((value, key) => {
             return (
-              <option value={value.name} key={key}>
+              <option className="option-projects" value={value.name} key={key}>
                 {value.name}
               </option>
             );
@@ -89,17 +85,18 @@ export default function ProjectMenu() {
       <div>
         {/* <label>City</label> */}
         <select
+          className="select-projects"
           style={{ fontSize: 12 }}
           placeholder="City"
           value={selectedCity}
           onChange={e => setSelectedCity(e.target.value)}
         >
-          <option value="" disabled selected>
+          <option className="option-projects" value="" disabled selected>
             Select City
           </option>
           {availableState?.states.map((e, key) => {
             return (
-              <option value={e.name} key={key}>
+              <option className="option-projects" value={e.name} key={key}>
                 {e.name}
               </option>
             );
@@ -111,17 +108,18 @@ export default function ProjectMenu() {
         {/* <label>Project</label> */}
 
         <select
+          className="select-projects"
           style={{ fontSize: 12 }}
           placeholder="Project"
           value={selectedProject}
           onChange={e => setSelectedProject(e.target.value)}
         >
-          <option value="" disabled selected>
+          <option className="option-projects" value="" disabled selected>
             Select Project
           </option>
           {availableProjects?.cities.map((e, key) => {
             return (
-              <option value={e.name} key={key}>
+              <option className="option-projects" value={e.name} key={key}>
                 {e}
               </option>
             );
@@ -132,7 +130,7 @@ export default function ProjectMenu() {
         id="clearButton"
         style={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "row"
         }}
       >
         <IconButton aria-label="delete" onClick={handleClick1}>
@@ -144,14 +142,13 @@ export default function ProjectMenu() {
         </IconButton>
       </div>
       <Button
-        variant="contained"
-        size="large"
-        sx={{ marginTop: 0.5, marginLeft: "1%" }}
+        variant="primary"
+        // size="large"
+        className="project-search btn-lg"
         onClick={handleClick}
       >
-        Search
+        Search Project
       </Button>
-
     </div>
   );
 }

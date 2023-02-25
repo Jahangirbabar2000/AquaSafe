@@ -14,8 +14,9 @@ import "./sites.css";
 import Navbar from "../navbar/navbar.js"
 // import NewButton from '../button/button';
 import { Link } from 'react-router-dom';
-import ProjectMenu from '../projects-menu/projects.js';
-import Button from "@mui/material/Button";
+import ProjectMenu from './projects-menu/projects.js';
+// import Button from "@mui/material/Button";
+import Button from "react-bootstrap/Button";
 function App(props) {
 
     React.useEffect(() => {     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -41,12 +42,14 @@ function App(props) {
       <div>
         <Navbar />
         <Sidebar name="sites" />
-            <div className="menuContainer"><ProjectMenu /> </div>
+        <div className="menuContainer">
+          <ProjectMenu />{" "}
+        </div>
         <Grid container pl={40} pt={6} pb={10}>
           {/* <Grid item xs={3}>
             {" "} */}
-            {/* Left small section*/}
-            {/* <h2 className="projectName">Sites / Projects </h2>
+          {/* Left small section*/}
+          {/* <h2 className="projectName">Sites / Projects </h2>
             <div className="search">
               <TextField
                 fullWidth
@@ -65,8 +68,8 @@ function App(props) {
                 variant="outlined"
               />
             </div> */}
-            {/************ Countries/Pakistan ************/}
-            {/* <Box sx={{ paddingTop: 5, maxWidth: 220 }}>
+          {/************ Countries/Pakistan ************/}
+          {/* <Box sx={{ paddingTop: 5, maxWidth: 220 }}>
               <Card
                 variant="outlined"
                 sx={{
@@ -116,7 +119,14 @@ function App(props) {
         </Grid>
         <Grid container pl={85}>
           <Link to="/dashboard">
-          <Button sx={{fontSize:16}} fullWidth variant="contained">View Devices</Button>
+            <Button
+              size="lg"
+              style={{ fontSize: "20px" }}
+              fullWidth
+              variant="primary"
+            >
+              View Devices
+            </Button>
             {/* <NewButton text={"View Devices"}></NewButton> */}
           </Link>
         </Grid>
