@@ -25,7 +25,7 @@ function InfoBox(props){
     return(
         <div className="Info">
              {props.icon}
-            <p style={{marginTop: 15,fontSize:"auto"}}>{props.up}</p>   
+            <p style={{margin: 15,fontSize:"17px"}}>{props.up}</p>   
         </div>
     );
 }
