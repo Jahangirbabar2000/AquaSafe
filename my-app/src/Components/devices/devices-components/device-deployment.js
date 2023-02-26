@@ -74,7 +74,6 @@ const DeviceDeployment = () => {
                 <TextField name="description" label="Description" />
                 <TextField name="location" label="Location" />
                 <TextField name="deviceNum" label="Device Number" />
-                {/* <div style={{display: "flex"}}> */}
                 <TextField
                   name="frequency"
                   label="Frequency"
@@ -86,7 +85,8 @@ const DeviceDeployment = () => {
                   options={checkboxOptions}
                 />
                 {/* </div> */}
-                <Button>Add Device</Button>
+                <div style={{height:25}}></div>
+                <Button sx={{fontSize:100}}>Add Device</Button>
               </Form>
             </Formik>
           </div>
