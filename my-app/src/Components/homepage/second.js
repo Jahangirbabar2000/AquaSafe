@@ -12,7 +12,7 @@ export default function Second(){
             {/* <PriorityHighIcon sx={{fontSize:40}} /> */}
             <div className="Info-container">
                 <InfoBox icon={<PriorityHighIcon sx={{ fontSize:100}}/>} up="Get Alerts for critical Contamination" />
-                <InfoBox icon={<NotificationsIcon sx={{ fontSize: 100}}/>} up="You choose between push or regular interval notifications" />
+                <InfoBox icon={<NotificationsIcon sx={{ fontSize: 100}}/>} up="Choose between push or regular interval notifications" />
                 <InfoBox icon={<ManageAccountsIcon sx={{fontSize:100}}/>} up="Manage user visibility and interactions" />
                 <InfoBox icon={<ConstructionIcon sx={{ fontSize: 100}}/>} up="Assign technicians to tasks as needed" />
 
@@ -25,7 +25,7 @@ function InfoBox(props){
     return(
         <div className="Info">
              {props.icon}
-            <p style={{marginTop: 23,fontSize:23}}>{props.up}</p>   
+            <p style={{marginTop: 15,fontSize:"auto"}}>{props.up}</p>   
         </div>
     );
 }

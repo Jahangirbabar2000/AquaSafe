@@ -6,9 +6,10 @@ export default function First() {
   return (
     <div className="title">
       <div className="title-child">
+        <div ><h1 id="app-name">AquaSafe</h1></div>
         <h1 id="title">
           An AI enabled quasi-real-time water quality monitoring for early
-          contamination detection
+          contamination detection.
         </h1>
         <div>
           <p id="title-sub">
