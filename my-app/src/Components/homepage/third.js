@@ -10,7 +10,7 @@ export default function Third() {
     <div className="andmore">
       <div id="third-title">
         <h1 id="title">Just visiting?</h1>
-        <p id="title-sub">
+        <p id="title-sub3">
           Visitors can access public data of their local water bodies.
         </p>
         <Link to="/dashboard">

@@ -1,9 +1,7 @@
-/* orange in asicoonect: (238,130,32) */
-/* blue in asicoonet: (29,39,95) */
-
 .title {
   background-color: white;
-  height: 14 cm;
+  margin-top:2%;
+  height: 43vh;
   display: flex;
   padding-bottom: 1%;
   /* border: 3px solid black; */
@@ -25,40 +23,55 @@
 
 .title-child:first-child {
   padding-left: 1cm;
-  padding-top: 6cm;
+  padding-top: 3%;
   min-width: 63%;
 }
 
-
+#app-name{
+  font-size: 6rem;
+  text-align: inherit;
+  padding-bottom: 0%;
+  margin:0px;
+}
 
 #title {
-  font-size: 1cm;
+  /* margin-top:3%; */
+  font-size: 3.5rem;
+    text-align: inherit;
+      padding-top: 3%;
+      margin-left:0%;
 }
 
 #title-sub {
-  margin-top: 2%;
-  font-size: 0.8cm;
+  /* margin-top: 2%; */
+  font-size: 1vh;
   margin-bottom: 0;
 }
 
 #title-sub2 {
-  font-size: 0.5cm;
+  font-size: 1.5vh;
 }
+
+#title-sub3 {
+  font-size: 2.5vh;
+}
+
 
 #regards {
   font-size: 0.3cm;
 }
 
 .more {
-  background-color: white;
-  padding-top: 0.5cm;
+  /* background-color: white; */
+  /* padding-top: 0.5cm; */
   border-top: 2px solid whitesmoke;
-  height: 14cm;
+  height: 47vh;
 }
 
 .andmore {
   border-top: 2px solid whitesmoke;
-  height: 15cm;
+    border-bottom: 2px solid whitesmoke;
+  height: 65vh;
   display: flex;
 }
 
@@ -99,23 +112,25 @@
 }
 
 .top-img {
-  height: 12cm;
-  padding-left: 30%;
-  padding-top: 9%;
+  height: 40vh;;
+  padding-left: 45%;
+  /* padding-top: 9%; */
   /* margin-top: 1cm; */
 }
 
 #heading {
-  margin-top: 1vh;
+  /* margin-top: 1vh; */
   /* border: 2px solid yellow; */
   text-align: center;
   color: cadetblue;
 }
 
 .Info-container {
-  margin: 6vh;
+  /* margin-top:3%; */
+  margin: 2vh;
   display: flex;
-  justify-content: space-between;
+  height:auto;
+  /* justify-content: space-between; */
 }
 
 .Info:hover {
@@ -125,12 +140,12 @@
 
 .Info {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin-top: 1cm;
+  /* margin-top: 1cm; */
   margin-left: auto;
   margin-right: auto;
-  height: 40vh;
+  height: 29vh;
   max-width: 47vh;
-  width: 50%;
+  width: 35vh;
   background-color: white;
   text-align: center;
   padding-top: 1cm;
