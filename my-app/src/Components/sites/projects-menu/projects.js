@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
+
 import IconButton from "@material-ui/core/IconButton";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import Typography from "@material-ui/core/Typography";
@@ -98,7 +98,7 @@ function ProjectMenu(props) {
           onChange={(e) => setSelectedCountry(e.target.value)}
           style={{ fontSize: 12 }}
         >
-          <option className="option-projects" value="" disabled selected>
+          <option className="option-projects" value="" disabled>
             Select Country
           </option>
           {data.countries.map((value, key) => (
@@ -117,7 +117,7 @@ function ProjectMenu(props) {
           onChange={(e) => setSelectedCity(e.target.value)}
           disabled={!selectedCountry}
         >
-          <option className="option-projects" value="" disabled selected>
+          <option className="option-projects" value="" disabled>
             Select City
           </option>
           {availableState?.states.map((value, key) => (
@@ -143,7 +143,7 @@ function ProjectMenu(props) {
           }}
           disabled={!selectedCity}
         >
-          <option className="option-projects" value="" disabled selected>
+          <option className="option-projects" value="" disabled>
             Select Project
           </option>
           {availableProjects?.lakes.map((lake, key) => (
@@ -156,19 +156,12 @@ function ProjectMenu(props) {
 
       <div className="buttons-div">
         <IconButton aria-label="delete" onClick={handleClick1}>
-          <CancelRoundedIcon className="icon" size="small" />
-          <Typography className="icon" variant="body1">
-            {" "}
+          <CancelRoundedIcon className="icon" style={{ fontSize: 23, marginRight: 3 }} />
+          <Typography className="icon" variant="h5">
             clear
           </Typography>
         </IconButton>
-        <Button
-          variant="primary"
-          className="project-search btn-lg"
-          onClick={handleClick}
-        >
-          Search Project
-        </Button>
+
       </div>
 
     </div>
