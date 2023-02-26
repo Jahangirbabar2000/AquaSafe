@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import Grid from "@mui/material/Grid";
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import "leaflet/dist/leaflet.css";
 import Sidebar from "../sidebar/side-bar";
 import "./sites.css";
 import Navbar from "../navbar/navbar.js";
 import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
+import Button from "react-bootstrap/Button";
 import ProjectMenu from "./projects-menu/projects";
 
 function Sites() {
@@ -72,9 +72,7 @@ function Sites() {
       </Grid>
       <Grid container pl={85}>
         <Link to="/dashboard">
-          <Button sx={{ fontSize: 16 }} fullWidth variant="contained">
-            View Devices
-          </Button>
+          <Button style={{ fontSize: "20px" }} fullWidth variant="primary">View Devices</Button>
         </Link>
       </Grid>
     </div>

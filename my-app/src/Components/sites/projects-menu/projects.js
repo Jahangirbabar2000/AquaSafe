@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
+import Button from "react-bootstrap/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import Typography from "@material-ui/core/Typography";
@@ -112,7 +112,6 @@ function ProjectMenu(props) {
       <div>
         <select
           className="select-projects"
-          style={{ fontSize: 12 }}
           placeholder="City"
           value={selectedCity}
           onChange={(e) => setSelectedCity(e.target.value)}
@@ -131,7 +130,6 @@ function ProjectMenu(props) {
       <div>
         <select
           className="select-projects"
-          style={{ fontSize: 12 }}
           placeholder="Project"
           value={selectedProject}
           onChange={(e) => {
@@ -165,12 +163,14 @@ function ProjectMenu(props) {
           </Typography>
         </IconButton>
         <Button
-          variant="contained"
+          variant="primary"
+          className="project-search btn-lg"
           onClick={handleClick}
         >
-          Show Coordinates
+          Search Project
         </Button>
       </div>
+
     </div>
   );
 }
