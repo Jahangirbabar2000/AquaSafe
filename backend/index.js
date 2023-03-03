@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 // Initialize express app
 const app = express();
 
+
+
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -22,6 +24,8 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+
 
 // Create connection to database using mysql2
 const connection = mysql.createConnection({
@@ -149,3 +153,22 @@ app.get('/activeUsers', (req, res) => {
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
 });
+
+
+// Code for merging react static files with backend
+const path = require('path')
+const _dirname = path.dirname("")
+const buildPath = path.join(_dirname, "../my-app/build");
+app.use(express.static(buildPath))
+app.get("/*", function (req, res) {
+
+    res.sendFile(
+        path.join(__dirname, "../my-app/build/index.html"),
+        function (err) {
+            if (err) {
+                res.status(500).send(err);
+            }
+        }
+    )
+})
+//////////////////////////////////////////////////////////
