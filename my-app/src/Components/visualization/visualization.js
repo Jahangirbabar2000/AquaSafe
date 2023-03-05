@@ -19,7 +19,7 @@ import Datepicker from "./datepicker";
 import Button from '@mui/material/Button';
 const mdTheme = createTheme();
 
-function App(props) {
+function App() {
   setTimeout(function () {
     window.dispatchEvent(new Event("resize"));
   }, 1000);
