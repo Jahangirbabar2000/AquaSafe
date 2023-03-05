@@ -29,8 +29,8 @@ app.use(passport.session());
 
 // Create connection to database using mysql2
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
+    host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com',
+    user: 'admin',
     password: 'jb123456',
     database: 'AquaSafe'
 });
@@ -125,7 +125,7 @@ app.get('/data', (req, res) => {
 
 // Create route to retrieve data from  hong kong dataset
 app.get('/hkdata', (req, res) => {
-    connection.query('SELECT * from hongkongdataset where Dates between "2018-01-01" and "2018-01-15";', (err, rows) => {
+    connection.query('SELECT * from HongKongDataSet where Dates between "2018-01-01" and "2018-01-15";', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
@@ -135,7 +135,8 @@ app.get('/hkdata', (req, res) => {
 app.get('/hkdata2', (req, res) => {
     const startDate = req.query.start_date;
     const endDate = req.query.end_date;
-    connection.query(`SELECT * from hongkongdataset where Dates between '${startDate}' and '${endDate}';`, (err, rows) => {
+    console.log("yess");
+    connection.query(`SELECT * from HongKongDataSet where Dates between '${startDate}' and '${endDate}';`, (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
