@@ -135,7 +135,6 @@ app.get('/hkdata', (req, res) => {
 app.get('/hkdata2', (req, res) => {
     const startDate = req.query.start_date;
     const endDate = req.query.end_date;
-    console.log("yess");
     connection.query(`SELECT * from HongKongDataSet where Dates between '${startDate}' and '${endDate}';`, (err, rows) => {
         if (err) throw err;
         res.send(rows);
@@ -143,7 +142,7 @@ app.get('/hkdata2', (req, res) => {
 });
 
 app.get('/activeUsers', (req, res) => {
-    connection.query('SELECT FirstName, Email, Designation, Country, Name as Site from users join WorksOn on users.Id = workson.user join projects on projects.id = workson.project;', (err, rows) => {
+    connection.query('SELECT FirstName, Email, Designation, Country, Name as Site from Users join WorksOn on Users.Id = WorksOn.user join Projects on Projects.id = WorksOn.project;', (err, rows) => {
         if (err) throw err;
 
         res.send(rows);
