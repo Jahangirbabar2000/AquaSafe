@@ -41,7 +41,7 @@ const theme = createTheme({
                 // Name of the slot
                 label: {
                     // Some CSS
-                    fontSize: '1.5rem',
+                    fontSize: '1.4rem',
                 },
             },
         },
@@ -60,6 +60,15 @@ const theme = createTheme({
                 root: {
                     // Some CSS
                     fontSize: '2rem',
+                },
+            },
+        },
+        MuiInputBase: {
+            styleOverrides: {
+                // Name of the slot
+                root: {
+                    // Some CSS
+                    maxWidth: '30vh',
                 },
             },
         },
