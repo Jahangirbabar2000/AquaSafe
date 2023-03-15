@@ -19,7 +19,7 @@ import Datepicker from "./datepicker";
 import Button from '@mui/material/Button';
 const mdTheme = createTheme();
 
-function App() {
+function App(props) {
   setTimeout(function () {
     window.dispatchEvent(new Event("resize"));
   }, 1000);
@@ -40,7 +40,11 @@ function App() {
     });
     axios.get(`/hkdata`)
       .then(response => {
-        setData(response.data);
+        const dateOnlyArray = response.data.map(obj => {
+          const dateOnlyString = new Date(obj.Dates).toISOString().slice(0, 10);
+          return { ...obj, Dates: dateOnlyString };
+        });
+        setData(dateOnlyArray);
         setLoading(false);
       })
       .catch(error => console.log(error));
@@ -51,7 +55,11 @@ function App() {
     const ed = moment(endDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
     axios.get(`/hkdata2?start_date=${sd}&end_date=${ed}`)
       .then(response => {
-        setData(response.data);
+        const dateOnlyArray = response.data.map(obj => {
+          const dateOnlyString = new Date(obj.Dates).toISOString().slice(0, 10);
+          return { ...obj, Dates: dateOnlyString };
+        });
+        setData(dateOnlyArray);
         setLoading(false);
       })
       .catch(error => console.log(error));
@@ -67,6 +75,11 @@ function App() {
 
     </div>;
   }
+
+
+
+
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Navbar />
@@ -76,23 +89,16 @@ function App() {
       }}>
         <Grid item xs={9} sx={{ ml: 40 }}>
           {/* Right big section*/}
-          <Paper sx={{
-            p: 2,
-            m: 2,
-            mr: 40
-          }}
-          >
-            <Datepicker startDate={startDate} setStartDate={setStartDate}
-              endDate={endDate} setEndDate={setEndDate} />
-            <Button variant="contained" onClick={getData} size="large"
-              sx={{ ml: 4, mt: 1 }}>View </Button>
-          </Paper>
+
           <Paper
             sx={{
               p: 2
             }}
           >
-            <h3>TOP PARAMETERS</h3>
+            <Link to="/WaterQualityPage" className="unstyled-link">
+              <h3>TOP PARAMETERS</h3>
+            </Link>
+
             <Grid container justifyContent="space-around" sm={12} >
               {/* PARAMETERS */}
 
@@ -128,6 +134,18 @@ function App() {
                 parameterName="Ammonia-Nitrogen" value={data[6]["Ammonia-Nitrogen (mg/L)"] + " mg/L"} />
 
             </Grid>
+          </Paper>
+          <Paper sx={{
+            p: 2,
+            mt: 2,
+            mb: 2,
+            mr: 47
+          }}
+          >
+            <Datepicker startDate={startDate} setStartDate={setStartDate}
+              endDate={endDate} setEndDate={setEndDate} />
+            <Button variant="contained" onClick={getData} size="large"
+              sx={{ ml: 4, mt: 1 }}>View </Button>
           </Paper>
           <Grid container alignItems="center" spacing={2}>
             {/* GRAPHS and MAP*/}
@@ -165,26 +183,21 @@ function App() {
               {/* MAP*/}
 
               <MapContainer
-                center={[22.292733, 114.168354]}
-                zoom={13}
+                center={[22.449300, 114.162233]}
+                zoom={17}
                 scrollWheelZoom={true}
               >
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={[22.292733, 114.168354]}>
+                <Marker position={[22.449300, 114.162233]}>
                   <Popup>
                     Location of this Device: <br /> North corner
                   </Popup>
                 </Marker>
               </MapContainer>
               <Box container pl={20} pt={3}>
-                <Link to="/WaterQualityPage" underline="none" sx={{ textDecoration: "none" }}>
-                  <Button>
-                    Water Quality Page
-                  </Button>
-                </Link>
               </Box>
             </Grid>
           </Grid>

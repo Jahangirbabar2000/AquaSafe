@@ -39,3 +39,8 @@ h3 {
     padding-bottom: 0.5vh;
     padding-top: 1vh;
 }
+
+.unstyled-link {
+    color: inherit;
+    text-decoration: none;
+}
