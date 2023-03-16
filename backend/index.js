@@ -32,8 +32,8 @@ app.use(passport.session());
 
 // Create connection to database using mysql2
 const connection = mysql.createConnection({
-    host: 'localhost', // find host on RDS
-    user: 'root', // user for RDS is 'admin'
+    host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // find host on RDS
+    user: 'admin', // user for RDS is 'admin'
     password: 'jb123456', // same on RDS
     database: 'AquaSafe' // same on RDS
 });
