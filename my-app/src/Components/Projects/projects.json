@@ -33,6 +33,20 @@
         "country": "Pakistan",
         "city": "Neelum Valey",
         "devices": 10
-    }
+    },
+      {
+        "id": 6,
+        "projectName": "Jheel Saif ul Malook",
+        "country": "Pakistan",
+        "city": "Naran",
+        "devices": 5
+      },
+        {
+          "id": 7,
+          "projectName": "Jheel Saif ul Malook",
+          "country": "Pakistan",
+          "city": "Naran",
+          "devices": 5
+        }
   
 ]
