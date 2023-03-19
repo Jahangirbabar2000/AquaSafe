@@ -69,7 +69,7 @@ function App(props) {
     return <div>
       <Navbar />
       <Sidebar name="dashboard" />
-      <Grid item xs={9} sx={{ ml: 25, mt: 10 }}>
+      <Grid item xs={9} sx={{ ml: 100, mt: 10 }}>
         <h1>Loading...</h1>
       </Grid>
 
