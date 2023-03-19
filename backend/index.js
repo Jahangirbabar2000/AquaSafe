@@ -34,8 +34,8 @@ app.use(passport.session());
 const connection = mysql.createConnection({
     host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // find host on RDS
     user: 'admin', // user for RDS is 'admin'
-    password: 'jb123456', // same on RDS
-    database: 'AquaSafe' // same on RDS
+    password: 'jb123456', // same on RDS as local
+    database: 'AquaSafe' // same on RDS as local
 });
 
 try {

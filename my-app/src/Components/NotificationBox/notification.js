@@ -4,9 +4,6 @@ import data from "./notification.json";
 import Box from "@mui/material/Box";
 
 import "./notification.css";
-import { makeStyles } from "@material-ui/core";
-
-
 
 function DisplayNotfication(props) {
     const notification = props.item;
@@ -72,13 +69,13 @@ function RenderNotifications(props) {
     return (
         // <div style={{ marginLeft:"auto"}}>
         // <Box>
-        <div sx={{zIndex:100}} className="notifications-container hidescroll">
+        <Box sx={{zIndex:100}} className="notifications-container hidescroll">
             {notifications.map((entry) => (
                 <div className="one-notification-container" key={entry.id}>
                     <DisplayNotfication item={entry} />
                 </div>
             ))}
-        </div>
+        </Box>
         // </Box>
         // </div>
     );
