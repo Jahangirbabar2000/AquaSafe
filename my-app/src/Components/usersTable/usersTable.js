@@ -39,7 +39,7 @@ function UsersTable() {
   const [usersData, setUsersData] = useState([]);
 
   const getUsersData = async (req, res) => {
-    res = await axios.get("/activeUsers");
+    res = await axios.get("http://localhost:8080/activeUsers");
     console.log(res.data);
     setUsersData(res.data);
   };

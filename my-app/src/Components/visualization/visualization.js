@@ -38,7 +38,7 @@ function App(props) {
       iconUrl: require("leaflet/dist/images/marker-icon.png"),
       shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
-    axios.get(`/hkdata`)
+    axios.get(`http://localhost:8080/hkdata`)
       .then(response => {
         const dateOnlyArray = response.data.map(obj => {
           const dateOnlyString = new Date(obj.Dates).toISOString().slice(0, 10);
@@ -53,7 +53,7 @@ function App(props) {
   const getData = () => {
     const sd = moment(startDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
     const ed = moment(endDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
-    axios.get(`/hkdata2?start_date=${sd}&end_date=${ed}`)
+    axios.get(`http://localhost:8080/hkdata2?start_date=${sd}&end_date=${ed}`)
       .then(response => {
         const dateOnlyArray = response.data.map(obj => {
           const dateOnlyString = new Date(obj.Dates).toISOString().slice(0, 10);
