@@ -4,11 +4,10 @@ import Sidebar from "../../sidebar/side-bar";
 import Navbar from "../../navbar/navbar";
 import { Formik, Form, Field, useFormik } from "formik";
 import * as Yup from "yup";
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import TextField from "./components-form/textfield.js";
 import Select from "./components-form/select.js";
 import Button from "./components-form/button.js";
-
 
 const sensors = ["Temperature", "Turbidity", "pH", "PO4", "Conductivity"];
 const CommunicationModes = ["GSM Module", "LoraWan"];
@@ -38,8 +37,29 @@ const FORM_VALIDATION = Yup.object().shape({
 
 const checkboxOptions = ["Minute", "Hour", "Day", "month"];
 const DeviceDeployment = () => {
+  // const checkboxes = [
+  //   { id: 1, label: 'Checkbox 1' },
+  //   { id: 2, label: 'Checkbox 2' },
+  //   { id: 3, label: 'Checkbox 3' },
+  //   { id: 4, label: 'Checkbox 4' },
+  //   { id: 5, label: 'Checkbox 5' }
+  // ];
+  // const [checkedItems, setCheckedItems] = useState({});
 
-  React.useEffect(() => {     // CODE FOR FIXING MARKER PROBLEM ON MAP
+  // const handleChange = (event) => {
+  //   setCheckedItems({ ...checkedItems, [event.target.name]: event.target.checked });
+  // }
+
+  // const handleButtonClick = () => {
+  //   const checkedValues = Object.entries(checkedItems)
+  //     .filter(([name, checked]) => checked)
+  //     .map(([name, checked]) => name);
+
+  //   console.log('Checked values:', checkedValues);
+  // }
+
+  React.useEffect(() => {
+    // CODE FOR FIXING MARKER PROBLEM ON MAP
     const L = require("leaflet");
 
     delete L.Icon.Default.prototype._getIconUrl;
@@ -55,7 +75,7 @@ const DeviceDeployment = () => {
     <div>
       <Navbar></Navbar>
       <Sidebar name="device" />
-    
+
       <div className="grid-container">
         <div className="containerr">
           <div className="card">
@@ -74,7 +94,6 @@ const DeviceDeployment = () => {
                 <TextField name="description" label="Description" />
                 <TextField name="location" label="Location" />
                 <TextField name="deviceNum" label="Device Number" />
-                {/* <div style={{display: "flex"}}> */}
                 <TextField
                   name="frequency"
                   label="Frequency"
@@ -86,9 +105,26 @@ const DeviceDeployment = () => {
                   options={checkboxOptions}
                 />
                 {/* </div> */}
-                <Button>Add Device</Button>
+                <div style={{ height: 25 }}></div>
+                <Button sx={{ fontSize: 100 }}>Add Device</Button>
               </Form>
             </Formik>
+            {/* <h2>Select sensors</h2>
+            <div>
+              {checkboxes.map(item => (
+                <label key={item.id}>
+                  <input
+                    type="checkbox"
+                    name={item.label}
+                    checked={checkedItems[item.label] || false}
+                    onChange={handleChange}
+                  />
+                  {item.label}
+                </label>
+              ))}
+              <br />
+              <button onClick={handleButtonClick}>Show Checked Values</button>
+            </div> */}
           </div>
         </div>
         <div className="map">
