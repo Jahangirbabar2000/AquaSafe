@@ -44,12 +44,12 @@
 
 #title-sub {
   /* margin-top: 2%; */
-  font-size: 1vh;
+  font-size: 2vh;
   margin-bottom: 0;
 }
 
 #title-sub2 {
-  font-size: 1.5vh;
+  font-size: 2.1vh;
 }
 
 #title-sub3 {
@@ -154,29 +154,14 @@
 
 /* THIS CSS IS FOR HOMEPAGE NAVBAR */
 
+
 .logo-img {
-  height: 50px;
+  height: 37px;
   /* border-right: 3px solid grey; */
 }
 
-.logo-img-login {
-  height: 70px;
-  /* border-right: 3px solid grey; */
-}
 
-.nav-container {
-  /* border-bottom:  100px solid black;  */
-  /* border: 10px solid black; */
-  display: flex;
-  height: 1.5cm;
-  border: 10px;
-  width: auto;
-  max-width: auto;
-  background-color: white;
-  border-bottom: 2px solid whitesmoke;
-  position: sticky;
-  top: 0;
-}
+
 
 .nav-ul {
   display: flex;
@@ -196,6 +181,9 @@
   margin: 5px;
   height: 40px;
 }
+
+
+
 
 .Navbar-img {
   height: 40px;
@@ -217,7 +205,7 @@
 #login {
   position: absolute;
   right: 0;
-  margin-top: 0.8%;
+  /* margin-top: 0.8%; */
   margin-right: 0.6%;
   width: 5%;
 }
@@ -232,4 +220,5 @@
 
 .look {
   margin-top: 0.5cm;
+  width: auto;
 }
