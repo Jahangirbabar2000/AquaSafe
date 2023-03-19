@@ -1,0 +1,91 @@
+[
+  {
+    "id": 1,
+    "type": "sensor",
+    "code": 10,
+    "country": "Pakistan",
+    "project": "Tarbela Dam",
+    "city": "Haripur",
+    "device": "AD1",
+    "sensor": "Oxygen",
+    "min": 0,
+    "max": 100,
+    "reading": 50,
+    "status": "Urgent",
+    "date": "8-5-2023"
+  },
+  {
+    "id": 2,
+    "type": "device",
+    "code": 20,
+    "country": "Pakistan",
+    "city": "Islamabad",
+    "project": "Rawal Lake",
+    "device": "SD1",
+    "status": "Urgent",
+    "date": "11-5-2023"
+  },
+  {
+    "id": 3,
+    "type": "device",
+    "code": 21,
+    "country": "Pakistan",
+    "city": "Hunza",
+    "project": "Attabad Lake",
+    "device": "BH1",
+    "status": "Urgent",
+    "date": "11-5-2023"
+  },
+  {
+    "id": 4,
+    "type": "sensor",
+    "code": 11,
+    "country": "Pakistan",
+    "city": "Islamabad",
+    "project": "Rawal Lake",
+    "device": "AD1",
+    "sensor": "CO2",
+    "min": 0,
+    "max": 100,
+    "reading": 50,
+    "status": "Moderate",
+    "date": "8-5-2023"
+  },
+  {
+    "id": 5,
+    "type": "sensor",
+    "code": 12,
+    "country": "Pakistan",
+    "city": "Naran",
+    "project": "Jheel Saif ul Malook",
+    "device": "AD5",
+    "sensor": "N03",
+    "min": 0,
+    "max": 100,
+    "reading": 50,
+    "status": "Safe",
+    "date": "8-5-2023"
+  },
+    {
+      "id": 6,
+      "type": "device",
+      "code": 20,
+      "country": "Pakistan",
+      "city": "Neelum Valley",
+      "project": "Ratti Gali Lake",
+      "device": "BS1",
+      "status": "Urgent",
+      "date": "11-5-2023"
+    },
+      {
+        "id": 7,
+        "type": "device",
+        "code": 21,
+        "country": "Pakistan",
+        "city": "Haripur",
+        "project": "Tarbela Dam",
+        "device": "BD1",
+        "status": "Urgent",
+        "date": "11-5-2023"
+      }
+]
