@@ -1,0 +1,40 @@
+.nav-container {
+  /* border-bottom:  100px solid black;  */
+  /* border: 10px solid black; */
+  display: flex;
+  height: 1.5cm;
+  border: 10px;
+  width: 100%;
+  /* max-width: auto; */
+  background-color: white;
+  border-bottom: 2px solid whitesmoke;
+  position: sticky;
+  top: 0;
+   justify-content: space-between;
+  align-items: center;
+}
+
+.logo-img {
+  height: 50px;
+  /* border-right: 3px solid grey; */
+}
+
+.icon-container{
+z-index: 3;
+}
+
+.notification-card{
+  background: orange;
+  z-index: 5;
+  margin-right: 0%
+}
+
+
+.notifications-icon {
+  width: 80px;
+  height: 80px;
+  /* margin-right: 10%; */
+  /* margin-top: 3%; */
+    display: flex;
+  align-items: center;
+}

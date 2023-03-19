@@ -1,0 +1,18 @@
+the code attribute defines the type of notification.
+Here are the codes that i have defined:
+
+code: 10
+[sensor] value is a dangerous levels
+
+code: 11
+[sensor] value is close to dangerous levels
+
+code: 12:
+[sensor] value is at optimal level.
+
+
+code: 20
+[device id] has crashed.
+
+code: 21
+[device id] has been moved
