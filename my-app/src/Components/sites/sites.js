@@ -6,8 +6,9 @@ import Sidebar from "../sidebar/side-bar";
 import "./sites.css";
 import Navbar from "../navbar/navbar.js";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
+// import Button from "react-bootstrap/Button";
 import ProjectMenu from "./projects-menu/projects";
+import Button from "@mui/material/Button";
 
 function Sites() {
   const [selectedCoordinates, setSelectedCoordinates] = useState([31.99, 77.13]);
@@ -63,7 +64,7 @@ function Sites() {
       </Grid>
       <Grid container pl={95}>
         <Link to="/dashboard">
-          <Button style={{ fontSize: "20px" }} variant="primary">View Devices</Button>
+          <Button style={{ fontSize: "16px" }} variant="contained">View Devices</Button>
         </Link>
       </Grid>
     </div>

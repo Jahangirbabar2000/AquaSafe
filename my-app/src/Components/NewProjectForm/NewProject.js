@@ -276,6 +276,7 @@ const waterbodyTypes = ["Lake", "River", "Dam", "pond", "Ocean"];
 
 // This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
 const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
   city: Yup.string().required("City is required"),
   description: Yup.string()
     .max(124)
@@ -331,6 +332,20 @@ const NewProject = () => (
           >
             {({ errors, touched }) => (
               <Form className="">
+                <div>
+                  {/* <label>Province</label> */}
+                  <Field
+                    as={TextField}
+                    fullWidth
+                    label="Project Name"
+                    style={{ fontSize: "30px" }}
+                    name="name"
+                    type="text"
+                    error={Boolean(touched.name && errors.name)}
+                    helperText={touched.name ? errors.name : ""}
+                  />
+                </div>{" "}
+                <br />
                 <div>
                   <InputLabel id="country-label">Country</InputLabel>
                   <Field
