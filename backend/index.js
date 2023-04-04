@@ -185,6 +185,7 @@ app.delete('/sensors/:id', (req, res) => {
     // Execute SQL query
     connection.query(query, (error) => {
         if (error) {
+            console.log(error);
             res.status(500).json({ error: 'Error deleting entry from MySQL' });
         } else {
             res.status(200).json({ message: 'Entry deleted successfully from MySQL' });
@@ -196,7 +197,7 @@ app.delete('/sensors/:id', (req, res) => {
 app.post('/sensors', (req, res) => {
     const data = req.body;
     // Construct SQL query to delete entry by ID
-    const query = `INSERT into SensorsCatalogue(Parameter, Model, SensorMin, SensorMax) VALUES('${data.Parameter}', '${data.Model}', ${data.SensorMin}, ${SensorMax});`;
+    const query = `INSERT into SensorsCatalogue(Parameter, Model, SensorMin, SensorMax) VALUES('${data.Parameter}', '${data.Model}', ${data.SensorMin}, ${data.SensorMax});`;
 
     // Execute SQL query
     connection.query(query, (error, results) => {

@@ -30,14 +30,20 @@ const AddSensor = () => {
     fetchData();
   }, []);
 
-  const handleSubmit = async () => {
-    try {
-      await axios.post(`http://localhost:8080/sensors/`);
-      navigate.push("/sensors");
-    } catch (err) {
-      console.error(err);
-    }
-  };
+ const handleSubmit = async (values) => {
+  try {
+    await axios.post(`http://localhost:8080/sensors/`, {
+      Parameter: values.Parameter,
+      Model: values.Model,
+      SensorMin: values.SensorMin,
+      SensorMax: values.SensorMax,
+    });
+    navigate("/sensors");
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   return (
     <div>
@@ -71,10 +77,7 @@ const AddSensor = () => {
               }}
               validationSchema={validationSchema}
               onSubmit={(values, actions) => {
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2));
-                  actions.setSubmitting(false);
-                }, 1000);
+                handleSubmit(values);
               }}
             >
               {({ errors, touched }) => (
@@ -146,8 +149,8 @@ const AddSensor = () => {
                     />{" "}
                   </div>
                   <br />
-                  <div className="button">
-                    <Button onClick={handleSubmit(navigate)}
+                  <div>
+                    <Button
                       type="submit"
                       fullWidth
                       variant="contained"
