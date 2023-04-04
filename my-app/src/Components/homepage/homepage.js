@@ -11,7 +11,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import aquasafeLogo from "../../AquaSafe.png";
-import { makeStyles } from "@material-ui/core";
+import { styled } from '@mui/system';
 
 function Home() {
   return (
@@ -27,19 +27,18 @@ function Home() {
 
 export default Home;
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    "& .MuiPaper-root": {
-      color: "black",
-      height: 55
-    }
+
+const Root = styled('div')(({ theme }) => ({
+  "& .MuiPaper-root": {
+    color: "black",
+    height: 55
   }
 }));
 
 function Navbarhome() {
-  const classes = useStyles();
   return (
-    <Box className={classes.root} sx={{ flexGrow: 1, marginBottom: 10 }}>
+    <Root>    
+    <Box sx={{ flexGrow: 1, marginBottom: 10 }}>
       <AppBar position="fixed" sx={{ background: "white" }}>
         <Toolbar>
           <Link to="/homepage">
@@ -60,6 +59,7 @@ function Navbarhome() {
           </Box>
         </Toolbar>
       </AppBar>
-    </Box>
+      </Box>
+    </Root>
   );
 }

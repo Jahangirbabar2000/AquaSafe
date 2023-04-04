@@ -33,11 +33,11 @@ app.use(passport.session());
 // Create connection to database using mysql2
 const connection = mysql.createConnection({
 
-    host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // RDS
-    user: 'admin',
+    // host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // RDS
+    // user: 'admin',
 
-    // host: 'localhost', // Local Machine
-    // user: 'root',
+    host: 'localhost', // Local Machine
+    user: 'root',
 
     password: 'jb123456',
     database: 'AquaSafe'
@@ -152,7 +152,7 @@ app.get('/hkdata2', (req, res) => {
 
 // Create route to retrieve parameters data from database
 app.get('/parameters', (req, res) => {
-    connection.query('select Name from waterparameters', (err, rows) => {
+    connection.query('select Name from WaterParameters', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
@@ -174,6 +174,41 @@ app.get('/sensorsTable', (req, res) => {
         res.send(rows);
     });
 });
+
+// Defining API endpoint for deleting a MySQL entry by ID
+app.delete('/sensors/:id', (req, res) => {
+    const id = req.params.id;
+
+    // Construct SQL query to delete entry by ID
+    const query = `DELETE FROM AquaSafe.SensorsCatalogue WHERE Id=${id};`;
+
+    // Execute SQL query
+    connection.query(query, (error) => {
+        if (error) {
+            res.status(500).json({ error: 'Error deleting entry from MySQL' });
+        } else {
+            res.status(200).json({ message: 'Entry deleted successfully from MySQL' });
+        }
+    });
+});
+
+// Defining API endpoint for adding a MySQL entry by ID
+app.post('/sensors', (req, res) => {
+    const data = req.body;
+    // Construct SQL query to delete entry by ID
+    const query = `INSERT into SensorsCatalogue(Parameter, Model, SensorMin, SensorMax) VALUES('${data.Parameter}', '${data.Model}', ${data.SensorMin}, ${SensorMax});`;
+
+    // Execute SQL query
+    connection.query(query, (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Error adding data to MySQL' });
+        } else {
+            res.status(200).json({ message: 'Data added successfully to MySQL', id: results.insertId });
+        }
+    });
+});
+
+
 
 // Start the server
 app.listen(8080, () => {

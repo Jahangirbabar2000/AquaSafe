@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from '@mui/material/IconButton';
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
-import Typography from "@material-ui/core/Typography";
+import Typography from '@mui/material/Typography';
 import "./projects.css";
 
 const data = {

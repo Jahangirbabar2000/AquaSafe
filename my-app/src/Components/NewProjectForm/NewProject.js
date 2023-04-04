@@ -1,22 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import Sidebar from "../sidebar/side-bar.js";
 import Navbar from "../navbar/navbar.js";
 import {
   Formik,
   Form,
-  useField,
-  useFormikContext,
-  withFormik,
   Field
 } from "formik";
 import * as Yup from "yup";
-import {
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel
-} from "@material-ui/core";
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 import "./NewProject.css";
 import Button from "@mui/material/Button";
 

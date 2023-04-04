@@ -1,4 +1,5 @@
 import axios from "axios";
+import React from 'react';
 import { useEffect, useState } from "react";
 import "./tableRow.css";
 import Sidebar from "../sidebar/side-bar";
@@ -48,10 +49,9 @@ function SensorsTable() {
         setSensorsData(res.data);
     };
 
-
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/users/${id}`);
+            await axios.delete(`http://localhost:8080/sensors/${id}`);
             setSensorsData(sensorsData.filter((user) => user.Id !== id));
         } catch (err) {
             console.error(err);

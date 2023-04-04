@@ -3,30 +3,41 @@ import Sidebar from "../sidebar/side-bar.js";
 import Navbar from "../navbar/navbar.js";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { TextField } from "@material-ui/core";
+import TextField from '@mui/material/TextField';
 import "./addSensor.css";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 // This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
 const validationSchema = Yup.object().shape({
-  sensorName: Yup.string().required(),
-  sensorType: Yup.string().required(),
-  parameter: Yup.string().required(),
-  min: Yup.number().required(),
-  max: Yup.number().required(),
+  Model: Yup.string().required(),
+  Parameter: Yup.string().required(),
+  SensorMin: Yup.number().required(),
+  SensorMax: Yup.number().required(),
 });
 
 const AddSensor = () => {
-  const [sensorTypes, setSensorTypes] = useState([]);
+  const [waterParameters, setWaterParameters] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("http://localhost:8080/parameters");
       const data = await response.json();
-      setSensorTypes(data);
+      setWaterParameters(data);
     };
     fetchData();
   }, []);
+
+  const handleSubmit = async () => {
+    try {
+      await axios.post(`http://localhost:8080/sensors/`);
+      navigate.push("/sensors");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div>
@@ -53,11 +64,10 @@ const AddSensor = () => {
             </h1>
             <Formik
               initialValues={{
-                sensorName: "",
                 sensorType: "",
                 parameter: "",
-                min: "",
-                max: "",
+                SensorMin: "",
+                SensorMax: "",
               }}
               validationSchema={validationSchema}
               onSubmit={(values, actions) => {
@@ -70,22 +80,7 @@ const AddSensor = () => {
               {({ errors, touched }) => (
                 <Form className="">
                   <br />
-                  <div>
-                    <Field
-                      as={TextField}
-                      fullWidth
-                      label="Sensor Name"
-                      style={{ fontSize: "30px" }}
-                      name="sensorName"
-                      type="text"
-                      error={Boolean(
-                        touched.sensorName && errors.sensorName
-                      )}
-                      helperText={
-                        touched.sensorName ? errors.sensorName : ""
-                      }
-                    />
-                  </div>{" "}
+
                   <br />
                   <div>
                     <Field
@@ -93,16 +88,16 @@ const AddSensor = () => {
                       fullWidth
                       label="Parameter"
                       variant="standard"
-                      name="parameter"
+                      name="Parameter"
                       error={Boolean(
-                        touched.parameter && errors.parameter
+                        touched.Parameter && errors.Parameter
                       )}
                       helperText={
-                        touched.parameter ? errors.parameter : ""
+                        touched.Parameter ? errors.Parameter : ""
                       }
                     >
                       <option value="">Select a parameter</option>
-                      {sensorTypes.map((type) => (
+                      {waterParameters.map((type) => (
                         <option key={type.id} value={type.id}>
                           {type.Name}
                         </option>
@@ -119,10 +114,10 @@ const AddSensor = () => {
                       fullWidth
                       label="Make/Model"
                       variant="standard"
-                      name="type"
+                      name="Model"
                       type="text"
-                      error={Boolean(touched.sensorType && errors.sensorType)}
-                      helperText={touched.sensorType ? errors.sensorType : ""}
+                      error={Boolean(touched.Model && errors.Model)}
+                      helperText={touched.Model ? errors.Model : ""}
                     />{" "}
                   </div>
                   <div>
@@ -131,10 +126,10 @@ const AddSensor = () => {
                       fullWidth
                       label="Minimum Value"
                       variant="standard"
-                      name="min"
+                      name="SensorMin"
                       type="number"
-                      error={Boolean(touched.min && errors.min)}
-                      helperText={touched.min ? errors.min : ""}
+                      error={Boolean(touched.SensorMin && errors.SensorMin)}
+                      helperText={touched.SensorMin ? errors.SensorMin : ""}
                     />{" "}
                   </div>
                   <br />
@@ -144,15 +139,15 @@ const AddSensor = () => {
                       fullWidth
                       label="Maximum Value"
                       variant="standard"
-                      name="max"
+                      name="SensorMax"
                       type="number"
-                      error={Boolean(touched.max && errors.max)}
-                      helperText={touched.max ? errors.max : ""}
+                      error={Boolean(touched.SensorMax && errors.SensorMax)}
+                      helperText={touched.SensorMax ? errors.SensorMax : ""}
                     />{" "}
                   </div>
                   <br />
                   <div className="button">
-                    <Button
+                    <Button onClick={handleSubmit(navigate)}
                       type="submit"
                       fullWidth
                       variant="contained"
@@ -161,11 +156,11 @@ const AddSensor = () => {
                     >
                       Add Sensor
                     </Button>
-                   
+
                   </div>
                 </Form>
               )}
-            </Formik>            
+            </Formik>
           </div>
         </div>
       </div>
