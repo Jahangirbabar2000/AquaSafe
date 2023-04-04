@@ -13,14 +13,12 @@ import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import GroupIcon from "@mui/icons-material/Group";
 
 export default function Sidebar(props) {
-  const [selectedButton, setSelectedButton] = useState("");
   return (
     <div className="sidenav">
       <ul className="">
         <li>
           <Link to="/dashboard">
             <div
-              // onClick={() => setSelectedButton("dashboard")}
               className={`${props.name === "dashboard" ? "highlight" : ""}`}
             >
               <TvRoundedIcon style={{ fontSize: 20 }} />
@@ -31,7 +29,6 @@ export default function Sidebar(props) {
         <li>
           <Link to="/newProject">
             <div
-              // onClick={() => setSelectedButton("newproject")}
               className={`${props.name === "newproject" ? "highlight" : ""}`}
             >
               <ContentPasteRoundedIcon style={{ fontSize: 20 }} />
@@ -42,7 +39,6 @@ export default function Sidebar(props) {
         <li>
           <Link to="/sites">
             <div
-              // onClick={() => setSelectedButton("sites")}
               className={`${props.name === "sites" ? "highlight" : ""}`}
             >
               <LocationOnRoundedIcon style={{ fontSize: 20 }} />
@@ -53,7 +49,6 @@ export default function Sidebar(props) {
         <li>
           <Link to="/deviceDeployment">
             <div
-              // onClick={() => setSelectedButton("device")}
               className={`${props.name === "device" ? "highlight" : ""}`}
             >
               <RouterRoundedIcon style={{ fontSize: 20 }} />
@@ -62,9 +57,8 @@ export default function Sidebar(props) {
           </Link>
         </li>
         <li>
-          <Link to="/addSensor">
+          <Link to="/sensors">
             <div
-              // onClick={() => setSelectedButton("sensor")}
               className={`${"sensor" === props.name ? "highlight" : ""}`}
             >
               <SensorsRoundedIcon style={{ fontSize: 20 }} />
@@ -85,7 +79,6 @@ export default function Sidebar(props) {
         <li>
           <Link to="/userstable">
             <div
-              // onClick={() => setSelectedButton("users")}
               className={`${props.name === "users" ? "highlight" : ""}`}
             >
               <GroupIcon style={{ fontSize: 20 }} />

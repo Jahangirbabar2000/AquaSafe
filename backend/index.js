@@ -32,10 +32,15 @@ app.use(passport.session());
 
 // Create connection to database using mysql2
 const connection = mysql.createConnection({
-    host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // find host on RDS
-    user: 'admin', // user for RDS is 'admin'
-    password: 'jb123456', // same on RDS as local
-    database: 'AquaSafe' // same on RDS as local
+
+    host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // RDS
+    user: 'admin',
+
+    // host: 'localhost', // Local Machine
+    // user: 'root',
+
+    password: 'jb123456',
+    database: 'AquaSafe'
 });
 
 try {
@@ -144,8 +149,26 @@ app.get('/hkdata2', (req, res) => {
     });
 });
 
+
+// Create route to retrieve parameters data from database
+app.get('/parameters', (req, res) => {
+    connection.query('select Name from waterparameters', (err, rows) => {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
 app.get('/activeUsers', (req, res) => {
     connection.query('SELECT FirstName, Email, Designation, Country, Name as Site from Users join WorksOn on Users.Id = WorksOn.user join Projects on Projects.id = WorksOn.project;', (err, rows) => {
+        if (err) throw err;
+
+        res.send(rows);
+    });
+});
+
+
+app.get('/sensorsTable', (req, res) => {
+    connection.query('SELECT * FROM AquaSafe.SensorsCatalogue;', (err, rows) => {
         if (err) throw err;
 
         res.send(rows);
