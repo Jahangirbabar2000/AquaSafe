@@ -133,11 +133,13 @@ app.get('/data', (req, res) => {
 
 // Create route to retrieve data from  hong kong dataset
 app.get('/hkdata', (req, res) => {
-    connection.query('SELECT * from HongKongDataSet where Dates between "2018-01-01" and "2018-01-15";', (err, rows) => {
+    connection.query('SELECT * from HongKongDataSet where Dates between "2014-01-01" and "2016-01-15";', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
 });
+
+
 
 // Create route to retrieve data from  hong kong dataset
 app.get('/hkdata2', (req, res) => {
@@ -149,6 +151,14 @@ app.get('/hkdata2', (req, res) => {
     });
 });
 
+
+// Create route to retrieve stationCoordinates from  hong kong dataset 
+app.get('/stationCoordinates', (req, res) => {
+    connection.query('SELECT * FROM aquasafe.stationCoordinates;', (err, rows) => {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
 
 // Create route to retrieve parameters data from database
 app.get('/parameters', (req, res) => {
