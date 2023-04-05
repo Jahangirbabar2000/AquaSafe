@@ -3,6 +3,7 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import "./tableRow.css";
 import Sidebar from "../sidebar/side-bar";
+import Sidebar2 from "../sidebar/Sidebar2.js";
 import { Grid } from "@mui/material";
 import Navbar from "../navbar/navbar.js";
 import { styled } from '@mui/material/styles';
@@ -67,7 +68,7 @@ function UsersTable() {
       <Navbar />
       <Grid spacing={40} container>
         <Grid item xs={4} sm={5} md={2}>
-          <Sidebar name="users" />
+          <Sidebar2 />
         </Grid>
         <Grid item xs={8} sm={7} md={9}>
           <br />

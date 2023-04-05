@@ -1,5 +1,6 @@
 import React from "react";
 import Sidebar from "../sidebar/side-bar.js";
+import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
 import {
   Formik,
@@ -288,12 +289,12 @@ const NewProject = () => (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "32vh auto"
+        gridTemplateColumns: "28vh auto"
         // gridGap: "2px"
       }}
     >
       <div>
-        <Sidebar name="newproject" />
+        <Sidebar2 />
       </div>
       <div className="box">
         <div className="container">

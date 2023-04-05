@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../sidebar/side-bar.js";
+import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
 import Button from "@mui/material/Button";
 import data from "../NotificationBox/notification.json";
@@ -61,7 +62,7 @@ export default function NotificationTable() {
         }}
       >
         <div>
-          <Sidebar name="notification" />
+          <Sidebar2 />
         </div>
         <div>
           <Button

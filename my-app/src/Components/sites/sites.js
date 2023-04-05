@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import "leaflet/dist/leaflet.css";
 import Sidebar from "../sidebar/side-bar";
+import Sidebar2 from "../sidebar/Sidebar2";
 import "./sites.css";
 import Navbar from "../navbar/navbar.js";
 import { Link } from "react-router-dom";
@@ -53,7 +54,11 @@ function Sites() {
   return (
     <div>
       <Navbar />
-      <Sidebar name="sites" />
+      <div style={{display: "flex", flexDirection: "row"}}>
+      <div>
+      <Sidebar2 />
+      </div>
+      <div style={{width: "100%"}}>
       <div className="menuContainer">
         <ProjectMenu setSelectedCoordinates={setSelectedCoordinates} />
       </div>
@@ -67,6 +72,8 @@ function Sites() {
           <Button style={{ fontSize: "16px" }} variant="contained">View Devices</Button>
         </Link>
       </Grid>
+        </div>
+      </div>
     </div>
   );
 }
