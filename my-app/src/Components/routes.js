@@ -13,7 +13,7 @@ import NewProject from "./NewProjectForm/NewProject";
 import AddSensor from "./Sensor/addSensor";
 import WaterQualityPage from "./parameters/parameters";
 import NotificationTable from "./NotificationTable/NotificationTable.js";
-
+import SensorsTable from "./Sensor/sensorsTable";
 function routes() {
   return (
     <Routes>
@@ -28,6 +28,7 @@ function routes() {
       <Route path="/deviceDeployment" element={<DeviceDeployment />} />
       <Route path="/newProject" element={<NewProject />} />
       <Route path="/addSensor" element={<AddSensor />} />
+      <Route path="/sensors" element={<SensorsTable />} />
       <Route path="/WaterQualityPage" element={<WaterQualityPage />} />
     </Routes>
   );

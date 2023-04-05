@@ -1,4 +1,5 @@
 import axios from "axios";
+import React from 'react';
 import { useEffect, useState } from "react";
 import "./tableRow.css";
 import Sidebar from "../sidebar/side-bar";
@@ -13,6 +14,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Link } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -35,6 +39,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+
+
 function UsersTable() {
   const [usersData, setUsersData] = useState([]);
 
@@ -44,13 +50,22 @@ function UsersTable() {
     setUsersData(res.data);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/users/${id}`);
+      setUsersData(usersData.filter((user) => user.Id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     getUsersData();
   }, []);
   return (
     <div>
       <Navbar />
-      <Grid container>
+      <Grid spacing={40} container>
         <Grid item xs={4} sm={5} md={2}>
           <Sidebar name="users" />
         </Grid>
@@ -69,6 +84,8 @@ function UsersTable() {
                   <StyledTableCell align="right">Designation</StyledTableCell>
                   <StyledTableCell align="right">Country</StyledTableCell>
                   <StyledTableCell align="right">Site</StyledTableCell>
+                  <StyledTableCell align="right">Edit</StyledTableCell>
+                  <StyledTableCell align="right">Delete</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -81,6 +98,16 @@ function UsersTable() {
                     <StyledTableCell align="right">{row.Designation}</StyledTableCell>
                     <StyledTableCell align="right">{row.Country}</StyledTableCell>
                     <StyledTableCell align="right">{row.Site}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="right">
+                      <Link to={`/edit/${row.Id}`}>
+                        <EditIcon />
+                      </Link>
+                    </StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="right">
+                      <IconButton onClick={() => handleDelete(row.Id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>

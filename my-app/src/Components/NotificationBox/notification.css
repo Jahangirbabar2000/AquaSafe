@@ -4,13 +4,12 @@
   overflow: auto;
   /* margin-left: 0.5%; */
   /* background: orange; */
-  box-shadow:2px 3px 5px 2px #6F8FAF;
+  box-shadow: 2px 3px 5px 2px #6F8FAF;
   /* z-index: 10; */
   position: absolute;
   border-radius: 5%;
-  right:3.5%;
-  top: 80%;
-  
+  right: 3.5%;
+  top: 80%
 }
 
 .one-notification-container {
@@ -19,19 +18,20 @@
   border-radius: 0%;
   box-shadow: 0 4px 9px -2px black;
   /* z-index: 20; */
-    /* border-bottom: 10px solid black; */
+  /* border-bottom: 10px solid black; */
 }
 
 .one-notification-container:first-child {
   margin-top: 0%;
 }
+
 .one-notification-container:last-child {
   margin-bottom: 0%;
 }
 
-.notification-subheading-title{
-   font-size: 14px;
-    font-weight: bold;
+.notification-subheading-title {
+  font-size: 14px;
+  font-weight: bold;
 }
 
 #notification {
@@ -50,15 +50,15 @@
 .moderate {
   font-size: 20px;
   color: yellowgreen;
-   font-weight: normal;
+  font-weight: normal;
 }
 
-.notification-info{
+.notification-info {
   font-size: 16px;
   font-weight: normal;
 }
 
-.notification-details{
+.notification-details {
   font-size: 12px;
   font-weight: normal;
 }
@@ -66,7 +66,10 @@
 .hidescroll::-webkit-scrollbar {
   display: none;
 }
+
 .hidescroll {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

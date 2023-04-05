@@ -69,15 +69,12 @@ function App(props) {
     return <div>
       <Navbar />
       <Sidebar name="dashboard" />
-      <Grid item xs={9} sx={{ ml: 25, mt: 10 }}>
+      <Grid item xs={9} sx={{ ml: 100, mt: 10 }}>
         <h1>Loading...</h1>
       </Grid>
 
     </div>;
   }
-
-
-
 
 
   return (
@@ -100,7 +97,10 @@ function App(props) {
             </Link>
 
             <Grid container justifyContent="space-around" sm={12} >
-              {/* PARAMETERS */}
+
+              {/**************************************/}
+              {/*            TOP PARAMETERS          */}
+              {/**************************************/}
 
               <Parameters color={data[6]["Water Temperature (°C)"] >= 4 &&
                 data[6]["Water Temperature (°C)"] <= 22 ? '#83b854' : '#de4545'}
@@ -135,53 +135,69 @@ function App(props) {
 
             </Grid>
           </Paper>
-          <Paper sx={{
-            p: 2,
-            mt: 2,
-            mb: 2,
-            mr: 47
-          }}
-          >
-            <Datepicker startDate={startDate} setStartDate={setStartDate}
-              endDate={endDate} setEndDate={setEndDate} />
-            <Button variant="contained" onClick={getData} size="large"
-              sx={{ ml: 4, mt: 1 }}>View </Button>
-          </Paper>
-          <Grid container alignItems="center" spacing={2}>
-            {/* GRAPHS and MAP*/}
-            <Grid item sm={7}>
-              {/* GRAPHS*/}
+
+          <Grid container>
+            <Grid item md={7}>
+
+              {/**************************************/}
+              {/*             DatePicker             */}
+              {/**************************************/}
+
               <Paper sx={{
-                pl: 3,
-                pr: 5,
-                pt: 2,
-                mt: 2
-              }}>
-                <h3>pH</h3>
-                <h5>(Scale 0-14)</h5>
-                <ResponsiveContainer height={140}>
-                  <BarGraph data={data} datakey={'pH'} min={'6.5'} max={'8.5'} />
-                </ResponsiveContainer>
-              </Paper>
-              <Paper sx={{
-                pl: 3,
-                pr: 5,
-                pt: 2,
-                mt: 2
-              }}>
-                <h3>Dissolved Oxygen</h3>
-                <h5>(mg/L)</h5>
-                <ResponsiveContainer height={140}>
-                  <LineGraph data={data} datakey={'Dissolved Oxygen (mg/L)'} min={'5'} max={'11'} />
-                </ResponsiveContainer>
+                p: 2,
+                mt: 2,
+                mb: 2,
+                mr: 0
+              }}
+              >
+                <Datepicker startDate={startDate} setStartDate={setStartDate}
+                  endDate={endDate} setEndDate={setEndDate} />
+                <Button variant="contained" onClick={getData} size="large"
+                  sx={{ ml: 4, mt: 1 }}>View </Button>
               </Paper>
 
 
+
+              <Grid item>
+
+                {/**************************************/}
+                {/*               2 GRAPHS             */}
+                {/**************************************/}
+
+                <Paper sx={{
+                  pl: 3,
+                  pr: 5,
+                  pt: 2,
+                  mt: 2
+                }}>
+                  <h3>pH</h3>
+                  <h5>(Scale 0-14)</h5>
+                  <ResponsiveContainer height={140}>
+                    <BarGraph data={data} datakey={'pH'} min={'6.5'} max={'8.5'} />
+                  </ResponsiveContainer>
+                </Paper>
+
+                <Paper sx={{
+                  pl: 3,
+                  pr: 5,
+                  pt: 2,
+                  mt: 2
+                }}>
+                  <h3>Dissolved Oxygen</h3>
+                  <h5>(mg/L)</h5>
+                  <ResponsiveContainer height={140}>
+                    <LineGraph data={data} datakey={'Dissolved Oxygen (mg/L)'} min={'5'} max={'11'} />
+                  </ResponsiveContainer>
+                </Paper>
+              </Grid>
 
             </Grid>
-            <Grid item sm={5} alignItems="flex=end" justifyContent="flex=end" sx={{ mt: 4 }} >
-              {/* MAP*/}
 
+            {/**************************************/}
+            {/*                MAP                 */}
+            {/**************************************/}
+
+            <Grid item sx={{ mt: 5 }} md={5} sm={5} alignItems="flex=end" justifyContent="flex=end">
               <MapContainer
                 center={[22.449300, 114.162233]}
                 zoom={17}
@@ -193,119 +209,126 @@ function App(props) {
                 />
                 <Marker position={[22.449300, 114.162233]}>
                   <Popup>
-                    Location of this Device: <br /> North corner
+                    Location of this Device: <br /> Lam Tsuen River
                   </Popup>
                 </Marker>
               </MapContainer>
               <Box container pl={20} pt={3}>
               </Box>
             </Grid>
+
           </Grid>
 
-          <Paper sx={{
-            pl: 3,
-            pr: 5,
-            pt: 2,
-            mt: 3
-          }}>
-            <h3>Ammonia-Nitrogen</h3>
-            <h5>(mg/L)</h5>
-            <ResponsiveContainer height={140}>
-              <BarGraph data={data} datakey={'Ammonia-Nitrogen (mg/L)'} min={'0.25'} max={'3'} />
-            </ResponsiveContainer>
-          </Paper>
 
-          <Paper sx={{
-            pl: 3,
-            pr: 5,
-            pt: 2,
-            mt: 2
-          }}>
-            <h3>Total Phosphorus (mg/L)</h3>
-            <h5>(mg/L)</h5>
-            <ResponsiveContainer height={140}>
-              <LineGraph data={data} datakey={'Total Phosphorus (mg/L)'} min={'0'} max={'3'} />
-            </ResponsiveContainer>
-          </Paper>
+          {/**************************************/}
+          {/*           Rest of charts           */}
+          {/**************************************/}
 
-          <Paper sx={{
-            pl: 3,
-            pr: 5,
-            pt: 2,
-            mt: 2
-          }}>
-            <h3>5-Day Biochemical Oxygen Demand</h3>
-            <h5>(mg/L)</h5>
-            <ResponsiveContainer height={140}>
-              <BarGraph data={data} datakey={'5-Day Biochemical Oxygen Demand (mg/L)'} min={'1'} max={'5'} />
-            </ResponsiveContainer>
-          </Paper>
+          <Grid>
+            <Paper sx={{
+              pl: 3,
+              pr: 5,
+              pt: 2,
+              mt: 3
+            }}>
+              <h3>Ammonia-Nitrogen</h3>
+              <h5>(mg/L)</h5>
+              <ResponsiveContainer height={140}>
+                <BarGraph data={data} datakey={'Ammonia-Nitrogen (mg/L)'} min={'0.25'} max={'3'} />
+              </ResponsiveContainer>
+            </Paper>
 
-          <Paper sx={{
-            pl: 3,
-            pr: 5,
-            pt: 2,
-            mt: 2
-          }}>
-            <h3>Water Temperature</h3>
-            <h5>(°C)</h5>
-            <ResponsiveContainer height={140}>
-              <LineGraph data={data} datakey={'Water Temperature (°C)'} min={'4'} max={'22'} />
-            </ResponsiveContainer>
-          </Paper>
+            <Paper sx={{
+              pl: 3,
+              pr: 5,
+              pt: 2,
+              mt: 2
+            }}>
+              <h3>Total Phosphorus (mg/L)</h3>
+              <h5>(mg/L)</h5>
+              <ResponsiveContainer height={140}>
+                <LineGraph data={data} datakey={'Total Phosphorus (mg/L)'} min={'0'} max={'3'} />
+              </ResponsiveContainer>
+            </Paper>
 
-          <Paper sx={{
-            pl: 3,
-            pr: 5,
-            pt: 2,
-            mt: 2
-          }}>
-            <h3>Suspended solids</h3>
-            <h5>(mg/L)</h5>
-            <ResponsiveContainer height={140}>
-              <BarGraph data={data} datakey={'Suspended solids (mg/L)'} min={'1'} max={'5'} />
-            </ResponsiveContainer>
-          </Paper>
+            <Paper sx={{
+              pl: 3,
+              pr: 5,
+              pt: 2,
+              mt: 2
+            }}>
+              <h3>5-Day Biochemical Oxygen Demand</h3>
+              <h5>(mg/L)</h5>
+              <ResponsiveContainer height={140}>
+                <BarGraph data={data} datakey={'5-Day Biochemical Oxygen Demand (mg/L)'} min={'1'} max={'5'} />
+              </ResponsiveContainer>
+            </Paper>
 
-          <Paper sx={{
-            pl: 3,
-            pr: 5,
-            pt: 2,
-            mt: 2
-          }}>
-            <h3>Conductivity</h3>
-            <h5>(µS/cm)</h5>
-            <ResponsiveContainer height={140}>
-              <LineGraph data={data} datakey={'Conductivity (µS/cm)'} min={'100'} max={'1000'} />
-            </ResponsiveContainer>
-          </Paper>
+            <Paper sx={{
+              pl: 3,
+              pr: 5,
+              pt: 2,
+              mt: 2
+            }}>
+              <h3>Water Temperature</h3>
+              <h5>(°C)</h5>
+              <ResponsiveContainer height={140}>
+                <LineGraph data={data} datakey={'Water Temperature (°C)'} min={'4'} max={'22'} />
+              </ResponsiveContainer>
+            </Paper>
 
-          <Paper sx={{
-            pl: 3,
-            pr: 5,
-            pt: 2,
-            mt: 2
-          }}>
-            <h3>Nitrate-Nitrogen</h3>
-            <h5>(mg/L)</h5>
-            <ResponsiveContainer height={140}>
-              <BarGraph data={data} datakey={'Nitrate-Nitrogen (mg/L)'} min={'0'} max={'10'} />
-            </ResponsiveContainer>
-          </Paper>
+            <Paper sx={{
+              pl: 3,
+              pr: 5,
+              pt: 2,
+              mt: 2
+            }}>
+              <h3>Suspended solids</h3>
+              <h5>(mg/L)</h5>
+              <ResponsiveContainer height={140}>
+                <BarGraph data={data} datakey={'Suspended solids (mg/L)'} min={'1'} max={'5'} />
+              </ResponsiveContainer>
+            </Paper>
 
-          <Paper sx={{
-            pl: 3,
-            pr: 5,
-            pt: 2,
-            mt: 2
-          }}>
-            <h3>Nitrite-Nitrogen</h3>
-            <h5>(mg/L)</h5>
-            <ResponsiveContainer height={140}>
-              <LineGraph data={data} datakey={'Nitrite-Nitrogen (mg/L)'} min={'0'} max={'1'} />
-            </ResponsiveContainer>
-          </Paper>
+            <Paper sx={{
+              pl: 3,
+              pr: 5,
+              pt: 2,
+              mt: 2
+            }}>
+              <h3>Conductivity</h3>
+              <h5>(µS/cm)</h5>
+              <ResponsiveContainer height={140}>
+                <LineGraph data={data} datakey={'Conductivity (µS/cm)'} min={'100'} max={'1000'} />
+              </ResponsiveContainer>
+            </Paper>
 
+            <Paper sx={{
+              pl: 3,
+              pr: 5,
+              pt: 2,
+              mt: 2
+            }}>
+              <h3>Nitrate-Nitrogen</h3>
+              <h5>(mg/L)</h5>
+              <ResponsiveContainer height={140}>
+                <BarGraph data={data} datakey={'Nitrate-Nitrogen (mg/L)'} min={'0'} max={'10'} />
+              </ResponsiveContainer>
+            </Paper>
+
+            <Paper sx={{
+              pl: 3,
+              pr: 5,
+              pt: 2,
+              mt: 2
+            }}>
+              <h3>Nitrite-Nitrogen</h3>
+              <h5>(mg/L)</h5>
+              <ResponsiveContainer height={140}>
+                <LineGraph data={data} datakey={'Nitrite-Nitrogen (mg/L)'} min={'0'} max={'1'} />
+              </ResponsiveContainer>
+            </Paper>
+          </Grid>
         </Grid>
       </Grid>
     </ThemeProvider>

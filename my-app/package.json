@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.10.4",
-    "@emotion/styled": "^11.10.4",
-    "@mui/icons-material": "^5.10.3",
-    "@mui/material": "^5.10.4",
-    "@mui/styles": "^5.11.9",
-    "@mui/x-date-pickers": "^5.0.18",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.11.16",
+    "@mui/styled-engine-sc": "^5.11.11",
+    "@mui/system": "^5.11.16",
+    "@mui/x-data-grid": "^6.0.4",
+    "@mui/x-date-pickers": "^6.0.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -24,10 +26,11 @@
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.0.2",
     "react-router": "^6.4.1",
-    "react-router-dom": "^6.7.0",
+    "react-router-dom": "^6.10.0",
     "react-scripts": "^5.0.1",
     "recharts": "^2.1.14",
-    "sort-by": "^1.2.0",
+    "sort-by": "^0.0.2",
+    "styled-components": "^5.3.9",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -53,8 +56,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@babel/eslint-parser": "^7.18.9"
   }
 }
