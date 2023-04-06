@@ -17,6 +17,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import GroupIcon from "@mui/icons-material/Group";
 import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
+import TableRowsOutlinedIcon from "@mui/icons-material/TableRowsOutlined";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -64,6 +65,8 @@ const Sidebar2 = (props) => {
           color: "#EF7E18 !important"
         },
         "& .pro-sidebar": {
+          // position: "sticky",
+          // boxSizing: "border-box",
           height: "100vh",
           fontSize: "50px"
           // background:"blue"
@@ -204,7 +207,7 @@ const Sidebar2 = (props) => {
                 // setSelected={setSelected}
               >
                 {" "}
-                Google maps
+             
               </Item>
               <Item
                 title="item 2"
@@ -214,7 +217,7 @@ const Sidebar2 = (props) => {
                 // setSelected={setSelected}
               >
                 {" "}
-                Open street maps
+              
               </Item>
             </SubMenu>
             {/* <br/> */}

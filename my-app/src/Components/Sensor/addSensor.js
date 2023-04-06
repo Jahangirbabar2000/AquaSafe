@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import "./addSensor.css";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 // This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
@@ -102,9 +103,11 @@ const AddSensor = () => {
                         </option>
                       ))}
                     </Field>
+                    <Link to="/addParameter">
                     <Button color="primary" size="small">
                       Add New Parameter?
                     </Button>
+                    </Link>
                   </div>{" "}
                   <br />
                   <div>
@@ -146,15 +149,17 @@ const AddSensor = () => {
                   </div>
                   <br />
                   <div>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                    >
-                      Add Sensor
-                    </Button>
+             
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                      >
+                        Add Sensor
+                      </Button>
+             
                   </div>
                 </Form>
               )}
