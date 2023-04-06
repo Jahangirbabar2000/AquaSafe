@@ -6,7 +6,7 @@ function BarGraph(props) {
       <BarChart margin={{
         top: 0,
       }} data={props.data}>
-        <XAxis dataKey="Dates" />
+        <XAxis dataKey="Dates" reversed={true} />
         <YAxis dataKey={props.datakey} />
         <Tooltip />
         <Bar dataKey={props.datakey} fill="#8884d8" />
