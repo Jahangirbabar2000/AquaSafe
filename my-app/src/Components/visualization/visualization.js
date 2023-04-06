@@ -20,7 +20,6 @@ import { Paper, Typography, Menu, MenuItem, IconButton } from "@mui/material";
 import Datepicker from "./datepicker";
 import Button from '@mui/material/Button';
 import { Icon } from "leaflet";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 const mdTheme = createTheme();
 
@@ -48,11 +47,10 @@ function App(props) {
 
 
   const handleMarkerClick = (marker) => {
-    setSelectedMarker({
-      ...marker,
-      color: 'green', // or any other color you want to use
-    });
+
+    setSelectedMarker(marker);
   };
+
 
   const customIcon = new Icon({
     iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -63,7 +61,14 @@ function App(props) {
     shadowSize: [41, 41]
   });
 
-
+  const selectedIcon = new Icon({
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+    shadowUrl: markerShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
 
   ////////////////////////////////////////////
 
@@ -332,12 +337,18 @@ function App(props) {
                     <Marker
                       key={marker.Station}
                       position={[marker.Latitude, marker.Longitude]}
-                      onClick={() => handleMarkerClick(marker)}
-                      icon={customIcon}
+                      icon={selectedMarker === marker ? selectedIcon : customIcon}
+                      eventHandlers={{
+                        click: (event) => {
+                          console.log('Marker clicked:', marker);
+                          handleMarkerClick(marker);
+                        },
+                      }}
                     >
                       <Popup>{marker.Station}</Popup>
                     </Marker>
                   ))}
+
                 </MapContainer>
 
 
