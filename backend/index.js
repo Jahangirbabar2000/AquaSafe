@@ -33,11 +33,11 @@ app.use(passport.session());
 // Create connection to database using mysql2
 const connection = mysql.createConnection({
 
-    // host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // RDS
-    // user: 'admin',
+    host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // RDS
+    user: 'admin',
 
-    host: 'localhost', // Local Machine
-    user: 'root',
+    // host: 'localhost', // Local Machine
+    // user: 'root',
 
     password: 'jb123456',
     database: 'AquaSafe'
