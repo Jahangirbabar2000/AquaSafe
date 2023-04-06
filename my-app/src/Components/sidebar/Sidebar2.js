@@ -16,6 +16,7 @@ import WifiRoundedIcon from "@mui/icons-material/WifiRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import GroupIcon from "@mui/icons-material/Group";
+import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -30,7 +31,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       
       icon={icon}
     >
-      <Typography sx={{ fontSize: 14 }}>{title}</Typography>
+      <Typography sx={{ fontSize: 16 }}>{title}</Typography>
       <Link to={to} />
     </MenuItem>
   );
@@ -151,6 +152,14 @@ const Sidebar2 = (props) => {
               title="Sensors"
               to="/sensors"
               icon={<SensorsRoundedIcon />}
+              selected={selected}
+              // setSelected={setSelected}
+            />
+
+            <Item
+              title="Parameters"
+              to="/parameters"
+              icon={<ScienceRoundedIcon />}
               selected={selected}
               // setSelected={setSelected}
             />

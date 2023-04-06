@@ -14,6 +14,9 @@ import AddSensor from "./Sensor/addSensor";
 import WaterQualityPage from "./parameters/parameters";
 import NotificationTable from "./NotificationTable/NotificationTable.js";
 import SensorsTable from "./Sensor/sensorsTable";
+import ParameterTable from "./parameters/ParameterTable"
+import Parameter from "./parameters/parameter";
+import AddParameter from "./parameters/AddParameterForm"
 function routes() {
   return (
     <Routes>
@@ -30,6 +33,8 @@ function routes() {
       <Route path="/addSensor" element={<AddSensor />} />
       <Route path="/sensors" element={<SensorsTable />} />
       <Route path="/WaterQualityPage" element={<WaterQualityPage />} />
+      <Route path="/parameters" element={<ParameterTable />} />
+      <Route path="/addParameter" element={<AddParameter />} />
     </Routes>
   );
 }
