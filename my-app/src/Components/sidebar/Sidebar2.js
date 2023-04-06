@@ -65,7 +65,7 @@ const Sidebar2 = (props) => {
           color: "#EF7E18 !important"
         },
         "& .pro-sidebar": {
-          position: "sticky",
+          position: "fixed",
           // boxSizing: "border-box",
           height: "100vh",
           fontSize: "50px"
