@@ -62,7 +62,7 @@ export default function NotificationTable() {
         }}
       >
         <div>
-          <Sidebar2 />
+          <Sidebar2 name="Notifications" />
         </div>
         <div>
           <Button

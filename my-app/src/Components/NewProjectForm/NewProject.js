@@ -294,7 +294,7 @@ const NewProject = () => (
       }}
     >
       <div>
-        <Sidebar2 />
+        <Sidebar2 name="Create New Project" />
       </div>
       <div className="box">
         <div className="container">

@@ -77,7 +77,7 @@ const DeviceDeployment = () => {
       <Navbar></Navbar>
       <div style={{display: "flex", flexDirection: "row"}}>
       <div>
-      <Sidebar2 />
+          <Sidebar2 name="Devices" />
       </div>
       <div>
       <div className="grid-container">

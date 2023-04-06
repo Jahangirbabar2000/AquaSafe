@@ -56,9 +56,9 @@ function Sites() {
       <Navbar />
       <div style={{display: "flex", flexDirection: "row"}}>
       <div>
-      <Sidebar2 />
+      <Sidebar2 name="Sites" />
       </div>
-      <div style={{width: "100%"}}>
+      <div style={{width: ""}}>
       <div className="menuContainer">
         <ProjectMenu setSelectedCoordinates={setSelectedCoordinates} />
       </div>

@@ -68,7 +68,7 @@ function UsersTable() {
       <Navbar />
       <Grid spacing={40} container>
         <Grid item xs={4} sm={5} md={2}>
-          <Sidebar2 />
+          <Sidebar2 name="Users" />
         </Grid>
         <Grid item xs={8} sm={7} md={9}>
           <br />
@@ -90,14 +90,18 @@ function UsersTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {usersData.map((row) => (
+                {usersData.map(row => (
                   <StyledTableRow key={row.Id}>
                     <StyledTableCell component="th" scope="row">
                       {row.FirstName}
                     </StyledTableCell>
                     <StyledTableCell align="right">{row.Email}</StyledTableCell>
-                    <StyledTableCell align="right">{row.Designation}</StyledTableCell>
-                    <StyledTableCell align="right">{row.Country}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      {row.Designation}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {row.Country}
+                    </StyledTableCell>
                     <StyledTableCell align="right">{row.Site}</StyledTableCell>
                     <StyledTableCell className="smallColumn" align="right">
                       <Link to={`/edit/${row.Id}`}>
@@ -116,8 +120,7 @@ function UsersTable() {
           </TableContainer>
         </Grid>
         <Grid container pt={5} pl={150}>
-          <Link to="/signup">
-          </Link>
+          <Link to="/signup"></Link>
         </Grid>
       </Grid>
     </div>

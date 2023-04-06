@@ -22,11 +22,12 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   const colors = tokens(theme.palette.mode);
   return (
     <MenuItem
+      // onClick={() => setSelected(title)}
       active={selected === title}
       style={{
         color: "#f5f5ff"
       }}
-      onClick={() => setSelected(title)}
+      
       icon={icon}
     >
       <Typography sx={{ fontSize: 14 }}>{title}</Typography>
@@ -35,11 +36,13 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   );
 };
 
-const Sidebar2 = () => {
+const Sidebar2 = (props) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Dashboard");
+  const [selected, setSelected] = useState(props.name);
+
+  // setSelected(props.name);
 
   return (
     <Box
@@ -113,7 +116,7 @@ const Sidebar2 = () => {
               to="/dashboard"
               icon={<TvRoundedIcon />}
               selected={selected}
-              setSelected={setSelected}
+              // setSelected={setSelected}
             />
             <Item
               title="Sites"
@@ -127,7 +130,7 @@ const Sidebar2 = () => {
               to="/newProject"
               icon={<ContentPasteRoundedIcon />}
               selected={selected}
-              setSelected={setSelected}
+              // setSelected={setSelected}
             />
 
             <Typography
@@ -142,14 +145,14 @@ const Sidebar2 = () => {
               to="/deviceDeployment"
               icon={<RouterRoundedIcon />}
               selected={selected}
-              setSelected={setSelected}
+              // setSelected={setSelected}
             />
             <Item
               title="Sensors"
               to="/sensors"
               icon={<SensorsRoundedIcon />}
               selected={selected}
-              setSelected={setSelected}
+              // setSelected={setSelected}
             />
             <Typography
               variant="h6"
@@ -163,7 +166,7 @@ const Sidebar2 = () => {
               to="/notifications"
               icon={<NotificationsRoundedIcon />}
               selected={selected}
-              setSelected={setSelected}
+              // setSelected={setSelected}
             />
             <Typography
               variant="h6"
@@ -177,7 +180,7 @@ const Sidebar2 = () => {
               to="/userstable"
               icon={<GroupIcon />}
               selected={selected}
-              setSelected={setSelected}
+              // setSelected={setSelected}
             />
             <SubMenu
               icon={<MapOutlinedIcon />}
@@ -189,7 +192,7 @@ const Sidebar2 = () => {
                 to="/sites"
                 icon={<MapOutlinedIcon />}
                 selected={selected}
-                setSelected={setSelected}
+                // setSelected={setSelected}
               >
                 {" "}
                 Google maps
@@ -199,7 +202,7 @@ const Sidebar2 = () => {
                 to="/sites"
                 icon={<MapOutlinedIcon />}
                 selected={selected}
-                setSelected={setSelected}
+                // setSelected={setSelected}
               >
                 {" "}
                 Open street maps
@@ -212,7 +215,7 @@ const Sidebar2 = () => {
               to="/homepage"
               icon={<LogoutRoundedIcon />}
               selected={selected}
-              setSelected={setSelected}
+              // setSelected={setSelected}
             />
           </Box>
         </Menu>
