@@ -142,8 +142,8 @@ function App(props) {
     if (loading) {
       return <div>
         <Navbar />
-        <Sidebar name="dashboard" />
-        <Grid item xs={9} sx={{ ml: 100, mt: 10 }}>
+        <Sidebar2 name="Dashboard" />
+        <Grid item xs={9} sx={{ ml: 200, mt: 10 }}>
           <h1>Loading...</h1>
         </Grid>
 
@@ -162,13 +162,13 @@ function App(props) {
           }}
         >
           <div>
-            <Sidebar2 name="Readings" />
+            <Sidebar2 name="Dashboard" />
           </div>
           <div style={{ marginLeft: 80 }}>
             <Grid container spacing={0} p={8} pt={2} sx={{
               backgroundColor: (theme) => theme.palette.grey[100]
             }}>
-              <Grid item xs={9} sx={{ ml: 40 }}>
+              <Grid item xs={12}>
                 {/* Right big section*/}
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, margin: 2 }}>
                   <Typography variant="h3" sx={{ fontSize: '2.5rem' }}>Site: Lam Tsuen River</Typography>

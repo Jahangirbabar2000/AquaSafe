@@ -29,7 +29,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       style={{
         color: "#f5f5ff"
       }}
-      
+
       icon={icon}
     >
       <Typography sx={{ fontSize: 16 }}>{title}</Typography>
@@ -65,7 +65,7 @@ const Sidebar2 = (props) => {
           color: "#EF7E18 !important"
         },
         "& .pro-sidebar": {
-          position: "sticky",
+          position: "fixed",
           // boxSizing: "border-box",
           height: "100vh",
           fontSize: "50px"
@@ -134,14 +134,14 @@ const Sidebar2 = (props) => {
               to="/newProject"
               icon={<ContentPasteRoundedIcon />}
               selected={selected}
-              // setSelected={setSelected}
+            // setSelected={setSelected}
             />
             <Item
               title="Readings"
               to="/readings"
               icon={<TableRowsOutlinedIcon />}
               selected={selected}
-              // setSelected={setSelected}
+            // setSelected={setSelected}
             />
 
             <Typography
@@ -156,14 +156,14 @@ const Sidebar2 = (props) => {
               to="/deviceDeployment"
               icon={<RouterRoundedIcon />}
               selected={selected}
-              // setSelected={setSelected}
+            // setSelected={setSelected}
             />
             <Item
               title="Sensors"
               to="/sensors"
               icon={<SensorsRoundedIcon />}
               selected={selected}
-              // setSelected={setSelected}
+            // setSelected={setSelected}
             />
 
             <Item
@@ -171,7 +171,7 @@ const Sidebar2 = (props) => {
               to="/parameters"
               icon={<ScienceRoundedIcon />}
               selected={selected}
-              // setSelected={setSelected}
+            // setSelected={setSelected}
             />
             <Typography
               variant="h6"
@@ -185,7 +185,7 @@ const Sidebar2 = (props) => {
               to="/notifications"
               icon={<NotificationsRoundedIcon />}
               selected={selected}
-              // setSelected={setSelected}
+            // setSelected={setSelected}
             />
             <Typography
               variant="h6"
@@ -199,7 +199,7 @@ const Sidebar2 = (props) => {
               to="/userstable"
               icon={<GroupIcon />}
               selected={selected}
-              // setSelected={setSelected}
+            // setSelected={setSelected}
             />
             <SubMenu
               icon={<MapOutlinedIcon />}
@@ -211,7 +211,7 @@ const Sidebar2 = (props) => {
                 to="/sites"
                 icon={<MapOutlinedIcon />}
                 selected={selected}
-                // setSelected={setSelected}
+              // setSelected={setSelected}
               >
                 {" "}
               </Item>
@@ -220,7 +220,7 @@ const Sidebar2 = (props) => {
                 to="/sites"
                 icon={<MapOutlinedIcon />}
                 selected={selected}
-                // setSelected={setSelected}
+              // setSelected={setSelected}
               >
                 {" "}
               </Item>
@@ -232,7 +232,7 @@ const Sidebar2 = (props) => {
               to="/homepage"
               icon={<LogoutRoundedIcon />}
               selected={selected}
-              // setSelected={setSelected}
+            // setSelected={setSelected}
             />
           </Box>
         </Menu>
