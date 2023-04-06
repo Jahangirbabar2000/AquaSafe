@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../sidebar/side-bar.js";
+import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -51,11 +52,11 @@ const AddSensor = () => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "32vh auto",
+          gridTemplateColumns: "28vh auto"
         }}
       >
         <div>
-          <Sidebar name="sensor" />
+          <Sidebar2 name="Sensors" />
         </div>
         <div className="box">
           <div className="container">
@@ -63,7 +64,7 @@ const AddSensor = () => {
               style={{
                 textAlign: "center",
                 paddingBottom: "20px",
-                paddingTop: "10px",
+                paddingTop: "10px"
               }}
             >
               Add New Sensor
@@ -73,7 +74,7 @@ const AddSensor = () => {
                 sensorType: "",
                 parameter: "",
                 SensorMin: "",
-                SensorMax: "",
+                SensorMax: ""
               }}
               validationSchema={validationSchema}
               onSubmit={(values, actions) => {
@@ -83,7 +84,6 @@ const AddSensor = () => {
               {({ errors, touched }) => (
                 <Form className="">
                   <br />
-
                   <br />
                   <div>
                     <Field
@@ -92,15 +92,11 @@ const AddSensor = () => {
                       label="Parameter"
                       variant="standard"
                       name="Parameter"
-                      error={Boolean(
-                        touched.Parameter && errors.Parameter
-                      )}
-                      helperText={
-                        touched.Parameter ? errors.Parameter : ""
-                      }
+                      error={Boolean(touched.Parameter && errors.Parameter)}
+                      helperText={touched.Parameter ? errors.Parameter : ""}
                     >
                       <option value="">Select a parameter</option>
-                      {waterParameters.map((type) => (
+                      {waterParameters.map(type => (
                         <option key={type.id} value={type.id}>
                           {type.Name}
                         </option>
@@ -159,7 +155,6 @@ const AddSensor = () => {
                     >
                       Add Sensor
                     </Button>
-
                   </div>
                 </Form>
               )}

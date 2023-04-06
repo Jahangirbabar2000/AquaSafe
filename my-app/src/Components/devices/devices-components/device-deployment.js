@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./device-deploy.css";
 import Sidebar from "../../sidebar/side-bar";
+import Sidebar2 from "../../sidebar/Sidebar2";
 import Navbar from "../../navbar/navbar";
 import { Formik, Form, Field, useFormik } from "formik";
 import * as Yup from "yup";
@@ -74,8 +75,11 @@ const DeviceDeployment = () => {
   return (
     <div>
       <Navbar></Navbar>
-      <Sidebar name="device" />
-
+      <div style={{display: "flex", flexDirection: "row"}}>
+      <div>
+          <Sidebar2 name="Devices" />
+      </div>
+      <div>
       <div className="grid-container">
         <div className="containerr">
           <div className="card">
@@ -148,6 +152,8 @@ const DeviceDeployment = () => {
           </MapContainer>
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

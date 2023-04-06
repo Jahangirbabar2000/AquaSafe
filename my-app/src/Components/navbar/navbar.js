@@ -15,11 +15,10 @@ import data from "../NotificationBox/notification.json";
 import RenderNotifications from "../NotificationBox/notification.js";
 import { styled } from '@mui/system';
 
-const Root = styled('div')(({ theme }) => ({
-    "& .MuiPaper-root": {
-        color: "black",
-        height: 55
-    }
+const Root = styled("div")(({ theme }) => ({
+  "& .MuiPaper-root": {
+    color: "black",
+    height: 55
   }
 }));
 
