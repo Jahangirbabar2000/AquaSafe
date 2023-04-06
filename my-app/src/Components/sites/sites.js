@@ -62,7 +62,7 @@ function Sites() {
         }}
       >
         <div>
-          <Sidebar2 name="Notifications" />
+          <Sidebar2 name="Sites" />
         </div>
         <div>
           <div className="menuContainer">
@@ -76,12 +76,14 @@ function Sites() {
           </Grid>
           <Grid container pl={95}>
             <Link to="/dashboard">
-              <Button style={{ fontSize: "16px" }} variant="contained">View Devices</Button>
+              <Button style={{ fontSize: "16px" }} variant="contained">
+                View Devices
+              </Button>
             </Link>
           </Grid>
         </div>
-        </div>
       </div>
+    </div>
   );
 }
 
