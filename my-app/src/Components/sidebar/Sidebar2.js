@@ -136,6 +136,13 @@ const Sidebar2 = (props) => {
               selected={selected}
               // setSelected={setSelected}
             />
+            <Item
+              title="Readings"
+              to="/readings"
+              icon={<TableRowsOutlinedIcon />}
+              selected={selected}
+              // setSelected={setSelected}
+            />
 
             <Typography
               variant="h6"
@@ -207,7 +214,6 @@ const Sidebar2 = (props) => {
                 // setSelected={setSelected}
               >
                 {" "}
-             
               </Item>
               <Item
                 title="item 2"
@@ -217,7 +223,6 @@ const Sidebar2 = (props) => {
                 // setSelected={setSelected}
               >
                 {" "}
-              
               </Item>
             </SubMenu>
             {/* <br/> */}

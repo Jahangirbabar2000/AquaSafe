@@ -57,7 +57,7 @@ export default function NotificationTable() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "32vh auto"
+          gridTemplateColumns: "28vh auto"
           // gridGap: "2px"
         }}
       >
