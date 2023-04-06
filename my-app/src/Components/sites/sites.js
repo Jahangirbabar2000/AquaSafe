@@ -3,11 +3,13 @@ import Grid from "@mui/material/Grid";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import "leaflet/dist/leaflet.css";
 import Sidebar from "../sidebar/side-bar";
+import Sidebar2 from "../sidebar/Sidebar2";
 import "./sites.css";
 import Navbar from "../navbar/navbar.js";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
+// import Button from "react-bootstrap/Button";
 import ProjectMenu from "./projects-menu/projects";
+import Button from "@mui/material/Button";
 
 function Sites() {
   const [selectedCoordinates, setSelectedCoordinates] = useState([31.99, 77.13]);
@@ -52,21 +54,34 @@ function Sites() {
   return (
     <div>
       <Navbar />
-      <Sidebar name="sites" />
-      <div className="menuContainer">
-        <ProjectMenu setSelectedCoordinates={setSelectedCoordinates} />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "27vh auto"
+          // gridGap: "2px"
+        }}
+      >
+        <div>
+          <Sidebar2 name="Notifications" />
+        </div>
+        <div>
+          <div className="menuContainer">
+            <ProjectMenu setSelectedCoordinates={setSelectedCoordinates} />
+          </div>
+
+          <Grid container pl={55} pt={9} pb={6}>
+            <Grid item sm={9} alignItems="flex=end" justifyContent="flex=end">
+              {map}
+            </Grid>
+          </Grid>
+          <Grid container pl={95}>
+            <Link to="/dashboard">
+              <Button style={{ fontSize: "16px" }} variant="contained">View Devices</Button>
+            </Link>
+          </Grid>
+        </div>
+        </div>
       </div>
-      <Grid container pl={55} pt={9} pb={6}>
-        <Grid item sm={9} alignItems="flex=end" justifyContent="flex=end">
-          {map}
-        </Grid>
-      </Grid>
-      <Grid container pl={95}>
-        <Link to="/dashboard">
-          <Button style={{ fontSize: "20px" }} variant="primary">View Devices</Button>
-        </Link>
-      </Grid>
-    </div>
   );
 }
 

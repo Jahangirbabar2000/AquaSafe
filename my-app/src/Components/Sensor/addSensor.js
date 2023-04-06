@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../sidebar/side-bar.js";
+import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -7,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import "./addSensor.css";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 // This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
@@ -51,11 +53,11 @@ const AddSensor = () => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "32vh auto",
+          gridTemplateColumns: "28vh auto"
         }}
       >
         <div>
-          <Sidebar name="sensor" />
+          <Sidebar2 name="Sensors" />
         </div>
         <div className="box">
           <div className="container">
@@ -63,7 +65,7 @@ const AddSensor = () => {
               style={{
                 textAlign: "center",
                 paddingBottom: "20px",
-                paddingTop: "10px",
+                paddingTop: "10px"
               }}
             >
               Add New Sensor
@@ -73,7 +75,7 @@ const AddSensor = () => {
                 sensorType: "",
                 parameter: "",
                 SensorMin: "",
-                SensorMax: "",
+                SensorMax: ""
               }}
               validationSchema={validationSchema}
               onSubmit={(values, actions) => {
@@ -83,7 +85,6 @@ const AddSensor = () => {
               {({ errors, touched }) => (
                 <Form className="">
                   <br />
-
                   <br />
                   <div>
                     <Field
@@ -92,23 +93,21 @@ const AddSensor = () => {
                       label="Parameter"
                       variant="standard"
                       name="Parameter"
-                      error={Boolean(
-                        touched.Parameter && errors.Parameter
-                      )}
-                      helperText={
-                        touched.Parameter ? errors.Parameter : ""
-                      }
+                      error={Boolean(touched.Parameter && errors.Parameter)}
+                      helperText={touched.Parameter ? errors.Parameter : ""}
                     >
                       <option value="">Select a parameter</option>
-                      {waterParameters.map((type) => (
+                      {waterParameters.map(type => (
                         <option key={type.id} value={type.id}>
                           {type.Name}
                         </option>
                       ))}
                     </Field>
+                    <Link to="/addParameter">
                     <Button color="primary" size="small">
                       Add New Parameter?
                     </Button>
+                    </Link>
                   </div>{" "}
                   <br />
                   <div>
@@ -150,16 +149,17 @@ const AddSensor = () => {
                   </div>
                   <br />
                   <div>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                    >
-                      Add Sensor
-                    </Button>
-
+             
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                      >
+                        Add Sensor
+                      </Button>
+             
                   </div>
                 </Form>
               )}
