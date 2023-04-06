@@ -120,7 +120,7 @@ const Sidebar2 = (props) => {
               to="/dashboard"
               icon={<TvRoundedIcon />}
               selected={selected}
-              // setSelected={setSelected}
+              setSelected={setSelected}
             />
             <Item
               title="Sites"

@@ -62,7 +62,7 @@ function Sites() {
         }}
       >
         <div>
-          <Sidebar2 name="Notifications" />
+          <Sidebar2 name="Sites" />
         </div>
         <div>
           <div className="menuContainer">
@@ -80,8 +80,8 @@ function Sites() {
             </Link>
           </Grid>
         </div>
-        </div>
       </div>
+    </div>
   );
 }
 
