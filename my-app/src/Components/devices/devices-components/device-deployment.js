@@ -83,7 +83,7 @@ const DeviceDeployment = () => {
         }}
       >
         <div>
-          <Sidebar2 name="Notifications" />
+          <Sidebar2 name="Devices" />
         </div>
         <div>
           <div className="grid-container">

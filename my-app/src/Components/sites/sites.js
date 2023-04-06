@@ -76,7 +76,9 @@ function Sites() {
           </Grid>
           <Grid container pl={95}>
             <Link to="/dashboard">
-              <Button style={{ fontSize: "16px" }} variant="contained">View Devices</Button>
+              <Button style={{ fontSize: "16px" }} variant="contained">
+                View Devices
+              </Button>
             </Link>
           </Grid>
         </div>
