@@ -31,7 +31,7 @@ export default function Readings() {
         <div>
           <Sidebar2 name="Readings" />
         </div>
-        <div style={{ marginLeft: 80 }}>
+        <div style={{ marginLeft: 150, marginTop: 20 }}>
           <Button
             variant="contained"
             style={{ marginLeft: "1%", padding: "0.5%", marginTop: "10px" }}
