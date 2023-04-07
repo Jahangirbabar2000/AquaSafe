@@ -124,7 +124,7 @@ app.post('/signin', (req, res) => {
 
 // Create route to retrieve data from database
 app.get('/data', (req, res) => {
-    connection.query('SELECT r.Time, r.Reading, sc.Parameter FROM aquasafe.readings as r, aquasafe.sensorscatalogue as sc where r.Sensor = sc.Id;', (err, rows) => {
+    connection.query('SELECT r.Time, r.Reading, sc.Parameter FROM AquaSafe.readings as r, aquasafe.sensorscatalogue as sc where r.Sensor = sc.Id;', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
@@ -154,7 +154,7 @@ app.get('/hkdata2', (req, res) => {
 
 // Create route to retrieve stationCoordinates from  hong kong dataset 
 app.get('/stationCoordinates', (req, res) => {
-    connection.query('SELECT * FROM aquasafe.stationCoordinates;', (err, rows) => {
+    connection.query('SELECT * FROM AquaSafe.stationCoordinates;', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
@@ -227,20 +227,20 @@ app.listen(8080, () => {
 });
 
 
-// // Code for merging react static files with backend
-// const path = require('path')
-// const _dirname = path.dirname("")
-// const buildPath = path.join(_dirname, "../my-app/build");
-// app.use(express.static(buildPath))
-// app.get("/*", function (req, res) {
+// Code for merging react static files with backend
+const path = require('path')
+const _dirname = path.dirname("")
+const buildPath = path.join(_dirname, "../my-app/build");
+app.use(express.static(buildPath))
+app.get("/*", function (req, res) {
 
-//     res.sendFile(
-//         path.join(__dirname, "../my-app/build/index.html"),
-//         function (err) {
-//             if (err) {
-//                 res.status(500).send(err);
-//             }
-//         }
-//     )
-// })
-// //////////////////////////////////////////////////////////
+    res.sendFile(
+        path.join(__dirname, "../my-app/build/index.html"),
+        function (err) {
+            if (err) {
+                res.status(500).send(err);
+            }
+        }
+    )
+})
+//////////////////////////////////////////////////////////

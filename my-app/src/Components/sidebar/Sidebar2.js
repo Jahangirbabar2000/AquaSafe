@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
-import { tokens } from "../../theme";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 // new sidebar icons
 import TvRoundedIcon from "@mui/icons-material/TvRounded";
@@ -12,7 +10,6 @@ import ContentPasteRoundedIcon from "@mui/icons-material/ContentPasteRounded";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 import RouterRoundedIcon from "@mui/icons-material/RouterRounded";
 import SensorsRoundedIcon from "@mui/icons-material/SensorsRounded";
-import WifiRoundedIcon from "@mui/icons-material/WifiRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import GroupIcon from "@mui/icons-material/Group";
@@ -20,8 +17,7 @@ import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 import TableRowsOutlinedIcon from "@mui/icons-material/TableRowsOutlined";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+
   return (
     <MenuItem
       // onClick={() => setSelected(title)}
@@ -39,8 +35,6 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 };
 
 const Sidebar2 = (props) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState(props.name);
 
@@ -49,33 +43,20 @@ const Sidebar2 = (props) => {
   return (
     <Box
       sx={{
-        "& .pro-sidebar-inner": {
-          background: "#2A3247"
-        },
-        "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important"
-        },
-        "& .pro-inner-item": {
-          padding: "5px 35px 5px 20px !important"
-        },
-        "& .pro-inner-item:hover": {
-          color: "#EF7E18 !important"
-        },
-        "& .pro-menu-item.active": {
-          color: "#EF7E18 !important"
-        },
+        "& .pro-sidebar-inner": { background: "#2A3247" },
+        "& .pro-icon-wrapper": { backgroundColor: "transparent !important" },
+        "& .pro-inner-item": { padding: "5px 35px 5px 20px !important" },
+        "& .pro-inner-item:hover": { color: "#EF7E18 !important" },
+        "& .pro-menu-item.active": { color: "#EF7E18 !important" },
         "& .pro-sidebar": {
-          position: "fixed",
-          // boxSizing: "border-box",
+          position: "fixed",// boxSizing: "border-box",
           height: "100vh",
           fontSize: "50px"
           // background:"blue"
         },
-        "& .pro-sidebar.collapsed": {
-          width: "100px"
-        }
-      }}
-    >
+        "& .pro-sidebar.collapsed": { width: "100px" }
+      }}>
+
       <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
@@ -108,17 +89,13 @@ const Sidebar2 = (props) => {
           </MenuItem> */}
 
           <Box paddingLeft={isCollapsed ? undefined : "5%"}>
-            <Typography
-              variant="h6"
-              color="#f5f5ff"
-              sx={{ m: "15px 0 5px 20px" }}
-            >
+            <Typography variant="h6" color="#f5f5ff" sx={{ m: "15px 0 5px 20px" }}>
               Projects
             </Typography>
             <Item
               title="Dashboard"
               to="/dashboard"
-              icon={<TvRoundedIcon />}
+              icon={<TvRoundedIcon  />}
               selected={selected}
               setSelected={setSelected}
             />

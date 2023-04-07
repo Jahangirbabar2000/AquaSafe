@@ -69,12 +69,12 @@ function Sites() {
             <ProjectMenu setSelectedCoordinates={setSelectedCoordinates} />
           </div>
 
-          <Grid container pl={55} pt={9} pb={6}>
+          <Grid container pl={35} pt={9} pb={6}>
             <Grid item sm={9} alignItems="flex=end" justifyContent="flex=end">
               {map}
             </Grid>
           </Grid>
-          <Grid container pl={95}>
+          <Grid container pl={75}>
             <Link to="/dashboard">
               <Button style={{ fontSize: "16px" }} variant="contained">
                 View Devices
