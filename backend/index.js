@@ -235,7 +235,6 @@ const buildPath = path.join(_dirname, "../my-app/build");
 app.use(express.static(buildPath))
 app.get("/*", function (req, res) {
 
-
     res.sendFile(
         path.join(__dirname, "../my-app/build/index.html"),
         function (err) {
@@ -245,5 +244,3 @@ app.get("/*", function (req, res) {
         }
     )
 })
-
-
