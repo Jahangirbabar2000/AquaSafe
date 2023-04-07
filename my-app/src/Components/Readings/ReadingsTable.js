@@ -42,7 +42,7 @@ function ReadingsTable() {
 
   useEffect(() => {
     // FIRST API REQUEST - Data
-    axios.get(`http://localhost:8080/hkdata`)
+    axios.get(`/hkdata`)
       .then(response => {
         setReadingsData(response.data);
       })

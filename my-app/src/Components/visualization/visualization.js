@@ -83,7 +83,7 @@ function App(props) {
     });
 
     // FIRST API REQUEST - Data
-    axios.get(`http://localhost:8080/hkdata`)
+    axios.get(`/hkdata`)
       .then(response => {
         const dateOnlyArray = response.data.map(obj => {
           const dateOnlyString = new Date(obj.Dates).toISOString().slice(0, 10);
@@ -95,7 +95,7 @@ function App(props) {
       .catch(error => console.log(error));
 
     // SECOND API REQUEST - Station Coordinates
-    axios.get("http://localhost:8080/stationCoordinates")
+    axios.get("/stationCoordinates")
       .then((response) => {
         setStationCoordinates(response.data);
       })
@@ -109,7 +109,7 @@ function App(props) {
   const getData = () => {
     const sd = moment(startDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
     const ed = moment(endDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
-    axios.get(`http://localhost:8080/hkdata2?start_date=${sd}&end_date=${ed}`)
+    axios.get(`/hkdata2?start_date=${sd}&end_date=${ed}`)
       .then(response => {
         const dateOnlyArray = response.data.map(obj => {
           const dateOnlyString = new Date(obj.Dates).toISOString().slice(0, 10);

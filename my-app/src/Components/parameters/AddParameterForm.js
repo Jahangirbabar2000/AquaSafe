@@ -23,7 +23,7 @@ const AddParameter = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:8080/parameters");
+      const response = await fetch("/parameters");
       const data = await response.json();
       setWaterParameters(data);
     };
@@ -32,7 +32,7 @@ const AddParameter = () => {
 
   const handleSubmit = async values => {
     try {
-      await axios.post(`http://localhost:8080/sensors/`, {
+      await axios.post(`/sensors/`, {
         ParameterName: values.ParameterName,
         ParameterMin: values.ParameterMin,
         ParameterMax: values.ParameterMax,
