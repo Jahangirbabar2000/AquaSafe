@@ -45,14 +45,14 @@ function SensorsTable() {
     const [sensorsData, setSensorsData] = useState([]);
 
     const getUsersData = async (req, res) => {
-        res = await axios.get("/sensorsTable");
+        res = await axios.get("http://localhost:8080/sensorsTable");
         console.log(res.data);
         setSensorsData(res.data);
     };
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`/sensors/${id}`);
+            await axios.delete(`http://localhost:8080/sensors/${id}`);
             setSensorsData(sensorsData.filter((user) => user.Id !== id));
         } catch (err) {
             console.error(err);

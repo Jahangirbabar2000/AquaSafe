@@ -25,7 +25,7 @@ const AddSensor = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/parameters");
+      const response = await fetch("http://localhost:8080/parameters");
       const data = await response.json();
       setWaterParameters(data);
     };
@@ -34,7 +34,7 @@ const AddSensor = () => {
 
  const handleSubmit = async (values) => {
   try {
-    await axios.post(`/sensors/`, {
+    await axios.post(`http://localhost:8080/sensors/`, {
       Parameter: values.Parameter,
       Model: values.Model,
       SensorMin: values.SensorMin,

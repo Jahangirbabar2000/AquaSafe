@@ -46,14 +46,14 @@ function UsersTable() {
   const [usersData, setUsersData] = useState([]);
 
   const getUsersData = async (req, res) => {
-    res = await axios.get("/activeUsers");
+    res = await axios.get("http://localhost:8080/activeUsers");
     console.log(res.data);
     setUsersData(res.data);
   };
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/users/${id}`);
+      await axios.delete(`http://localhost:8080/users/${id}`);
       setUsersData(usersData.filter((user) => user.Id !== id));
     } catch (err) {
       console.error(err);
