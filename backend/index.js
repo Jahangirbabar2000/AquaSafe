@@ -229,13 +229,12 @@ app.listen(8080, () => {
 
 
 // // Code for merging react static files with backend
-// const path = require('path')
-// const _dirname = path.dirname("")
-// const buildPath = path.join(_dirname, "../my-app/build");
-// app.use(express.static(buildPath))
-// app.get("/*", function (req, res) {
+ const path = require('path')
+ const _dirname = path.dirname("")
+ const buildPath = path.join(_dirname, "../my-app/build");
+ app.use(express.static(buildPath))
+ app.get("/*", function (req, res) {
 
-<<<<<<< HEAD
     res.sendFile(
         path.join(__dirname, "../my-app/build/index.html"),
         function (err) {
@@ -245,16 +244,4 @@ app.listen(8080, () => {
         }
     )
 })
-//////////////////////////////////////////////////////////
-=======
-//     res.sendFile(
-//         path.join(__dirname, "../my-app/build/index.html"),
-//         function (err) {
-//             if (err) {
-//                 res.status(500).send(err);
-//             }
-//         }
-//     )
-// })
-// //////////////////////////////////////////////////////////
->>>>>>> 296500fb0816fa768c74a2daa2fcada6311ada1f
+
