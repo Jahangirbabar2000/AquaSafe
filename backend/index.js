@@ -33,10 +33,15 @@ app.use(passport.session());
 
 // Create connection to database using mysql2
 const connection = mysql.createConnection({
-    host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // find host on RDS
-    user: 'admin', // user for RDS is 'admin'
-    password: 'jb123456', // same on RDS as local
-    database: 'AquaSafe' // same on RDS as local
+
+    host: 'database-1.coouedpy5myu.us-east-1.rds.amazonaws.com', // RDS
+    user: 'admin',
+
+    // host: 'localhost', // Local Machine
+    // user: 'root',
+
+    password: 'jb123456',
+    database: 'AquaSafe'
 });
 
 try {
@@ -129,17 +134,36 @@ app.get('/data', (req, res) => {
 
 // Create route to retrieve data from  hong kong dataset
 app.get('/hkdata', (req, res) => {
-    connection.query('SELECT * from HongKongDataSet where Dates between "2018-01-01" and "2018-01-15";', (err, rows) => {
+    connection.query('SELECT * from HongKongDataSet where Dates between "2014-01-01" and "2016-01-15";', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
 });
+
+
 
 // Create route to retrieve data from  hong kong dataset
 app.get('/hkdata2', (req, res) => {
     const startDate = req.query.start_date;
     const endDate = req.query.end_date;
     connection.query(`SELECT * from HongKongDataSet where Dates between '${startDate}' and '${endDate}';`, (err, rows) => {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
+
+// Create route to retrieve stationCoordinates from  hong kong dataset 
+app.get('/stationCoordinates', (req, res) => {
+    connection.query('SELECT * FROM aquasafe.stationCoordinates;', (err, rows) => {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
+// Create route to retrieve parameters data from database
+app.get('/parameters', (req, res) => {
+    connection.query('select Name from WaterParameters', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
@@ -153,19 +177,65 @@ app.get('/activeUsers', (req, res) => {
     });
 });
 
+
+app.get('/sensorsTable', (req, res) => {
+    connection.query('SELECT * FROM AquaSafe.SensorsCatalogue;', (err, rows) => {
+        if (err) throw err;
+
+        res.send(rows);
+    });
+});
+
+// Defining API endpoint for deleting a MySQL entry by ID
+app.delete('/sensors/:id', (req, res) => {
+    const id = req.params.id;
+
+    // Construct SQL query to delete entry by ID
+    const query = `DELETE FROM AquaSafe.SensorsCatalogue WHERE Id=${id};`;
+
+    // Execute SQL query
+    connection.query(query, (error) => {
+        if (error) {
+            console.log(error);
+            res.status(500).json({ error: 'Error deleting entry from MySQL' });
+        } else {
+            res.status(200).json({ message: 'Entry deleted successfully from MySQL' });
+        }
+    });
+});
+
+// Defining API endpoint for adding a MySQL entry by ID
+app.post('/sensors', (req, res) => {
+    const data = req.body;
+    // Construct SQL query to delete entry by ID
+    const query = `INSERT into SensorsCatalogue(Parameter, Model, SensorMin, SensorMax) VALUES('${data.Parameter}', '${data.Model}', ${data.SensorMin}, ${data.SensorMax});`;
+
+    // Execute SQL query
+    connection.query(query, (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Error adding data to MySQL' });
+        } else {
+            res.status(200).json({ message: 'Data added successfully to MySQL', id: results.insertId });
+        }
+    });
+});
+
+
+
 // Start the server
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
 });
 
 
-// Code for merging react static files with backend
-const path = require('path')
-const _dirname = path.dirname("")
-const buildPath = path.join(_dirname, "../my-app/build");
-app.use(express.static(buildPath))
-app.get("/*", function (req, res) {
+// // Code for merging react static files with backend
+// const path = require('path')
+// const _dirname = path.dirname("")
+// const buildPath = path.join(_dirname, "../my-app/build");
+// app.use(express.static(buildPath))
+// app.get("/*", function (req, res) {
 
+<<<<<<< HEAD
     res.sendFile(
         path.join(__dirname, "../my-app/build/index.html"),
         function (err) {
@@ -176,3 +246,15 @@ app.get("/*", function (req, res) {
     )
 })
 //////////////////////////////////////////////////////////
+=======
+//     res.sendFile(
+//         path.join(__dirname, "../my-app/build/index.html"),
+//         function (err) {
+//             if (err) {
+//                 res.status(500).send(err);
+//             }
+//         }
+//     )
+// })
+// //////////////////////////////////////////////////////////
+>>>>>>> 296500fb0816fa768c74a2daa2fcada6311ada1f

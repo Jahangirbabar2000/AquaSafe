@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../sidebar/side-bar.js";
+import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
 import Button from "@mui/material/Button";
 import data from "../NotificationBox/notification.json";
@@ -56,14 +57,14 @@ export default function NotificationTable() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "32vh auto"
+          gridTemplateColumns: "28vh auto"
           // gridGap: "2px"
         }}
       >
         <div>
-          <Sidebar name="notification" />
+          <Sidebar2 name="Notifications" />
         </div>
-        <div>
+        <div style={{marginLeft: 22}}>
           <Button
             variant="contained"
             // borderWidth={100}

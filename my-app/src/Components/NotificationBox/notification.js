@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import data from "./notification.json";
+import React from "react";
 import Box from "@mui/material/Box";
 
 import "./notification.css";

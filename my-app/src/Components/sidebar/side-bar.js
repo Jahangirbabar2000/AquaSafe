@@ -13,16 +13,23 @@ import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import GroupIcon from "@mui/icons-material/Group";
 
 export default function Sidebar(props) {
-  const [selectedButton, setSelectedButton] = useState("");
+
+  const [open, setOpen] = useState(false);
+  const [openSensor, setOpenSensor] = useState(false);
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+  const handleClickSensor = () => {
+    setOpenSensor(!openSensor);
+  };
+
   return (
     <div className="sidenav">
       <ul className="">
         <li>
           <Link to="/dashboard">
-            <div
-              // onClick={() => setSelectedButton("dashboard")}
-              className={`${props.name === "dashboard" ? "highlight" : ""}`}
-            >
+            <div className={`${props.name === "dashboard" ? "highlight" : ""}`}>
               <TvRoundedIcon style={{ fontSize: 20 }} />
               <span className="sidebar-text">Dashboard</span>
             </div>
@@ -31,7 +38,6 @@ export default function Sidebar(props) {
         <li>
           <Link to="/newProject">
             <div
-              // onClick={() => setSelectedButton("newproject")}
               className={`${props.name === "newproject" ? "highlight" : ""}`}
             >
               <ContentPasteRoundedIcon style={{ fontSize: 20 }} />
@@ -41,10 +47,7 @@ export default function Sidebar(props) {
         </li>
         <li>
           <Link to="/sites">
-            <div
-              // onClick={() => setSelectedButton("sites")}
-              className={`${props.name === "sites" ? "highlight" : ""}`}
-            >
+            <div className={`${props.name === "sites" ? "highlight" : ""}`}>
               <LocationOnRoundedIcon style={{ fontSize: 20 }} />
               <span className="sidebar-text">Sites</span>
             </div>
@@ -52,26 +55,37 @@ export default function Sidebar(props) {
         </li>
         <li>
           <Link to="/deviceDeployment">
-            <div
-              // onClick={() => setSelectedButton("device")}
-              className={`${props.name === "device" ? "highlight" : ""}`}
-            >
+            <div className={`${props.name === "device" ? "highlight" : ""}`}>
               <RouterRoundedIcon style={{ fontSize: 20 }} />
               <span className="sidebar-text">Devices</span>
             </div>
           </Link>
         </li>
-        <li>
-          <Link to="/addSensor">
-            <div
-              // onClick={() => setSelectedButton("sensor")}
-              className={`${"sensor" === props.name ? "highlight" : ""}`}
-            >
-              <SensorsRoundedIcon style={{ fontSize: 20 }} />
-              <span className="sidebar-text">Sensors</span>
-            </div>
-          </Link>
+        <li onClick={handleClickSensor}>
+          {/* <Link to="/sensors"> */}
+          <div className={`${"sensor" === props.name ? "highlight" : ""}`}>
+            <SensorsRoundedIcon
+              style={{ color: "#818181", fontSize: 20, marginLeft: "1.8vh" }}
+            />
+            <span className="sidebar-text">Sensors (expand)</span>
+          </div>
+          {/* </Link> */}
         </li>
+        {/* Sensor children code starts here */}
+        {openSensor && (
+          <div className="Sidebar-item-child">
+            <ul className="Sidebar-item-child-ul" style={{ marginLeft: 80 }}>
+              <Link to="/sensors">
+                {" "}
+                <li>Add New Sensor</li>{" "}
+              </Link>
+              <Link to="">
+              <li>dummy 2</li>
+              </Link>
+            </ul>
+          </div>
+        )}
+
         <li>
           <Link to="/notifications">
             <div
@@ -84,21 +98,26 @@ export default function Sidebar(props) {
         </li>
         <li>
           <Link to="/userstable">
-            <div
-              // onClick={() => setSelectedButton("users")}
-              className={`${props.name === "users" ? "highlight" : ""}`}
-            >
+            <div className={`${props.name === "users" ? "highlight" : ""}`}>
               <GroupIcon style={{ fontSize: 20 }} />
               <span className="sidebar-text">Users</span>
             </div>
           </Link>
         </li>
-        <li id="logout">
+        <li id="logout" >
           <Link to="/homepage">
-            <LogoutRoundedIcon style={{ fontSize: 20 }} />
-            <span className="sidebar-text">Logout</span>
+          <LogoutRoundedIcon style={{ fontSize: 20 }} />
+          <span className="sidebar-text">Logout</span>
           </Link>
         </li>
+        {/* {open && (
+          <div className="Sidebar-item-child">
+            <ul className="Sidebar-item-child-ul" style={{ marginLeft: 50 }}>
+              <li>dummy 1</li>
+              <li>dummy 2</li>
+            </ul>
+          </div>
+        )} */}
       </ul>
     </div>
   );

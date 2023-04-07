@@ -1,22 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import Sidebar from "../sidebar/side-bar.js";
+import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
 import {
   Formik,
   Form,
-  useField,
-  useFormikContext,
-  withFormik,
   Field
 } from "formik";
 import * as Yup from "yup";
-import {
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel
-} from "@material-ui/core";
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 import "./NewProject.css";
 import Button from "@mui/material/Button";
 
@@ -276,6 +270,7 @@ const waterbodyTypes = ["Lake", "River", "Dam", "pond", "Ocean"];
 
 // This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
 const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
   city: Yup.string().required("City is required"),
   description: Yup.string()
     .max(124)
@@ -294,12 +289,12 @@ const NewProject = () => (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "32vh auto"
+        gridTemplateColumns: "28vh auto"
         // gridGap: "2px"
       }}
     >
       <div>
-        <Sidebar name="newproject" />
+        <Sidebar2 name="Create New Project" />
       </div>
       <div className="box">
         <div className="container">
@@ -331,6 +326,20 @@ const NewProject = () => (
           >
             {({ errors, touched }) => (
               <Form className="">
+                <div>
+                  {/* <label>Province</label> */}
+                  <Field
+                    as={TextField}
+                    fullWidth
+                    label="Project Name"
+                    style={{ fontSize: "30px" }}
+                    name="name"
+                    type="text"
+                    error={Boolean(touched.name && errors.name)}
+                    helperText={touched.name ? errors.name : ""}
+                  />
+                </div>{" "}
+                <br />
                 <div>
                   <InputLabel id="country-label">Country</InputLabel>
                   <Field

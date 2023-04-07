@@ -4,23 +4,24 @@ import TextField from '@mui/material/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { styled } from '@material-ui/core/styles';
 import { Typography } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-const MyTextField = styled(TextField)({
-    '& .MuiInputBase-input': {
-        fontSize: '16px', // set the font size to be larger than the "large" size
-        padding: '12px', // set the padding to be larger than the "large" size
-    },
-});
+import moment from 'moment';
 
 const theme = createTheme({
     components: {
-        // Name of the component
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& .MuiInputBase-input': {     
+                        fontSize: '15px', // set the font size to be larger than the "large" size
+                        padding: '12px', // set the padding to be larger than the "large" size
+                    },
+                },
+            },
+        },
         MuiPickersDay: {
             styleOverrides: {
-                // Name of the slot
                 root: {
                     // Some CSS
                     fontSize: '1.5rem',
@@ -29,7 +30,6 @@ const theme = createTheme({
         },
         PrivatePickersYear: {
             styleOverrides: {
-                // Name of the slot
                 button: {
                     // Some CSS
                     fontSize: '1.5rem',
@@ -38,7 +38,6 @@ const theme = createTheme({
         },
         MuiPickersCalendarHeader: {
             styleOverrides: {
-                // Name of the slot
                 label: {
                     // Some CSS
                     fontSize: '1.4rem',
@@ -47,7 +46,6 @@ const theme = createTheme({
         },
         MuiTypography: {
             styleOverrides: {
-                // Name of the slot
                 root: {
                     // Some CSS
                     fontSize: '1.2rem',
@@ -56,7 +54,6 @@ const theme = createTheme({
         },
         MuiSvgIcon: {
             styleOverrides: {
-                // Name of the slot
                 root: {
                     // Some CSS
                     fontSize: '2rem',
@@ -65,7 +62,6 @@ const theme = createTheme({
         },
         MuiInputBase: {
             styleOverrides: {
-                // Name of the slot
                 root: {
                     // Some CSS
                     maxWidth: '30vh',
@@ -74,7 +70,6 @@ const theme = createTheme({
         },
     },
 });
-
 
 export default function Datepicker({ startDate, setStartDate, endDate, setEndDate }) {
 
@@ -95,11 +90,11 @@ export default function Datepicker({ startDate, setStartDate, endDate, setEndDat
                         </Typography>
                     }
                     inputFormat="DD/MM/YYYY"
-                    value={startDate}
+                    value={moment(startDate)}
                     onChange={handleChange1}
-                    minDate={'2013-01-03 00:00:00'}
-                    maxDate={'2018-12-17 00:00:00'}
-                    renderInput={(params) => <MyTextField {...params} />}
+                    minDate={moment('2013-01-03 00:00:00')}
+                    maxDate={moment('2018-12-17 00:00:00')}
+                    renderInput={(params) => <TextField {...params} />}
                 />
                 <span> ___ </span>
                 <DesktopDatePicker
@@ -109,11 +104,11 @@ export default function Datepicker({ startDate, setStartDate, endDate, setEndDat
                         </Typography>
                     }
                     inputFormat="DD/MM/YYYY"
-                    value={endDate}
+                    value={moment(endDate)}
                     onChange={handleChange2}
-                    minDate={startDate}
-                    maxDate={'2018-12-17 00:00:00'}
-                    renderInput={(params) => <MyTextField {...params} />}
+                    minDate={moment(startDate)}
+                    maxDate={moment('2018-12-17 00:00:00')}
+                    renderInput={(params) => <TextField {...params} />}
                 />
             </LocalizationProvider>
         </ThemeProvider>

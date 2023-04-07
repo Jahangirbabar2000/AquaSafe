@@ -1,6 +1,7 @@
 import React from "react";
 import "./devices.css";
 import Sidebar from "../sidebar/side-bar.js";
+import Sidebar2 from "../sidebar/Sidebar2";
 import Navbar from "../navbar/navbar.js";
 import Templates from "./devices-components/select-template.js";
 import DeviceDeployment from "./devices-components/device-deployment.js";
@@ -16,7 +17,7 @@ function Device() {
         }}
       >
         <div>
-          <Sidebar name="" />
+          <Sidebar2 />
         </div>
         <div style={{ background: "#f2f2f2", padding: "16px" }}>
           <div>

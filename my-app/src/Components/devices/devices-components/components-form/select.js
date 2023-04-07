@@ -1,5 +1,6 @@
 import React from 'react';
-import { TextField, MenuItem } from '@material-ui/core';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 import { useField, useFormikContext } from 'formik';
 
 const SelectWrapper = ({

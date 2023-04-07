@@ -9,7 +9,7 @@ function LineGraph(props) {
         margin={0}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="Dates" />
+        <XAxis dataKey="Dates" reversed={true} />
         <YAxis dataKey={props.datakey} />
         <Tooltip />
         <Line type="Monotone" dataKey={props.datakey} stroke="#82ca9d" />
