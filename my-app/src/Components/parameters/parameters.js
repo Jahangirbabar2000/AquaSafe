@@ -1,14 +1,14 @@
 import React from "react";
-import { Container, Typography, Grid, Paper } from "@mui/material";
+import { Container, Typography, Grid } from "@mui/material";
 import Parameter from "./parameter";
-import Sidebar from "../sidebar/side-bar";
 import Navbar from "../navbar/navbar";
+import Sidebar2 from "../sidebar/Sidebar2";
 
 const WaterQualityPage = () => {
   return (
     <div>
       <Navbar />
-      <Sidebar />
+      <Sidebar2 name="Dashboard" />
       <Container sx={{ ml: "260px", mt: "25px", pb: "50px" }}>
         <Typography variant="h4" sx={{ mb: 3 }} align="center">Water Quality Parameters</Typography>
         <Grid container spacing={2}>

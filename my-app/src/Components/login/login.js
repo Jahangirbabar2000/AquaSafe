@@ -1,12 +1,9 @@
 import * as React from 'react';
 import axios from 'axios';
-import Navbar from "../navbar/navbar.js";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -122,7 +119,7 @@ export default function Login() {
                                 onBlur={(event) => handlePasswordValidation(event.target.value)}
                             />
 
-                            <Link href="/sites">
+                            <Link href="/dashboard">
                                 <Button
                                     // type="submit"
                                     fullWidth

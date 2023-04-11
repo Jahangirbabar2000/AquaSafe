@@ -2,8 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import "./Readings.css";
-
-import { Grid } from "@mui/material";
+import { Grid, TablePagination } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,10 +12,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -40,30 +35,48 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function ReadingsTable() {
-  const [sensorsData, setSensorsData] = useState([]);
 
-  const getUsersData = async (req, res) => {
-    res = await axios.get("http://localhost:8080/sensorsTable");
-    console.log(res.data);
-    setSensorsData(res.data);
-  };
-
-  const handleDelete = async id => {
-    try {
-      await axios.delete(`http://localhost:8080/sensors/${id}`);
-      setSensorsData(sensorsData.filter(user => user.Id !== id));
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const [ReadingsData, setReadingsData] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    getUsersData();
+    // FIRST API REQUEST - Data
+    axios.get(`http://localhost:8080/hkdata`)
+      .then(response => {
+        setReadingsData(response.data);
+      })
+      .catch(error => console.log(error));
   }, []);
+
+  const columns = [
+    { id: 'Location', label: 'Location', align: 'center' },
+    { id: 'Station', label: 'Station', align: 'center' },
+    { id: 'Date', label: 'Date', align: 'center' },
+    { id: 'Temperature', label: 'Temperature (C)', align: 'center' },
+    { id: 'pH', label: 'pH', align: 'center' },
+    { id: 'DissolvedOxygen', label: 'Dissolved Oxygen (mg/L)', align: 'center' },
+    { id: 'Conductivity', label: 'Conductivity (µS/cm)', align: 'center' },
+    { id: 'NitriteNitrogen', label: 'Nitrite-Nitrogen (mg/L)', align: 'center' },
+    { id: 'BOD5', label: 'BOD5 (mg/L)', align: 'center' },
+    { id: 'TotalPhosphorus', label: 'Total Phosphorus (mg/L)', align: 'center' },
+    { id: 'AmmoniaNitrogen', label: 'Ammonia Nitrogen (mg/L)', align: 'center' },
+  ];
+
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <div style={{ marginLeft: 10 }}>
       <Grid spacing={40} container>
-        <Grid item xs={8} sm={7} md={9}>
+        <Grid item md={11}>
           <br />
           <br />
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -74,61 +87,46 @@ function ReadingsTable() {
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
+
               <TableHead>
                 <TableRow>
-                  <StyledTableCell align="center">Location</StyledTableCell>
-                  <StyledTableCell align="center">Station</StyledTableCell>
-                  <StyledTableCell align="center">
-                    Temperate (C)
-                  </StyledTableCell>
-                  <StyledTableCell align="center">pH</StyledTableCell>
-                  <StyledTableCell align="center">
-                    Dissolved Oxygen (mg/L)
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Conductivity (µS/cm)
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Nitrite-Nitrogen (mg/L)
-                  </StyledTableCell>
-                  <StyledTableCell align="center">BOD5 (mg/L)</StyledTableCell>
-                                  <StyledTableCell align="center">Total Phosphorus (mg/L)</StyledTableCell>
-                  <StyledTableCell align="center">Ammonia Nitrogen (mg/L)</StyledTableCell>
+                  {columns.map((column) => (
+                    <StyledTableCell key={column.id} align="center">
+                      {column.label}
+                    </StyledTableCell>
+                  ))}
                 </TableRow>
               </TableHead>
+
               <TableBody>
-                {sensorsData.map(row => (
+                {ReadingsData.map(row => (
                   <StyledTableRow key={row.Id}>
-                    <StyledTableCell component="th" scope="row">
-                      {row.Parameter}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.Model}
-                    </StyledTableCell>
-                    <StyledTableCell className="mediumColumn" align="center">
-                      {row.SensorMin}
-                    </StyledTableCell>
-                    <StyledTableCell className="mediumColumn" align="center">
-                      {row.SensorMax}
-                    </StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">
-                      <Link to={`/edit/${row.Id}`}>
-                        <EditIcon />
-                      </Link>
-                    </StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">
-                      <IconButton onClick={() => handleDelete(row.Id)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">{row.Location}</StyledTableCell>
+                    <StyledTableCell align="center">{row.Station}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="center">{row.Dates}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="center">{row["Water Temperature (°C)"]}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="center">{row["pH"]}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="center">{row["Dissolved Oxygen (mg/L)"]}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="center">{row["Conductivity (µS/cm)"]}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="center">{row["Nitrite-Nitrogen (mg/L)"]}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="center">{row["5-Day Biochemical Oxygen Demand (mg/L)"]}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="center">{row["Total Phosphorus (mg/L)"]}</StyledTableCell>
+                    <StyledTableCell className="smallColumn" align="center">{row["Ammonia-Nitrogen (mg/L)"]}</StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={ReadingsData.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
             </Table>
           </TableContainer>
-        </Grid>
-        <Grid container pt={5} pl={150}>
-          <Link to="/signup"></Link>
+
         </Grid>
       </Grid>
     </div>

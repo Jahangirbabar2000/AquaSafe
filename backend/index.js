@@ -13,6 +13,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); // Allow all origins
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow specific HTTP methods
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "*");
     next();
 });
 
@@ -124,7 +125,7 @@ app.post('/signin', (req, res) => {
 
 // Create route to retrieve data from database
 app.get('/data', (req, res) => {
-    connection.query('SELECT r.Time, r.Reading, sc.Parameter FROM aquasafe.readings as r, aquasafe.sensorscatalogue as sc where r.Sensor = sc.Id;', (err, rows) => {
+    connection.query('SELECT r.Time, r.Reading, sc.Parameter FROM AquaSafe.readings as r, aquasafe.sensorscatalogue as sc where r.Sensor = sc.Id;', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
@@ -154,7 +155,7 @@ app.get('/hkdata2', (req, res) => {
 
 // Create route to retrieve stationCoordinates from  hong kong dataset 
 app.get('/stationCoordinates', (req, res) => {
-    connection.query('SELECT * FROM aquasafe.stationCoordinates;', (err, rows) => {
+    connection.query('SELECT * FROM AquaSafe.stationCoordinates;', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
@@ -243,4 +244,3 @@ app.listen(8080, () => {
 //         }
 //     )
 // })
-// //////////////////////////////////////////////////////////
