@@ -9,7 +9,7 @@ const WaterQualityPage = () => {
     <div>
       <Navbar />
       <Sidebar2 name="Dashboard" />
-      <Container sx={{ ml: "260px", mt: "25px", pb: "50px" }}>
+      <Container sx={{ ml: "40vh", mt: "25px", pb: "50px" }}>
         <Typography variant="h4" sx={{ mb: 3 }} align="center">Water Quality Parameters</Typography>
         <Grid container spacing={2}>
           <Parameter title={"pH"} description={"pH is a measure of the acidity or alkalinity of a solution. pH values range from 0-14, with 7 being neutral. A pH of less than 7 is acidic, and a pH greater than 7 is basic. Maintaining a proper pH balance is important for the survival of aquatic life, as well as for drinking water quality. "} />
