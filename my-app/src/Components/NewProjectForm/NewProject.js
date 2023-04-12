@@ -1,5 +1,4 @@
 import React from "react";
-import Sidebar from "../sidebar/side-bar.js";
 import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
 import {
@@ -286,27 +285,20 @@ const validationSchema = Yup.object().shape({
 const NewProject = () => (
   <div>
     <Navbar />
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "28vh auto"
-        // gridGap: "2px"
-      }}
-    >
+    <div style={{ display: "grid", gridTemplateColumns: "28vh auto" }}>
       <div>
         <Sidebar2 name="Create New Project" />
       </div>
       <div className="box">
         <div className="container">
-          <h1
+          <h2
             style={{
               textAlign: "center",
-              paddingBottom: "20px",
-              paddingTop: "10px"
+              paddingBottom: "5px"
             }}
           >
             New Project
-          </h1>
+          </h2>
           <Formik
             initialValues={{
               country: "Pakistan",

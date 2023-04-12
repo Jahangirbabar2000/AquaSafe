@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import IconButton from '@mui/material/IconButton';
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import Typography from '@mui/material/Typography';
@@ -77,11 +76,6 @@ function ProjectMenu(props) {
   );
 
 
-
-  const handleClick = () => {
-    console.log("HIIIIIII");
-  };
-
   const handleClick1 = () => {
     setSelectedCity("");
     setSelectedCountry("");
@@ -156,14 +150,12 @@ function ProjectMenu(props) {
 
       <div className="buttons-div">
         <IconButton aria-label="delete" onClick={handleClick1}>
-          <CancelRoundedIcon className="icon" style={{ fontSize: 23, marginRight: 3 }} />
-          <Typography className="icon" variant="h5">
+          <CancelRoundedIcon className="icon" style={{ fontSize: 20, marginRight: 4 }} />
+          <Typography className="icon" variant="h6" >
             clear
           </Typography>
         </IconButton>
-
       </div>
-
     </div>
   );
 }

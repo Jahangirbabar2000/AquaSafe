@@ -10,53 +10,11 @@ import moment from 'moment';
 
 const theme = createTheme({
     components: {
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    '& .MuiInputBase-input': {     
-                        fontSize: '15px', // set the font size to be larger than the "large" size
-                        padding: '12px', // set the padding to be larger than the "large" size
-                    },
-                },
-            },
-        },
         MuiPickersDay: {
             styleOverrides: {
                 root: {
                     // Some CSS
-                    fontSize: '1.5rem',
-                },
-            },
-        },
-        PrivatePickersYear: {
-            styleOverrides: {
-                button: {
-                    // Some CSS
-                    fontSize: '1.5rem',
-                },
-            },
-        },
-        MuiPickersCalendarHeader: {
-            styleOverrides: {
-                label: {
-                    // Some CSS
-                    fontSize: '1.4rem',
-                },
-            },
-        },
-        MuiTypography: {
-            styleOverrides: {
-                root: {
-                    // Some CSS
-                    fontSize: '1.2rem',
-                },
-            },
-        },
-        MuiSvgIcon: {
-            styleOverrides: {
-                root: {
-                    // Some CSS
-                    fontSize: '2rem',
+                    fontSize: '1.1rem',
                 },
             },
         },
@@ -64,7 +22,7 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     // Some CSS
-                    maxWidth: '30vh',
+                    maxWidth: '29vh',
                 },
             },
         },
@@ -85,7 +43,7 @@ export default function Datepicker({ startDate, setStartDate, endDate, setEndDat
             <LocalizationProvider dateAdapter={AdapterMoment}>
                 <DesktopDatePicker
                     label={
-                        <Typography variant="h6" style={{ fontSize: '1.6rem' }}>
+                        <Typography variant="h6">
                             From
                         </Typography>
                     }
@@ -99,7 +57,7 @@ export default function Datepicker({ startDate, setStartDate, endDate, setEndDat
                 <span> ___ </span>
                 <DesktopDatePicker
                     label={
-                        <Typography variant="h6" style={{ fontSize: '1.6rem' }}>
+                        <Typography variant="h6">
                             To
                         </Typography>
                     }

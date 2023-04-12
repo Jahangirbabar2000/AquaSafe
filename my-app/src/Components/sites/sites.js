@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import Grid from "@mui/material/Grid";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import "leaflet/dist/leaflet.css";
-import Sidebar from "../sidebar/side-bar";
 import Sidebar2 from "../sidebar/Sidebar2";
 import "./sites.css";
 import Navbar from "../navbar/navbar.js";
@@ -75,7 +74,7 @@ function Sites() {
             </Grid>
           </Grid>
           <Grid container pl={75}>
-            <Link to="/dashboard">
+            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
               <Button style={{ fontSize: "16px" }} variant="contained">
                 View Devices
               </Button>

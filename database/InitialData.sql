@@ -149,3 +149,49 @@ INSERT INTO Readings (Id, Time, Reading, Device, Sensor) VALUES  (1,'2022-10-07 
 ,(6,'2022-10-18 00:00:00',10.2,1,1) ,(7,'2022-10-19 00:00:00',4.6,1,1)
 ,(8,'2022-10-20 00:00:00',1.5,1,1) ,(9,'2022-10-21 00:00:00',9.5,1,1);
 
+DROP TABLE IF EXISTS stationCoordinates;
+CREATE TABLE `stationCoordinates` (
+  `Station` VARCHAR(10) PRIMARY KEY,
+  `Latitude` DOUBLE NOT NULL,
+  `Longitude` DOUBLE NOT NULL,
+  `Site` VARCHAR(255) DEFAULT 'Lam Tsuen River'
+);
+
+-- Populate the new table with random coordinates for each Station
+-- INSERT IGNORE INTO `stationCoordinates` (`Station`, `Latitude`, `Longitude`)
+-- SELECT DISTINCT `Station`, RAND()*0.01 + 22.42415, RAND()*0.01 + 114.12423 FROM `hongkongdataset`;
+
+INSERT INTO `stationCoordinates` (`Station`, `Latitude`, `Longitude`, `Site`)
+VALUES
+('YL4',22.45012,114.13554, 'Lam Tsuen River'),
+('YL3',22.45037,114.13576, 'Lam Tsuen River'),
+('YL2', 22.45153,114.13640, 'Lam Tsuen River'),
+('YL1', 22.45337,114.13649, 'Lam Tsuen River'),
+('TW3', 22.45500,114.13602, 'Lam Tsuen River'),
+('TW2', 22.45618,114.13787, 'Lam Tsuen River'),
+('TW1', 22.45657,114.13985, 'Lam Tsuen River'),
+('TSR2', 22.45789,114.14105, 'Lam Tsuen River'),
+('TSR1',22.45963,114.14050, 'Lam Tsuen River'),
+('TR6', 22.46106,114.14221, 'Lam Tsuen River'),
+('TR4', 22.46177,114.14409, 'Lam Tsuen River'),
+('TR23L', 22.46201,114.14587, 'Lam Tsuen River'),
+('TR23A', 22.44796,114.17257, 'Lam Tsuen River'),
+('TR20B', 22.46085,114.14765, 'Lam Tsuen River'),
+('TR19I', 22.45968,114.14821, 'Lam Tsuen River'),
+('TR19C', 22.44972,114.17264, 'Lam Tsuen River'),
+('TR19A', 22.44720,114.17266, 'Lam Tsuen River'),
+('TR19', 22.45837,114.15055, 'Lam Tsuen River'),
+('TR17L',22.45742,114.15107, 'Lam Tsuen River'),
+('TR17', 22.45608,114.15225, 'Lam Tsuen River'),
+('TR14', 22.45517,114.15277, 'Lam Tsuen River'),
+('TR13', 22.45388,114.15355, 'Lam Tsuen River'),
+('TR12I',22.45227,114.15405, 'Lam Tsuen River'),
+('TR12H', 22.45102,114.15670, 'Lam Tsuen River'),
+('TR12G', 22.45012,114.15855, 'Lam Tsuen River'),
+('TR12F', 22.44917,114.16110, 'Lam Tsuen River'),
+('TR12E',22.45000,114.16349, 'Lam Tsuen River'),
+('TR12D', 22.45042,114.16489, 'Lam Tsuen River'),
+('TR12C', 22.45068,114.16838, 'Lam Tsuen River'),
+('TR12B', 22.44947,114.17651, 'Lam Tsuen River');
+
+

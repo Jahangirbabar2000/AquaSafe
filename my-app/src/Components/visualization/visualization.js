@@ -21,6 +21,8 @@ import Datepicker from "./datepicker";
 import Button from '@mui/material/Button';
 import { Icon } from "leaflet";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import CircularProgress from '@mui/material/CircularProgress';
+
 const mdTheme = createTheme();
 
 
@@ -138,14 +140,15 @@ function App(props) {
   }
 
   if (loading) {
-    return <div>
-      <Navbar />
-      <Sidebar2 name="Dashboard" />
-      <Grid item xs={9} sx={{ ml: 110, mt: 30 }}>
-        <Typography variant="h2">Loading...</Typography>
-      </Grid>
-
-    </div>;
+    return (
+      <div>
+        <Navbar />
+        <Sidebar2 name="Dashboard" />
+        <Grid item xs={9} sx={{ ml: 110, mt: 30 }}>
+          <CircularProgress />
+        </Grid>
+      </div>
+    )
   }
 
 
@@ -167,11 +170,11 @@ function App(props) {
               {/**************************************/}
 
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, margin: 2 }}>
-                <Typography variant="h3" sx={{ fontSize: '2.5rem' }}>Site: Lam Tsuen River</Typography>
+                <Typography variant="h5" >Site: Lam Tsuen River</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                  <Typography variant="h3" sx={{ fontSize: '2.5rem' }}>Station: {selectedStation}</Typography>
+                  <Typography variant="h5">Station: {selectedStation}</Typography>
                   <IconButton onClick={handleMenuOpen}>
-                    <ExpandMoreIcon sx={{ fontSize: '2.7rem' }} />
+                    <ExpandMoreIcon sx={{ fontSize: '2rem' }} />
                   </IconButton>
                 </Box>
                 <Menu
@@ -198,12 +201,12 @@ function App(props) {
               <Paper sx={{ p: 2 }}>
 
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="h5" display="inline">
+                  <Typography variant="h6" display="inline">
                     TOP PARAMETERS
                   </Typography>
                   <Link to="/WaterQualityPage" className="unstyled-link">
                     <IconButton aria-label="help" sx={{ display: 'flex', alignItems: 'center' }}>
-                      <HelpOutline sx={{ fontSize: '1.8rem' }} />
+                      <HelpOutline />
                     </IconButton>
                   </Link>
                 </Box>
@@ -265,17 +268,17 @@ function App(props) {
                   {/**************************************/}
 
                   <Grid item>
-                    <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 2 }}>
-                      <h3>pH</h3>
-                      <h5>(Scale 0-14)</h5>
+                    <Paper sx={{ pl: 3, pr: 5 }}>
+                      <Typography sx={{ pt: 1 }} variant="h5" >pH</Typography>
+                      <Typography sx={{ pt: 1 }} variant="body1" >(Scale 0-14)</Typography>
                       <ResponsiveContainer height={140}>
                         <BarGraph data={filteredData} datakey={'pH'} min={'6.5'} max={'8.5'} />
                       </ResponsiveContainer>
                     </Paper>
 
                     <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 2 }}>
-                      <h3>Dissolved Oxygen</h3>
-                      <h5>(mg/L)</h5>
+                      <Typography sx={{ pt: 1 }} variant="h5" >Dissolved Oxygen</Typography>
+                      <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
                       <ResponsiveContainer height={140}>
                         <LineGraph data={filteredData} datakey={'Dissolved Oxygen (mg/L)'} min={'5'} max={'11'} />
                       </ResponsiveContainer>
@@ -324,64 +327,64 @@ function App(props) {
 
               <Grid>
                 <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <h3>Ammonia-Nitrogen</h3>
-                  <h5>(mg/L)</h5>
+                  <Typography sx={{ pt: 1 }} variant="h5" >Ammonia-Nitrogen</Typography>
+                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
                   <ResponsiveContainer height={140}>
                     <BarGraph data={filteredData} datakey={'Ammonia-Nitrogen (mg/L)'} min={'0.25'} max={'3'} />
                   </ResponsiveContainer>
                 </Paper>
 
                 <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <h3>Total Phosphorus (mg/L)</h3>
-                  <h5>(mg/L)</h5>
+                  <Typography sx={{ pt: 1 }} variant="h5" >Total Phosphorus (mg/L)</Typography>
+                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
                   <ResponsiveContainer height={140}>
                     <LineGraph data={filteredData} datakey={'Total Phosphorus (mg/L)'} min={'0'} max={'3'} />
                   </ResponsiveContainer>
                 </Paper>
 
                 <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <h3>5-Day Biochemical Oxygen Demand</h3>
-                  <h5>(mg/L)</h5>
+                  <Typography sx={{ pt: 1 }} variant="h5" >5-Day Biochemical Oxygen Demand</Typography>
+                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
                   <ResponsiveContainer height={140}>
                     <BarGraph data={filteredData} datakey={'5-Day Biochemical Oxygen Demand (mg/L)'} min={'1'} max={'5'} />
                   </ResponsiveContainer>
                 </Paper>
 
                 <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <h3>Water Temperature</h3>
-                  <h5>(°C)</h5>
+                  <Typography sx={{ pt: 1 }} variant="h5" >Water Temperature</Typography>
+                  <Typography sx={{ pt: 1 }} variant="body1" >(°C)</Typography>
                   <ResponsiveContainer height={140}>
                     <LineGraph data={filteredData} datakey={'Water Temperature (°C)'} min={'4'} max={'22'} />
                   </ResponsiveContainer>
                 </Paper>
 
                 <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <h3>Suspended solids</h3>
-                  <h5>(mg/L)</h5>
+                  <Typography sx={{ pt: 1 }} variant="h5" >Suspended solids</Typography>
+                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
                   <ResponsiveContainer height={140}>
                     <BarGraph data={filteredData} datakey={'Suspended solids (mg/L)'} min={'1'} max={'5'} />
                   </ResponsiveContainer>
                 </Paper>
 
                 <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <h3>Conductivity</h3>
-                  <h5>(µS/cm)</h5>
+                  <Typography sx={{ pt: 1 }} variant="h5" >Conductivity</Typography>
+                  <Typography sx={{ pt: 1 }} variant="body1" >(µS/cm)</Typography>
                   <ResponsiveContainer height={140}>
                     <LineGraph data={filteredData} datakey={'Conductivity (µS/cm)'} min={'100'} max={'1000'} />
                   </ResponsiveContainer>
                 </Paper>
 
                 <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <h3>Nitrate-Nitrogen</h3>
-                  <h5>(mg/L)</h5>
+                  <Typography sx={{ pt: 1 }} variant="h5" >Nitrate-Nitrogen</Typography>
+                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
                   <ResponsiveContainer height={140}>
                     <BarGraph data={filteredData} datakey={'Nitrate-Nitrogen (mg/L)'} min={'0'} max={'10'} />
                   </ResponsiveContainer>
                 </Paper>
 
                 <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <h3>Nitrite-Nitrogen</h3>
-                  <h5>(mg/L)</h5>
+                  <Typography sx={{ pt: 1 }} variant="h5" >Nitrite-Nitrogen</Typography>
+                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
                   <ResponsiveContainer height={140}>
                     <LineGraph data={filteredData} datakey={'Nitrite-Nitrogen (mg/L)'} min={'0'} max={'1'} />
                   </ResponsiveContainer>

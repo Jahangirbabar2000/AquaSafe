@@ -3,8 +3,6 @@ import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-// new sidebar icons
 import TvRoundedIcon from "@mui/icons-material/TvRounded";
 import ContentPasteRoundedIcon from "@mui/icons-material/ContentPasteRounded";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
@@ -89,7 +87,7 @@ const Sidebar2 = (props) => {
           </MenuItem> */}
 
           <Box paddingLeft={isCollapsed ? undefined : "5%"}>
-            <Typography variant="h6" color="#f5f5ff" sx={{ m: "15px 0 5px 20px" }}>
+            <Typography variant="h6" color="#f5f5ff" sx={{ m: "15px 0 0 20px" }}>
               Projects
             </Typography>
             <Item
@@ -124,7 +122,7 @@ const Sidebar2 = (props) => {
             <Typography
               variant="h6"
               color="#f5f5ff"
-              sx={{ m: "15px 0 5px 20px" }}
+              sx={{ m: "15px 0 0 20px" }}
             >
               IoT
             </Typography>
@@ -153,7 +151,7 @@ const Sidebar2 = (props) => {
             <Typography
               variant="h6"
               color="#f5f5ff"
-              sx={{ m: "15px 0 5px 20px" }}
+              sx={{ m: "15px 0 0 20px" }}
             >
               Notifications
             </Typography>
@@ -167,7 +165,7 @@ const Sidebar2 = (props) => {
             <Typography
               variant="h6"
               color="#f5f5ff"
-              sx={{ m: "15px 0 5px 20px" }}
+              sx={{ m: "15px 0 0 20px" }}
             >
               User Management
             </Typography>
@@ -178,7 +176,7 @@ const Sidebar2 = (props) => {
               selected={selected}
             // setSelected={setSelected}
             />
-            <SubMenu
+            {/* <SubMenu
               icon={<MapOutlinedIcon />}
               style={{ color: "#f5f5ff" }}
               title="Submenu"
@@ -201,7 +199,7 @@ const Sidebar2 = (props) => {
               >
                 {" "}
               </Item>
-            </SubMenu>
+            </SubMenu> */}
             {/* <br/> */}
             {/* <br/> */}
             <Item

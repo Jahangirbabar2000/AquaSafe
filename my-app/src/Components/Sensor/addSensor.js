@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../sidebar/side-bar.js";
 import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
 import { Formik, Form, Field } from "formik";
@@ -10,6 +9,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+
 
 // This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
 const validationSchema = Yup.object().shape({
@@ -32,19 +32,19 @@ const AddSensor = () => {
     fetchData();
   }, []);
 
- const handleSubmit = async (values) => {
-  try {
-    await axios.post(`http://localhost:8080/sensors/`, {
-      Parameter: values.Parameter,
-      Model: values.Model,
-      SensorMin: values.SensorMin,
-      SensorMax: values.SensorMax,
-    });
-    navigate("/sensors");
-  } catch (err) {
-    console.error(err);
-  }
-};
+  const handleSubmit = async (values) => {
+    try {
+      await axios.post(`http://localhost:8080/sensors/`, {
+        Parameter: values.Parameter,
+        Model: values.Model,
+        SensorMin: values.SensorMin,
+        SensorMax: values.SensorMax,
+      });
+      navigate("/sensors");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
 
   return (
@@ -60,7 +60,7 @@ const AddSensor = () => {
           <Sidebar2 name="Sensors" />
         </div>
         <div className="box">
-          <div className="container">
+          <div className="containerrr">
             <h1
               style={{
                 textAlign: "center",
@@ -104,9 +104,9 @@ const AddSensor = () => {
                       ))}
                     </Field>
                     <Link to="/addParameter">
-                    <Button color="primary" size="small">
-                      Add New Parameter?
-                    </Button>
+                      <Button color="primary" size="small">
+                        Add New Parameter?
+                      </Button>
                     </Link>
                   </div>{" "}
                   <br />
@@ -149,17 +149,17 @@ const AddSensor = () => {
                   </div>
                   <br />
                   <div>
-             
-                      <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                      >
-                        Add Sensor
-                      </Button>
-             
+
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                    >
+                      Add Sensor
+                    </Button>
+
                   </div>
                 </Form>
               )}
