@@ -16,7 +16,7 @@ const Parameter = (props) => {
         <Grid item xs={12} sm={6}>
             <Paper
                 elevation={isHovered ? 7 : 3}
-                sx={{ p: 2 }}
+                sx={{ p: 2, m: 1 }}
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
             >

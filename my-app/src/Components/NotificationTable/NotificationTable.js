@@ -64,7 +64,7 @@ export default function NotificationTable() {
         <div>
           <Sidebar2 name="Notifications" />
         </div>
-        <div style={{marginLeft: 22}}>
+        <div style={{marginLeft: 60}}>
           <Button
             variant="contained"
             // borderWidth={100}

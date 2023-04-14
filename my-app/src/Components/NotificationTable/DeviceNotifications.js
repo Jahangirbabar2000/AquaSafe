@@ -68,7 +68,7 @@ const DeviceNotification = (props) => {
     ];
 
     return (
-        <div><h1 style={{ marginLeft: "4%", paddingTop: "1%" }}>Device Notifications</h1>
+        <div><h1 style={{ marginLeft: "4%" }}>Device Notifications</h1>
         <Box m="10px">
             <Box
                 className="sensor-notfication-box"

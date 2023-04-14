@@ -87,7 +87,7 @@ const DeviceDeployment = () => {
         </div>
         <div>
           <div className="grid-container">
-            <div className="containerr">
+            <div className="containerrrr">
               <div className="card">
                 <h2>General Device Details</h2>
                 <Formik

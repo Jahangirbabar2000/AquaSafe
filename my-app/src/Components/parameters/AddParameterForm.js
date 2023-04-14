@@ -58,7 +58,7 @@ const AddParameter = () => {
           <Sidebar2 name="Parameters" />
         </div>
         <div className="box">
-          <div className="container">
+          <div className="containerr">
             <h1
               style={{
                 textAlign: "center",

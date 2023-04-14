@@ -16,10 +16,10 @@ function Parameters(props) {
       boxShadow: 5,
     }}>
       <CardContent style={{ padding: 12 }}>
-        <Typography variant='h5' component="div">
+        <Typography variant='subtitle2' component="div">
           {props.parameterName}
         </Typography>
-        <Typography variant='h6'>
+        <Typography variant='subtitle2'>
           {props.value}
         </Typography>
       </CardContent>

@@ -1,7 +1,6 @@
 import React from "react";
 import "./homepage.css";
-import Button from "react-bootstrap/Button";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Button from "@mui/material/Button"; // Import MUI Button component
 import visual from "./visualization2.png";
 import { Link } from "react-router-dom";
 
@@ -14,9 +13,10 @@ export default function Third() {
           Visitors can access public data of their local water bodies.
         </p>
         <Link to="/dashboard">
-          <Button className="look" variant="primary">Take a Look</Button>{" "}
+          <Button className="look" variant="contained" color="primary">
+            Take a Look
+          </Button>
         </Link>
-
       </div>
 
       <div className="pic-div">

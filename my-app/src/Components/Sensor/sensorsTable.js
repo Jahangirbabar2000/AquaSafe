@@ -1,24 +1,15 @@
 import axios from "axios";
-import React from 'react';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Grid, styled } from "@mui/material";
+import { Link } from "react-router-dom";
+import { Paper, Button, IconButton, Tooltip, Snackbar } from "@mui/material"
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, tableCellClasses, } from "@mui/material";
 import "./tableRow.css";
-import Sidebar from "../sidebar/side-bar";
 import Sidebar2 from "../sidebar/Sidebar2.js";
-import { Grid } from "@mui/material";
 import Navbar from "../navbar/navbar.js";
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Link } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Button from "@mui/material/Button";
-import EditIcon from '@mui/icons-material/Edit';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -42,7 +33,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function SensorsTable() {
+
     const [sensorsData, setSensorsData] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState("");
+
 
     const getUsersData = async (req, res) => {
         res = await axios.get("http://localhost:8080/sensorsTable");
@@ -54,10 +49,13 @@ function SensorsTable() {
         try {
             await axios.delete(`http://localhost:8080/sensors/${id}`);
             setSensorsData(sensorsData.filter((user) => user.Id !== id));
+            setOpen(true);
+            setMessage("Sensor deleted successfully");
         } catch (err) {
             console.error(err);
         }
     };
+
 
     useEffect(() => {
         getUsersData();
@@ -74,13 +72,8 @@ function SensorsTable() {
                     <br />
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <h1 style={{ flex: 1 }}>Existing Sensors</h1>
-                        <Link to="/addSensor">
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                            >
+                        <Link to="/addSensor" style={{ textDecoration: 'none' }}>
+                            <Button type="submit" variant="contained" color="primary" size="large">
                                 Add Sensor
                             </Button>
                         </Link>
@@ -115,15 +108,26 @@ function SensorsTable() {
                                             </Link>
                                         </StyledTableCell>
                                         <StyledTableCell className="smallColumn" align="center">
-                                            <IconButton onClick={() => handleDelete(row.Id)}>
-                                                <DeleteIcon />
-                                            </IconButton>
+                                            <Tooltip title="Delete">
+                                                <IconButton onClick={() => handleDelete(row.Id)}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Tooltip>
                                         </StyledTableCell>
                                     </StyledTableRow>
                                 ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <Snackbar
+                        sx={{ debug: true }}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        open={open}
+                        autoHideDuration={null}
+                        onClose={() => setOpen(false)}
+                        message={message}
+                    />
+
                 </Grid>
                 <Grid container pt={5} pl={150}>
                     <Link to="/signup">

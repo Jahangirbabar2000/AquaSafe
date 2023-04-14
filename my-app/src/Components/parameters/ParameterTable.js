@@ -74,7 +74,7 @@ function ParameterTable() {
           <div style={{ display: "flex", alignItems: "center" }}>
             <h1 style={{ flex: 1 }}>Existing Paramters</h1>
             {/* EDIT LINE BELOW */}
-            <Link to="/addParameter">
+            <Link to="/addParameter" style={{ textDecoration: 'none' }}>
               <Button
                 type="submit"
                 variant="contained"
