@@ -47,6 +47,11 @@ export default function Readings() {
       console.log("data hasbeen uploaded");
   };
 
+  // This function downloads the template. It is in the public folder
+  function downLoadCSV() {
+    window.location.href = "/template.csv";
+  }
+
   return (
     <div>
       {/* <CsvTokenizer /> */}
@@ -64,23 +69,27 @@ export default function Readings() {
           <Button
             variant="contained"
             style={{ marginLeft: "1%", padding: "0.5%", marginTop: "10px" }}
-            // onClick={handleClick2}
+            onClick={downLoadCSV}
           >
             Download Template
           </Button>
 
-          <Button variant="contained" component="label" style={{ marginLeft: "1%", padding: "0.5%", marginTop: "10px" }}>
+          <Button
+            variant="contained"
+            component="label"
+            style={{ marginLeft: "1%", padding: "0.5%", marginTop: "10px" }}
+          >
             {selectedFileName ? selectedFileName : "Upload"}
-          <input hidden accept=".csv" type="file" onChange={handleFileChange} />
+            <input
+              hidden
+              accept=".csv"
+              type="file"
+              onChange={handleFileChange}
+            />
           </Button>
 
-          {!isCSV &&
-            <ReadingsTable />
-          }
-          {
-            isCSV && <CSVTable data={jsonData}/>
-          }
-         
+          {!isCSV && <ReadingsTable />}
+          {isCSV && <CSVTable data={jsonData} />}
         </div>
       </div>
     </div>
