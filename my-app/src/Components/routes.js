@@ -18,6 +18,9 @@ import ParameterTable from "./parameters/ParameterTable"
 import Parameter from "./parameters/parameter";
 import AddParameter from "./parameters/AddParameterForm";
 import Readings from "./Readings/Readings.js";
+import DeviceTemplates from "./devices/devices-components/deviceTemplate";
+import ProjectApp from "./projects/ProjectApp";
+
 function routes() {
   return (
     <Routes>
@@ -29,8 +32,10 @@ function routes() {
       <Route path="/homepage" element={<Homepage />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/deviceTemplate" element={<DeviceTemplates />} />
       <Route path="/deviceDeployment" element={<DeviceDeployment />} />
       <Route path="/newProject" element={<NewProject />} />
+      <Route path="/projects" element={<ProjectApp />} />
       <Route path="/addSensor" element={<AddSensor />} />
       <Route path="/sensors" element={<SensorsTable />} />
       <Route path="/WaterQualityPage" element={<WaterQualityPage />} />

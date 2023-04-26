@@ -296,6 +296,11 @@ function App(props) {
                     center={[22.449919, 114.163583]}
                     zoom={15}
                     scrollWheelZoom={true}
+                    style={{
+                      marginLeft: '6vh',
+                      width: '53vh',
+                      height: '65vh',
+                    }}
                   >
                     <TileLayer
                       url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"

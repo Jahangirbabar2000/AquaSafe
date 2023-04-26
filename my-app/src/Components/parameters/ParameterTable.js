@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import "./ParameterTable.css";
+import { Paper, Button, IconButton, Tooltip, Snackbar } from "@mui/material"
 import Sidebar2 from "../sidebar/Sidebar2.js";
 import { Grid } from "@mui/material";
 import Navbar from "../navbar/navbar.js";
@@ -12,11 +13,8 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -41,26 +39,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function ParameterTable() {
-  const [sensorsData, setSensorsData] = useState([]);
+  const [parametersData, setParametersData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const getUsersData = async (req, res) => {
-    res = await axios.get("http://localhost:8080/sensorsTable");
+  const getParametersData = async (req, res) => {
+    res = await axios.get("http://localhost:8080/parameters");
     console.log(res.data);
-    setSensorsData(res.data);
+    setParametersData(res.data);
   };
 
-  const handleDelete = async id => {
+  const handleDelete = async name => {
     try {
-      await axios.delete(`http://localhost:8080/sensors/${id}`);
-      setSensorsData(sensorsData.filter(user => user.Id !== id));
+      await axios.delete(`http://localhost:8080/parameters/${name}`);
+      setParametersData(parametersData.filter((parameter) => parameter.Name !== name));
+      setOpen(true);
+      setMessage("Parameter deleted successfully");
     } catch (err) {
       console.error(err);
     }
   };
 
   useEffect(() => {
-    getUsersData();
+    getParametersData();
   }, []);
+
   return (
     <div>
       <Navbar />
@@ -72,7 +75,7 @@ function ParameterTable() {
           <br />
           <br />
           <div style={{ display: "flex", alignItems: "center" }}>
-            <h1 style={{ flex: 1 }}>Existing Paramters</h1>
+            <h1 style={{ flex: 1 }}>Existing Parameters</h1>
             {/* EDIT LINE BELOW */}
             <Link to="/addParameter" style={{ textDecoration: 'none' }}>
               <Button
@@ -93,9 +96,7 @@ function ParameterTable() {
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">Name</StyledTableCell>
-                  <StyledTableCell sx={{ flex: 3 }} align="center">
-                    Details
-                  </StyledTableCell>
+                  <StyledTableCell align="center">Unit</StyledTableCell>
                   <StyledTableCell align="center">Min</StyledTableCell>
                   <StyledTableCell align="center">Max</StyledTableCell>
                   <StyledTableCell align="center">Edit</StyledTableCell>
@@ -103,35 +104,46 @@ function ParameterTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sensorsData.map(row => (
+                {parametersData.map(row => (
                   <StyledTableRow key={row.Id}>
                     <StyledTableCell component="th" scope="row">
-                      {row.Parameter}
+                      {row.Name}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {row.Model}
+                      {row.Unit}
                     </StyledTableCell>
                     <StyledTableCell className="mediumColumn" align="center">
-                      {row.SensorMin}
+                      {row.Min}
                     </StyledTableCell>
                     <StyledTableCell className="mediumColumn" align="center">
-                      {row.SensorMax}
+                      {row.Max}
                     </StyledTableCell>
                     <StyledTableCell className="smallColumn" align="center">
-                      <Link to={`/edit/${row.Id}`}>
-                        <EditIcon />
-                      </Link>
+                      <Tooltip title="Edit">
+                        <Link to={`/edit/${row.Id}`}>
+                          <EditIcon />
+                        </Link>
+                      </Tooltip>
                     </StyledTableCell>
                     <StyledTableCell className="smallColumn" align="center">
-                      <IconButton onClick={() => handleDelete(row.Id)}>
-                        <DeleteIcon />
-                      </IconButton>
+                      <Tooltip title="Delete">
+                        <IconButton onClick={() => handleDelete(row.Id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+          <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            open={open}
+            autoHideDuration={3000}
+            onClose={() => setOpen(false)}
+            message={message}
+          />
         </Grid>
         <Grid container pt={5} pl={150}>
           <Link to="/signup"></Link>

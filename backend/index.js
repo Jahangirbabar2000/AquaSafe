@@ -92,7 +92,6 @@ catch (err) { console.log(err); }
 
 app.post('/signup', (req, res) => {
     const data = req.body;
-    console.log(data);
     connection.query(
         "INSERT INTO Users (FirstName, LastName, Email, Password, Designation, Country, Site) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [data.firstName, data.lastName, data.email, data.password, data.designation, data.country, data.site],
@@ -108,7 +107,6 @@ app.post('/signup', (req, res) => {
 
 app.post('/signin', (req, res) => {
     const data = req.body;
-    console.log(data);
     // connection.query(
     //     "INSERT INTO Users (FirstName, LastName, Email, Password, Designation, Country, Site) VALUES (?, ?, ?, ?, ?, ?, ?)",
     //     [data.firstName, data.lastName, data.email, data.password, data.designation, data.country, data.site],
@@ -161,13 +159,6 @@ app.get('/stationCoordinates', (req, res) => {
     });
 });
 
-// Create route to retrieve parameters data from database
-app.get('/parameters', (req, res) => {
-    connection.query('select Name from WaterParameters', (err, rows) => {
-        if (err) throw err;
-        res.send(rows);
-    });
-});
 
 app.get('/activeUsers', (req, res) => {
     connection.query('SELECT FirstName, Email, Designation, Country, Name as Site from Users join WorksOn on Users.Id = WorksOn.user join Projects on Projects.id = WorksOn.project;', (err, rows) => {
@@ -207,7 +198,6 @@ app.delete('/sensors/:id', (req, res) => {
 // Defining API endpoint for adding a MySQL entry by ID
 app.post('/sensors', (req, res) => {
     const data = req.body;
-    // Construct SQL query to delete entry by ID
     const query = `INSERT into SensorsCatalogue(Parameter, Model, SensorMin, SensorMax) VALUES('${data.Parameter}', '${data.Model}', ${data.SensorMin}, ${data.SensorMax});`;
 
     // Execute SQL query
@@ -220,7 +210,70 @@ app.post('/sensors', (req, res) => {
     });
 });
 
+app.get('/deviceTemplates', (req, res) => {
+    connection.query('SELECT sc.Name, sc.Model, sc.Sensors, c.Type as CommTech FROM AquaSafe.DevicesCatalogue as sc, AquaSafe.Communication as c where sc.CommTech = c.Id;', (err, rows) => {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
 
+// Create route to retrieve parameters data from database
+app.get('/parameters', (req, res) => {
+    connection.query('select * from WaterParameters', (err, rows) => {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
+app.post('/parameters', (req, res) => {
+    const data = req.body;
+    const query = `INSERT into WaterParameters(Name, Description, Unit, Min, Max) VALUES('${data.ParameterName}', '${data.ParameterDescription}', '${data.ParameterUnit}', ${data.ParameterMin}, ${data.ParameterMax});`;
+    connection.query(query, (error, results) => {
+        if (error) {
+            console.log(error)
+            res.status(500).json({ error: 'Error adding data to MySQL' });
+        } else {
+            res.status(200).json({ message: 'Data added successfully to MySQL', id: results.insertId });
+        }
+    });
+});
+
+// Defining API endpoint for deleting a MySQL entry by ID
+app.delete('/parameters/:name', (req, res) => {
+    const Name = req.params.name;
+    // Construct SQL query to delete entry by ID
+    const query = `DELETE FROM AquaSafe.WaterParameters WHERE Name='${Name}';`;
+    // Execute SQL query
+    connection.query(query, (error) => {
+        if (error) {
+            console.log(error)
+            res.status(500).json({ error: 'Error deleting entry from MySQL' });
+        } else {
+            res.status(200).json({ message: 'Entry deleted successfully from MySQL' });
+        }
+    });
+});
+
+app.get('/projects', (req, res) => {
+    connection.query('select * from AquaSafe.Projects', (err, rows) => {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
+app.post('/projects', (req, res) => {
+    const data = req.body;
+    const query = ` INSERT into AquaSafe.Projects (Name, Location, Country, Longitude, Latitude, Description) VALUES('${data.Name}', '${data.Location}', '${data.Country}', ${data.Longitude}, ${data.Latitude}, '${data.Description}');`;
+    // Execute SQL query
+    connection.query(query, (error) => {
+        if (error) {
+            console.log(error)
+            res.status(500).json({ error: 'Error deleting entry from MySQL' });
+        } else {
+            res.status(200).json({ message: 'Entry deleted successfully from MySQL' });
+        }
+    });
+});
 
 // Start the server
 app.listen(8080, () => {

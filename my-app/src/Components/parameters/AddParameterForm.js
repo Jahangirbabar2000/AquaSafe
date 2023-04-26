@@ -1,49 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
-import { Formik, Form, Field } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import TextField from "@mui/material/TextField";
 import "./addParameter.css";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { TextField, Typography } from "@mui/material";
 
-// This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
 const validationSchema = Yup.object().shape({
   ParameterName: Yup.string().required(),
-  ParameterMin: Yup.string().required(),
-  ParamterMax: Yup.number().required(),
-  ParameterDetails: Yup.number().required()
+  ParameterMin: Yup.number().required(),
+  ParameterMax: Yup.number().required(),
+  ParameterUnit: Yup.string().required(),
+  ParameterDescription: Yup.string().required()
 });
 
 const AddParameter = () => {
-  const [waterParameters, setWaterParameters] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:8080/parameters");
-      const data = await response.json();
-      setWaterParameters(data);
-    };
-    fetchData();
-  }, []);
-
-  const handleSubmit = async values => {
-    try {
-      await axios.post(`http://localhost:8080/sensors/`, {
-        ParameterName: values.ParameterName,
-        ParameterMin: values.ParameterMin,
-        ParameterMax: values.ParameterMax,
-        ParameterUnit: values.ParameterUnit,
-        ParameterDetails: values.ParameterDetails
-      });
-      navigate("/parameters");
-    } catch (err) {
-      console.error(err);
+  const formik = useFormik({
+    initialValues: {
+      ParameterName: "",
+      ParameterMin: "",
+      ParameterMax: "",
+      ParameterUnit: "",
+      ParameterDescription: ""
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      try {
+        await axios.post(`http://localhost:8080/parameters/`, {
+          ParameterName: values.ParameterName,
+          ParameterMin: values.ParameterMin,
+          ParameterMax: values.ParameterMax,
+          ParameterUnit: values.ParameterUnit,
+          ParameterDescription: values.ParameterDescription
+        });
+        navigate("/parameters");
+      } catch (err) {
+        console.error(err);
+      }
     }
-  };
+  });
 
   return (
     <div>
@@ -59,130 +59,96 @@ const AddParameter = () => {
         </div>
         <div className="box">
           <div className="containerr">
-            <h1
-              style={{
-                textAlign: "center",
-                paddingBottom: "20px",
-                paddingTop: "10px"
-              }}
-            >
+            <Typography
+              variant="h5"
+              style={{ textAlign: 'center', fontWeight: 'bold' }}>
               Add New Parameter
-            </h1>
-            <Formik
-              initialValues={{
-                sensorType: "",
-                parameter: "",
-                SensorMin: "",
-                SensorMax: ""
-              }}
-              validationSchema={validationSchema}
-              onSubmit={(values, actions) => {
-                handleSubmit(values);
-              }}
-            >
-              {({ errors, touched }) => (
-                <Form className="">
-                  <br />
-                  <br />
-                  <div>
-                    <Field
-                      as={TextField}
-                      fullWidth
-                      label="Parameter Name"
-                      variant="standard"
-                      name="ParameterName"
-                      type="text"
-                      error={Boolean(
-                        touched.ParameterName && errors.ParameterName
-                      )}
-                      helperText={
-                        touched.ParameterName ? errors.ParameterName : ""
-                      }
-                    />{" "}
-                  </div>
-                  <br />
-                  <div>
-                    <Field
-                      as={TextField}
-                      fullWidth
-                      label="Minimum Value"
-                      variant="standard"
-                      name="ParameterMin"
-                      type="number"
-                      error={Boolean(
-                        touched.ParameterMin && errors.ParameterMin
-                      )}
-                      helperText={
-                        touched.ParameterMin ? errors.ParameterMin : ""
-                      }
-                    />{" "}
-                  </div>
-                  <br />
-                  <div>
-                    <Field
-                      as={TextField}
-                      fullWidth
-                      label="Maximum Value"
-                      variant="standard"
-                      name="ParameterMax"
-                      type="number"
-                      error={Boolean(
-                        touched.ParameterMax && errors.ParameterMax
-                      )}
-                      helperText={
-                        touched.ParameterMax ? errors.ParameterMax : ""
-                      }
-                    />{" "}
-                  </div>
-                  <br />
-                  <div>
-                    <Field
-                      as={TextField}
-                      fullWidth
-                      label="Parameter Unit"
-                      variant="standard"
-                      name="ParameterUnit"
-                      type="text"
-                      error={Boolean(
-                        touched.ParameterUnit && errors.ParameterUnit
-                      )}
-                      helperText={
-                        touched.ParameterUnit ? errors.ParameterUnit : ""
-                      }
-                    />{" "}
-                  </div>
-                  <br />
-                  <div>
-                    <Field
-                      as={TextField}
-                      fullWidth
-                      label="Details"
-                      variant="standard"
-                      name="ParameterDetails"
-                      type="text"
-                      error={Boolean(
-                        touched.ParameterDetails && errors.ParameterDetails
-                      )}
-                      helperText={
-                        touched.ParameterDetails ? errors.ParameterDetails : ""
-                      }
-                    />{" "}
-                  </div>
-                  <br />
-                  <div>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                    >
-                      Add Parameter
-                    </Button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
+            </Typography>
+            <form onSubmit={formik.handleSubmit}>
+              <br />
+              <br />
+              <div>
+                <TextField
+                  fullWidth
+                  label="Parameter Name"
+                  variant="standard"
+                  name="ParameterName"
+                  type="text"
+                  value={formik.values.ParameterName}
+                  onChange={formik.handleChange}
+                  error={formik.touched.ParameterName && Boolean(formik.errors.ParameterName)}
+                  helperText={formik.touched.ParameterName && formik.errors.ParameterName}
+                />
+              </div>
+              <br />
+              <div>
+                <TextField
+                  fullWidth
+                  label="Minimum Value"
+                  variant="standard"
+                  name="ParameterMin"
+                  type="number"
+                  value={formik.values.ParameterMin}
+                  onChange={formik.handleChange}
+                  error={formik.touched.ParameterMin && Boolean(formik.errors.ParameterMin)}
+                  helperText={formik.touched.ParameterMin && formik.errors.ParameterMin}
+                />
+              </div>
+              <br />
+              <div>
+                <TextField
+                  fullWidth
+                  label="Maximum Value"
+                  variant="standard"
+                  name="ParameterMax"
+                  type="number"
+                  value={formik.values.ParameterMax}
+                  onChange={formik.handleChange}
+                  error={formik.touched.ParameterMax && Boolean(formik.errors.ParameterMax)}
+                  helperText={formik.touched.ParameterMax && formik.errors.ParameterMax}
+                />
+              </div>
+              <br />
+              <div>
+                <TextField
+                  fullWidth
+                  label="Parameter Unit"
+                  variant="standard"
+                  name="ParameterUnit"
+                  type="text"
+                  value={formik.values.ParameterUnit}
+                  onChange={formik.handleChange}
+                  error={formik.touched.ParameterUnit && Boolean(formik.errors.ParameterUnit)}
+                  helperText={formik.touched.ParameterUnit &&
+                    formik.errors.ParameterUnit}
+                />
+              </div>
+              <br />
+              <div>
+                <TextField
+                  fullWidth
+                  label="Parameter Description"
+                  variant="standard"
+                  name="ParameterDescription"
+                  type="text"
+                  value={formik.values.ParameterDescription}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.ParameterDescription &&
+                    Boolean(formik.errors.ParameterDescription)
+                  }
+                  helperText={
+                    formik.touched.ParameterDescription &&
+                    formik.errors.ParameterDescription
+                  }
+                />
+              </div>
+              <br />
+              <br />
+              <Button variant="contained" type="submit" fullWidth>
+                Add Parameter
+              </Button>
+            </form>
           </div>
         </div>
       </div>

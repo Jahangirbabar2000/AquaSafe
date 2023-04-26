@@ -128,4 +128,12 @@ CREATE TABLE `Reports` (
   FOREIGN KEY (`Device`) REFERENCES `DeployedDevices`(`Id`)
 );
 
+DROP TABLE IF EXISTS stationCoordinates;
+CREATE TABLE `stationCoordinates` (
+  `Station` VARCHAR(10) PRIMARY KEY,
+  `Latitude` DOUBLE NOT NULL,
+  `Longitude` DOUBLE NOT NULL,
+  `Site` VARCHAR(255) DEFAULT 'Lam Tsuen River'
+);
+
 

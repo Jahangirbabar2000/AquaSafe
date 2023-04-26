@@ -12,7 +12,7 @@ export default function Third() {
         <p id="title-sub3">
           Visitors can access public data of their local water bodies.
         </p>
-        <Link to="/dashboard">
+        <Link to="/dashboard" style={{ textDecoration: 'none' }}>
           <Button className="look" variant="contained" color="primary">
             Take a Look
           </Button>
