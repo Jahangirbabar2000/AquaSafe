@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "title": "Buy groceries",
+        "details": "Milk, eggs, bread, cheese",
+        "date": "2023-05-01",
+        "priority": "medium",
+        "project": "rawal lake",
+        "user": "John",
+        "time": "10:00"
+    },
+    {
+        "id": 2,
+        "title": "Submit report",
+        "details": "Complete sales report and submit to boss",
+        "date": "2023-05-03",
+        "priority": "high",
+        "project": "nust lake",
+        "user": "Mary",
+        "time": "14:00"
+    },
+    {
+        "id": 3,
+        "title": "Book flight tickets",
+        "details": "Book flight tickets for summer vacation",
+        "date": "2023-05-10",
+        "priority": "low",
+        "project": "tarbela dam",
+        "user": "John",
+        "time": "09:00"
+    },
+    {
+        "id": 4,
+        "title": "Pay electricity bill",
+        "details": "Pay electricity bill for the month of May",
+        "date": "2023-05-15",
+        "priority": "medium",
+        "project": "rawal lake",
+        "user": "Mary",
+        "time": "16:00"
+    },
+    {
+        "id": 5,
+        "title": "Attend meeting",
+        "details": "Attend team meeting to discuss project status",
+        "date": "2023-05-20",
+        "priority": "high",
+        "project": "nust lake",
+        "user": "John",
+        "time": "11:00"
+    }
+]
