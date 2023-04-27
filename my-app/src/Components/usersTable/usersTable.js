@@ -2,7 +2,6 @@ import axios from "axios";
 import React from 'react';
 import { useEffect, useState } from "react";
 import "./tableRow.css";
-import Sidebar from "../sidebar/side-bar";
 import Sidebar2 from "../sidebar/Sidebar2.js";
 import { Grid } from "@mui/material";
 import Navbar from "../navbar/navbar.js";

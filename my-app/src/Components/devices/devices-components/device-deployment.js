@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import "./device-deploy.css";
 import Sidebar2 from "../../sidebar/Sidebar2";
 import Navbar from "../../navbar/navbar";
 import { Formik, Form, Field, useFormik } from "formik";
@@ -22,8 +21,6 @@ const FORM_VALIDATION = Yup.object().shape({
   frequency: Yup.number().required("Frequency is required"),
   timeUnit: Yup.string().required("Unit is required"),
 });
-
-
 
 const checkboxOptions = ["Minute", "Hour", "Day", "month"];
 
@@ -59,10 +56,9 @@ const DeviceDeployment = () => {
     });
   }, []);
 
-
   const map = useMemo(() => (
     <MapContainer
-      className="deviceMap"
+      style={{ marginRight: "10vh", width: "70vh", height: "60vh" }}
       center={markerPosition}
       zoom={14}
       scrollWheelZoom={true}
@@ -84,7 +80,6 @@ const DeviceDeployment = () => {
     return null;
   }
 
-
   return (
     <div>
       <Navbar />
@@ -99,17 +94,41 @@ const DeviceDeployment = () => {
           <Sidebar2 name="Devices" />
         </div>
         <div>
-          <div className="grid-container">
-            <div className="containerrrr">
-              <div className="card">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              height: "100vh",
+              backgroundColor: "#f2f2f2",
+            }}
+          >
+            <div
+              style={{
+                marginTop: "5vh",
+                marginLeft: "18vh",
+              }}
+            >
+              <div
+                style={{
+                  minWidth: "450px",
+                  paddingTop: "3%",
+                  paddingBottom: "3%",
+                  background: "whitesmoke",
+                  borderRadius: "5%",
+                  marginTop: "15px",
+                  padding: "7%",
+                  boxShadow: "0px 0px 10px #888888",
+                  marginLeft: "1rem",
+                }}
+              >
                 <h2>General Device Details</h2>
                 <Formik
                   initialValues={{
                     ...INITIAL_FORM_STATES,
-                    sensors: sensors.map(sensor => sensor.name)
+                    sensors: sensors.map((sensor) => sensor.name),
                   }}
                   validationSchema={FORM_VALIDATION}
-                  onSubmit={values => {
+                  onSubmit={(values) => {
                     console.log(values);
                   }}
                 >
@@ -153,39 +172,75 @@ const DeviceDeployment = () => {
                       />
                     </div>
 
-
-
                     <div style={{ display: "flex", marginBottom: "10px" }}>
-                      <TextField name="frequency" label="Frequency" style={{ marginRight: "10px" }} />
-                      <Select name="timeUnit" label="Unit" options={checkboxOptions} />
+                      <TextField
+                        name="frequency"
+                        label="Frequency"
+                        style={{ marginRight: "10px" }}
+                      />
+                      <Select
+                        name="timeUnit"
+                        label="Unit"
+                        options={checkboxOptions}
+                      />
                     </div>
 
                     <div>
                       <h2>Sensors</h2>
-                      <div style={{ display: "flex", flexWrap: "wrap" }}>
-                        {sensors.map(sensor => (
-                          <label key={sensor.Name} style={{ display: "flex", alignItems: "center", margin: "5px", cursor: "pointer" }}>
-                            <Field type="checkbox" name="sensors" value={sensor.Name} style={{ marginRight: "5px" }} />
-                            <span style={{ fontSize: "16px" }}>{sensor.Name}</span>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        {sensors.map((sensor) => (
+                          <label
+                            key={sensor.Name}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              margin: "5px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <Field
+                              type="checkbox"
+                              name="sensors"
+                              value={sensor.Name}
+                              style={{ marginRight: "5px" }}
+                            />
+                            <span style={{ fontSize: "16px" }}>
+                              {sensor.Name}
+                            </span>
                           </label>
                         ))}
                       </div>
                     </div>
 
                     <div style={{ height: 25 }}></div>
-                    <Button sx={{ fontSize: 100 }}>Add Device</Button>
+                    <Button
+                      style={{ fontSize: "100px" }}
+                      sx={{ fontSize: "100px" }}
+                    >
+                      Add Device
+                    </Button>
                   </Form>
                 </Formik>
               </div>
             </div>
-            <div className="map">
+            <div
+              style={{
+                paddingTop: "50px",
+                paddingLeft: "10% ",
+              }}
+            >
               <h2>Select location from map:</h2>
               {map}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

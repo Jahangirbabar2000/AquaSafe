@@ -11,8 +11,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import data from "../NotificationBox/notification.json";
-import RenderNotifications from "../NotificationBox/notification.js";
+import data from "../notifications/NotificationBox/notification.json";
+import RenderNotifications from "../notifications/NotificationBox/notification.js";
 import { styled } from '@mui/system';
 
 const Root = styled("div")(({ theme }) => ({

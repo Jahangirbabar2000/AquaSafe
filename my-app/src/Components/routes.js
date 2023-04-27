@@ -12,10 +12,9 @@ import DeviceDeployment from "./devices/devices-components/device-deployment";
 import NewProject from "./NewProjectForm/NewProject";
 import AddSensor from "./Sensor/addSensor";
 import WaterQualityPage from "./parameters/parameters";
-import NotificationTable from "./NotificationTable/NotificationTable.js";
+import NotificationTable from "./notifications/NotificationTable/NotificationTable";
 import SensorsTable from "./Sensor/sensorsTable";
 import ParameterTable from "./parameters/ParameterTable"
-import Parameter from "./parameters/parameter";
 import AddParameter from "./parameters/AddParameterForm";
 import Readings from "./Readings/Readings.js";
 import DeviceTemplates from "./devices/devices-components/deviceTemplate";
