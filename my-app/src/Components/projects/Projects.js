@@ -1,11 +1,16 @@
 // Projects.js
 import React from 'react';
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid } from "@mui/material";
 import ProjectCard from './ProjectCard';
+import { useNavigate } from 'react-router-dom';
 
 const Projects = ({ projects }) => {
+  const navigate = useNavigate();
+
   const handleCardClick = (project) => {
     console.log('Clicked project: ', project);
+    // Navigate to a different page
+    navigate('/dashboard');
   };
 
   return (

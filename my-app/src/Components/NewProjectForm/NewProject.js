@@ -267,21 +267,25 @@ const NewProject = () => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const formObject = Object.fromEntries(formData.entries());
-    console.log(formObject)
+
+    const { name, location, country, longitude, latitude, description } = formObject;
+
     try {
-      await axios.post(`http://localhost:8080/projects/`, {
-        Name: formObject.name,
-        Location: formObject.location,
-        Country: formObject.country,
-        Longitude: formObject.longitude,
-        Latitude: formObject.latitude,
-        Description: formObject.description,
+      await axios.post('http://localhost:8080/projects/', {
+        Name: name,
+        Location: location,
+        Country: country,
+        Longitude: longitude,
+        Latitude: latitude,
+        Description: description,
       });
-      navigate("/deviceDeployment");
+
+      navigate(`/deviceDeployment?latitude=${latitude}&longitude=${longitude}`);
     } catch (err) {
       console.error(err);
     }
   };
+
 
 
   const [country, setCountry] = useState("Pakistan");
@@ -346,19 +350,6 @@ const NewProject = () => {
                   variant="standard"
                 />
               </div>
-              <div>
-                <TextField
-                  fullWidth
-                  label="Longitude"
-                  name="longitude"
-                  type="text"
-                  required
-                  variant="standard"
-                  inputProps={{
-                    pattern: "^[0-9]+(\\.[0-9]{1,15})?$"
-                  }}
-                />
-              </div>
 
               <div>
                 <TextField
@@ -373,6 +364,20 @@ const NewProject = () => {
                   }}
                 />
               </div>
+              <div>
+                <TextField
+                  fullWidth
+                  label="Longitude"
+                  name="longitude"
+                  type="text"
+                  required
+                  variant="standard"
+                  inputProps={{
+                    pattern: "^[0-9]+(\\.[0-9]{1,15})?$"
+                  }}
+                />
+              </div>
+
 
               <div>
                 <TextField

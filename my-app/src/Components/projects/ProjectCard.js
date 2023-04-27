@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography, CardActionArea } from '@material-ui/core';
+import { Card, CardContent, Typography, CardActionArea } from "@mui/material";
 import { MapContainer, TileLayer } from 'react-leaflet';
 
 const ProjectCard = ({ project, onCardClick }) => {
@@ -19,10 +19,12 @@ const ProjectCard = ({ project, onCardClick }) => {
                     </Typography>
                     <div style={{ height: '150px', width: '100%', marginTop: '10px' }}>
                         <MapContainer
-                            center={[Longitude, Latitude]}
+                            center={[Latitude, Longitude]}
                             zoom={12}
                             scrollWheelZoom={false}
                             zoomControl={false}
+                            dragging={false}
+                            doubleClickZoom={false}
                             style={{ height: '100%', width: '100%', marginLeft: '0vh' }}
                         >
                             <TileLayer
