@@ -3,17 +3,13 @@
     flex-direction: row;
 }
 
-input >  h3{
-    padding-right: 1.3rem;
-}
-
 .input {
   margin: 1rem;
 }
 
 .containerr{
   /* border: solid black 2px; */
-  width: 35%;
+  width: 45%;
   /* height: 100%; */
   padding-top: 3%;
   padding-bottom: 3%;

@@ -128,14 +128,14 @@ const Sidebar2 = (props) => {
             </Typography>
             <Item
               title="Devices"
-              to="/deviceDeployment"
+              to="/deviceTemplate"
               icon={<RouterRoundedIcon />}
               selected={selected}
             // setSelected={setSelected}
             />
             <Item
-              title="Sensors"
-              to="/sensors"
+              title="Projects"
+              to="/projects"
               icon={<SensorsRoundedIcon />}
               selected={selected}
             // setSelected={setSelected}

@@ -155,7 +155,7 @@ const AddSensor = () => {
                       fullWidth
                       variant="contained"
                       color="primary"
-                      size="large"
+                      size="normal"
                     >
                       Add Sensor
                     </Button>

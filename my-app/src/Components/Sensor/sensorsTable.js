@@ -60,6 +60,7 @@ function SensorsTable() {
     useEffect(() => {
         getUsersData();
     }, []);
+
     return (
         <div>
             <Navbar />
@@ -103,9 +104,11 @@ function SensorsTable() {
                                         <StyledTableCell className="mediumColumn" align="center">{row.SensorMin}</StyledTableCell>
                                         <StyledTableCell className="mediumColumn" align="center">{row.SensorMax}</StyledTableCell>
                                         <StyledTableCell className="smallColumn" align="center">
-                                            <Link to={`/edit/${row.Id}`}>
-                                                <EditIcon />
-                                            </Link>
+                                            <Tooltip title="Edit">
+                                                <Link to={`/edit/${row.Id}`}>
+                                                    <EditIcon />
+                                                </Link>
+                                            </Tooltip>
                                         </StyledTableCell>
                                         <StyledTableCell className="smallColumn" align="center">
                                             <Tooltip title="Delete">
@@ -120,10 +123,9 @@ function SensorsTable() {
                         </Table>
                     </TableContainer>
                     <Snackbar
-                        sx={{ debug: true }}
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                         open={open}
-                        autoHideDuration={null}
+                        autoHideDuration={3000}
                         onClose={() => setOpen(false)}
                         message={message}
                     />

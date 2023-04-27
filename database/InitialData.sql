@@ -138,8 +138,6 @@ INSERT INTO WorksOn VALUES (1, 1, 'IoT Engineer'), (2 , 1,'Local Admin'), (3, 1,
  INSERT into SensorsCatalogue (Id, Parameter, Model, SensorMin, SensorMax) VALUES (10, 'Nitrite-Nitrogen (NO2-N)', 'censoR299' , 0, 20);
 
 INSERT into Communication VALUES (1, 'LORAWAN', 99.5 , 'lORa231', '29E');
-  
-INSERT into DevicesCatalogue (Id, Model, Name, CommTech, Sensors) VALUES (1, 'Arduino34E', 'Device203' , 1, null);
 
 INSERT into DeployedDevices VALUES (1, 1, 'A24R' , 33.7027, 73.1261, 5, 1, 'NorthEastCornerDevice', 'LORAWAN', 505);
 
@@ -194,4 +192,12 @@ VALUES
 ('TR12C', 22.45068,114.16838, 'Lam Tsuen River'),
 ('TR12B', 22.44947,114.17651, 'Lam Tsuen River');
 
+INSERT into DevicesCatalogue (Model, Name, CommTech, Sensors) 
+VALUES ('Arduino54B', 'Device215' , 1, '{"sensor1": "temperature", "sensor2": "humidity", "sensor3": "pressure"}');
+
+INSERT INTO DevicesCatalogue (Model, Name, CommTech, Sensors)
+VALUES ('Arduino54B', 'Device215', 1, '{"sensor1": "Water Temperature", "sensor2": "Total Phosphorus", "sensor3": "Suspended solids", "sensor4": "pH", "sensor5": "Nitrite-Nitrogen (NO2-N)", "sensor6": "Nitrate-Nitrogen (NO3-N)", "sensor7": "Dissolved Oxygen", "sensor8": "Conductivity", "sensor9": "Ammonia-Nitrogen (NH3-N)", "sensor10": "5-day Biochemical Oxygen Demand (BOD5)"}');
+
+INSERT INTO DevicesCatalogue (Model, Name, CommTech, Sensors)
+VALUES ('Arduino54B', 'Device215', 1, '{"sensor1": "Water Temperature", "sensor2": "Total Phosphorus", "sensor3": "Suspended solids", "sensor4": "pH", "sensor5": "Nitrite-Nitrogen (NO2-N)", "sensor6": "Nitrate-Nitrogen (NO3-N)", "sensor7": "Dissolved Oxygen", "sensor9": "Ammonia-Nitrogen (NH3-N)"}');
 

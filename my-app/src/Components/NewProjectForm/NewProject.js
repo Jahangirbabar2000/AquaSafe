@@ -1,17 +1,10 @@
-import React from "react";
+import { React, useState } from "react";
 import Sidebar2 from "../sidebar/Sidebar2.js";
 import Navbar from "../navbar/navbar.js";
-import {
-  Formik,
-  Form,
-  Field
-} from "formik";
-import * as Yup from "yup";
-import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
 import "./NewProject.css";
-import Button from "@mui/material/Button";
+import { TextField, InputLabel, Select, Button, MenuItem, FormControl, Typography } from '@mui/material';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const countryList = [
   "Afghanistan",
@@ -264,176 +257,152 @@ const countryList = [
   "Zimbabwe",
   "Åland Islands"
 ];
-const waterbodyTypes = ["Lake", "River", "Dam", "pond", "Ocean"];
+
+const NewProject = () => {
 
 
-// This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
-  city: Yup.string().required("City is required"),
-  description: Yup.string()
-    .max(124)
-    .required("description is required"),
-  location: Yup.string()
-    .required("Location is required")
-    .max("100", "Location should not exceed 100"),
-  province: Yup.string().required("Province is required"),
-  country: Yup.string().required("Please select a country"),
-  waterbodytype: Yup.string().required("Please select a Water body type")
-});
+  const navigate = useNavigate();
 
-const NewProject = () => (
-  <div>
-    <Navbar />
-    <div style={{ display: "grid", gridTemplateColumns: "28vh auto" }}>
-      <div>
-        <Sidebar2 name="Create New Project" />
-      </div>
-      <div className="box">
-        <div className="container">
-          <h2
-            style={{
-              textAlign: "center",
-              paddingBottom: "5px"
-            }}
-          >
-            New Project
-          </h2>
-          <Formik
-            initialValues={{
-              country: "Pakistan",
-              city: "",
-              province: "",
-              description: "",
-              location: "",
-              waterbodytype: ""
-            }}
-            validationSchema={validationSchema}
-            onSubmit={(values, actions) => {
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                actions.setSubmitting(false);
-              }, 1000);
-            }}
-          >
-            {({ errors, touched }) => (
-              <Form className="">
-                <div>
-                  {/* <label>Province</label> */}
-                  <Field
-                    as={TextField}
-                    fullWidth
-                    label="Project Name"
-                    style={{ fontSize: "30px" }}
-                    name="name"
-                    type="text"
-                    error={Boolean(touched.name && errors.name)}
-                    helperText={touched.name ? errors.name : ""}
-                  />
-                </div>{" "}
-                <br />
-                <div>
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const formObject = Object.fromEntries(formData.entries());
+    console.log(formObject)
+    try {
+      await axios.post(`http://localhost:8080/projects/`, {
+        Name: formObject.name,
+        Location: formObject.location,
+        Country: formObject.country,
+        Longitude: formObject.longitude,
+        Latitude: formObject.latitude,
+        Description: formObject.description,
+      });
+      navigate("/deviceDeployment");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
+  const [country, setCountry] = useState("Pakistan");
+
+  const handleCountryChange = (event) => {
+    setCountry(event.target.value);
+  };
+
+  return (
+    <div>
+      <Navbar />
+      <div style={{ display: "grid", gridTemplateColumns: "28vh auto" }}>
+        <div>
+          <Sidebar2 name="Create New Project" />
+        </div>
+        <div className="box">
+          <div className="container">
+            <Typography variant="h5" align="center" gutterBottom>
+              <strong>New Project</strong>
+            </Typography>
+
+            <form onSubmit={handleSubmit}>
+              <div>
+                <TextField
+                  fullWidth
+                  label="Project Name"
+                  style={{ fontSize: "30px" }}
+                  name="name"
+                  type="text"
+                  required
+                  variant="standard"
+                />
+              </div>
+
+              <br />
+              <div>
+                <FormControl fullWidth>
                   <InputLabel id="country-label">Country</InputLabel>
-                  <Field
-                    fullWidth
-                    name="country"
-                    as={Select}
+                  <Select
                     labelId="country-label"
+                    name="country"
+                    value={country}
+                    onChange={handleCountryChange}
+                    required
+                    variant="standard"
                   >
-                    {countryList.map(country => (
-                      <option key={country} value={country}>
+                    {countryList.map((country) => (
+                      <MenuItem key={country} value={country}>
                         {country}
-                      </option>
+                      </MenuItem>
                     ))}
-                  </Field>
-                </div>
-                <br />
-                <div>
-                  {/* <label>Province</label> */}
-                  <Field
-                    as={TextField}
-                    fullWidth
-                    label="Province"
-                    style={{ fontSize: "30px" }}
-                    name="province"
-                    type="text"
-                    error={Boolean(touched.province && errors.province)}
-                    helperText={touched.province ? errors.province : ""}
-                  />
-                </div>{" "}
-                <br />
-                <div>
-                  <Field
-                    as={TextField}
-                    fullWidth
-                    label="City"
-                    variant="standard"
-                    name="city"
-                    type="text"
-                    error={Boolean(touched.city && errors.city)}
-                    helperText={touched.city ? errors.city : ""}
-                  />
-                </div>{" "}
-                <br />
-                <div>
-                  <Field
-                    as={TextField}
-                    fullWidth
-                    label="Description"
-                    variant="standard"
-                    multiline
-                    name="description"
-                    type="text"
-                    error={Boolean(touched.description && errors.description)}
-                    helperText={touched.description ? errors.description : ""}
-                  />{" "}
-                </div>
-                <br />
-                <div>
-                  <Field
-                    name="location"
-                    type="text"
-                    as={TextField}
-                    fullWidth
-                    label="Location"
-                    variant="standard"
-                    error={Boolean(touched.location && errors.location)}
-                    helperText={touched.location ? errors.location : ""}
-                  />
-                </div>
-                <br />
-                <div>
-                  <InputLabel id="body-label">Waterbody Type</InputLabel>
-                  <Field
-                    name="waterbodytype"
-                    as={Select}
-                    fullWidth
-                    labelId="body-label"
-                    error={Boolean(
-                      touched.waterbodytype && errors.waterbodytype
-                    )}
-                    helperText={
-                      touched.waterbodytype ? errors.waterbodytype : ""
-                    }
-                  >
-                    {waterbodyTypes.map(types => (
-                      <option key={types} value={types}>
-                        {types}
-                      </option>
-                    ))}
-                  </Field>
-                </div>
-                <br />
-                <Button fullWidth variant="contained" type="submit">
+                  </Select>
+                </FormControl>
+              </div>
+              <div>
+                <TextField
+                  fullWidth
+                  label="Location"
+                  name="location"
+                  type="text"
+                  required
+                  variant="standard"
+                />
+              </div>
+              <div>
+                <TextField
+                  fullWidth
+                  label="Longitude"
+                  name="longitude"
+                  type="text"
+                  required
+                  variant="standard"
+                  inputProps={{
+                    pattern: "^[0-9]+(\\.[0-9]{1,15})?$"
+                  }}
+                />
+              </div>
+
+              <div>
+                <TextField
+                  fullWidth
+                  label="Latitude"
+                  name="latitude"
+                  type="text"
+                  required
+                  variant="standard"
+                  inputProps={{
+                    pattern: "^[0-9]+(\\.[0-9]{1,15})?$"
+                  }}
+                />
+              </div>
+
+              <div>
+                <TextField
+                  fullWidth
+                  label="Description"
+                  multiline
+                  name="description"
+                  type="text"
+                  required
+                  variant="standard"
+                />
+              </div>
+              <div>
+              </div>
+              <br></br>
+              <div style={{ textAlign: "center" }}>
+                <Button
+                  color="primary"
+                  type="submit"
+                  variant="contained"
+                >
                   Create Project
                 </Button>
-              </Form>
-            )}
-          </Formik>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default NewProject;

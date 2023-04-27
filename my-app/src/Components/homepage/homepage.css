@@ -1,6 +1,6 @@
 .title {
   background-color: white;
-  margin-top:2%;
+  margin-top: 2%;
   height: 43vh;
   display: flex;
   padding-bottom: 1%;
@@ -27,29 +27,29 @@
   min-width: 63%;
 }
 
-#app-name{
-  font-size: 6rem;
+#app-name {
+  font-size: 4rem;
   text-align: inherit;
   padding-bottom: 0%;
-  margin:0px;
+  margin: 0px;
 }
 
 #title {
   /* margin-top:3%; */
-  font-size: 3.5rem;
-    text-align: inherit;
-      padding-top: 3%;
-      margin-left:0%;
+  font-size: 2rem;
+  text-align: inherit;
+  padding-top: 2%;
+  margin-left: 0%;
 }
 
 #title-sub {
   /* margin-top: 2%; */
   font-size: 2vh;
-  margin-bottom: 0;
+
 }
 
 #title-sub2 {
-  font-size: 2.1vh;
+  font-size: 2vh;
 }
 
 #title-sub3 {
@@ -70,7 +70,7 @@
 
 .andmore {
   border-top: 2px solid whitesmoke;
-    border-bottom: 2px solid whitesmoke;
+  border-bottom: 2px solid whitesmoke;
   height: 65vh;
   display: flex;
 }
@@ -112,15 +112,14 @@
 }
 
 .top-img {
-  height: 40vh;;
+  height: 40vh;
+  ;
   padding-left: 45%;
   /* padding-top: 9%; */
   /* margin-top: 1cm; */
 }
 
 #heading {
-  /* margin-top: 1vh; */
-  /* border: 2px solid yellow; */
   text-align: center;
   color: cadetblue;
 }
@@ -129,7 +128,7 @@
   /* margin-top:3%; */
   margin: 2vh;
   display: flex;
-  height:auto;
+  height: auto;
   /* justify-content: space-between; */
 }
 

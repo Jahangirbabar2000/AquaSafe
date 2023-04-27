@@ -1,63 +1,47 @@
-import React, { useState } from "react";
-import "./device-deploy.css";
-import Sidebar from "../../sidebar/side-bar";
+import React, { useState, useEffect, useMemo } from "react";
 import Sidebar2 from "../../sidebar/Sidebar2";
 import Navbar from "../../navbar/navbar";
 import { Formik, Form, Field, useFormik } from "formik";
 import * as Yup from "yup";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import TextField from "./components-form/textfield.js";
 import Select from "./components-form/select.js";
 import Button from "./components-form/button.js";
-
-const sensors = ["Temperature", "Turbidity", "pH", "PO4", "Conductivity"];
-const CommunicationModes = ["GSM Module", "LoraWan"];
+import axios from "axios";
 
 const INITIAL_FORM_STATES = {
-  deviceID: "",
-  description: "",
-  location: "",
-  DeviceNum: "",
+  latitude: "",
+  longitude: "",
   frequency: "",
-  timeUnit: ""
+  timeUnit: "",
+  sensors: []
 };
 
-// This is the validation schema. You can change it to change validation. Look up Yup documentation for more.
 const FORM_VALIDATION = Yup.object().shape({
-  deviceID: Yup.string().required("Enter a device ID"),
-  description: Yup.string()
-    .max(124)
-    .required("description is required"),
-  location: Yup.string()
-    .required("Location is required")
-    .max("100", "Location should not exceed 100"),
-  deviceNum: Yup.number("Must be a number.").required("Enter a device number"),
-  frequency: Yup.number().required("Enter a frequency"),
-  timeUnit: Yup.string().required("Required")
+  frequency: Yup.number().required("Frequency is required"),
+  timeUnit: Yup.string().required("Unit is required"),
 });
 
 const checkboxOptions = ["Minute", "Hour", "Day", "month"];
+
 const DeviceDeployment = () => {
-  // const checkboxes = [
-  //   { id: 1, label: 'Checkbox 1' },
-  //   { id: 2, label: 'Checkbox 2' },
-  //   { id: 3, label: 'Checkbox 3' },
-  //   { id: 4, label: 'Checkbox 4' },
-  //   { id: 5, label: 'Checkbox 5' }
-  // ];
-  // const [checkedItems, setCheckedItems] = useState({});
+  const [sensors, setSensors] = useState([]);
+  const [markerPosition, setMarkerPosition] = useState([33.702299, 73.13]);
 
-  // const handleChange = (event) => {
-  //   setCheckedItems({ ...checkedItems, [event.target.name]: event.target.checked });
-  // }
+  function handleMapClick(e) {
+    const { lat, lng } = e.latlng;
+    const newLat = parseFloat(lat.toFixed(6));
+    const newLng = parseFloat(lng.toFixed(6));
+    setMarkerPosition([newLat, newLng]);
+  }
 
-  // const handleButtonClick = () => {
-  //   const checkedValues = Object.entries(checkedItems)
-  //     .filter(([name, checked]) => checked)
-  //     .map(([name, checked]) => name);
-
-  //   console.log('Checked values:', checkedValues);
-  // }
+  useEffect(() => {
+    const fetchSensors = async () => {
+      const response = await axios.get("http://localhost:8080/parameters");
+      setSensors(response.data);
+    };
+    fetchSensors();
+  }, []);
 
   React.useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -71,6 +55,30 @@ const DeviceDeployment = () => {
       shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
   }, []);
+
+  const map = useMemo(() => (
+    <MapContainer
+      style={{ marginRight: "10vh", width: "70vh", height: "60vh" }}
+      center={markerPosition}
+      zoom={14}
+      scrollWheelZoom={true}
+    >
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <Marker position={markerPosition}>
+        <Popup>
+          Latitude: {markerPosition[0]} <br /> Longitude: {markerPosition[1]}
+        </Popup>
+      </Marker>
+      <MapEvents onClick={handleMapClick} />
+      <MapCenter />
+    </MapContainer>
+  ), [markerPosition]);
+
+  function MapCenter() {
+    const map = useMap();
+    map.setView(markerPosition);
+    return null;
+  }
 
   return (
     <div>
@@ -86,82 +94,163 @@ const DeviceDeployment = () => {
           <Sidebar2 name="Devices" />
         </div>
         <div>
-          <div className="grid-container">
-            <div className="containerrrr">
-              <div className="card">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              height: "100vh",
+              backgroundColor: "#f2f2f2",
+            }}
+          >
+            <div
+              style={{
+                marginTop: "5vh",
+                marginLeft: "18vh",
+              }}
+            >
+              <div
+                style={{
+                  minWidth: "450px",
+                  paddingTop: "3%",
+                  paddingBottom: "3%",
+                  background: "whitesmoke",
+                  borderRadius: "5%",
+                  marginTop: "15px",
+                  padding: "7%",
+                  boxShadow: "0px 0px 10px #888888",
+                  marginLeft: "1rem",
+                }}
+              >
                 <h2>General Device Details</h2>
                 <Formik
                   initialValues={{
-                    ...INITIAL_FORM_STATES
+                    ...INITIAL_FORM_STATES,
+                    sensors: sensors.map((sensor) => sensor.name),
                   }}
                   validationSchema={FORM_VALIDATION}
-                  onSubmit={values => {
+                  onSubmit={(values) => {
                     console.log(values);
                   }}
                 >
                   <Form>
-                    <TextField name="deviceID" label="Device ID" />
-                    <TextField name="description" label="Description" />
-                    <TextField name="location" label="Location" />
-                    <TextField name="deviceNum" label="Device Number" />
-                    <TextField
-                      name="frequency"
-                      label="Frequency"
-                      helperText="Choose frequency of receving data"
-                    />
-                    <Select
-                      name="timeUnit"
-                      label="Unit"
-                      options={checkboxOptions}
-                    />
-                    {/* </div> */}
+                    <div style={{ display: "flex" }}>
+                      <TextField
+                        name="latitude"
+                        label="Latitude"
+                        value={markerPosition[0]}
+                        onChange={(e) => {
+                          const inputValue = e.target.value;
+                          let newLatitude = 0;
+
+                          if (inputValue !== "") {
+                            newLatitude = parseFloat(inputValue);
+                            if (isNaN(newLatitude)) {
+                              newLatitude = 0;
+                            }
+                          }
+                          setMarkerPosition([newLatitude, markerPosition[1]]);
+                        }}
+                        style={{ marginRight: "10px" }}
+                      />
+
+                      <TextField
+                        name="longitude"
+                        label="Longitude"
+                        value={markerPosition[1]}
+                        onChange={(e) => {
+                          const inputValue = e.target.value;
+                          let newLongitude = 0;
+
+                          if (inputValue !== "") {
+                            newLongitude = parseFloat(inputValue);
+                            if (isNaN(newLongitude)) {
+                              newLongitude = 0;
+                            }
+                          }
+                          setMarkerPosition([markerPosition[0], newLongitude]);
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ display: "flex", marginBottom: "10px" }}>
+                      <TextField
+                        name="frequency"
+                        label="Frequency"
+                        style={{ marginRight: "10px" }}
+                      />
+                      <Select
+                        name="timeUnit"
+                        label="Unit"
+                        options={checkboxOptions}
+                      />
+                    </div>
+
+                    <div>
+                      <h2>Sensors</h2>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        {sensors.map((sensor) => (
+                          <label
+                            key={sensor.Name}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              margin: "5px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <Field
+                              type="checkbox"
+                              name="sensors"
+                              value={sensor.Name}
+                              style={{ marginRight: "5px" }}
+                            />
+                            <span style={{ fontSize: "16px" }}>
+                              {sensor.Name}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
                     <div style={{ height: 25 }}></div>
-                    <Button sx={{ fontSize: 100 }}>Add Device</Button>
+                    <Button
+                      style={{ fontSize: "100px" }}
+                      sx={{ fontSize: "100px" }}
+                    >
+                      Add Device
+                    </Button>
                   </Form>
                 </Formik>
-                {/* <h2>Select sensors</h2>
-            <div>
-              {checkboxes.map(item => (
-                <label key={item.id}>
-                  <input
-                    type="checkbox"
-                    name={item.label}
-                    checked={checkedItems[item.label] || false}
-                    onChange={handleChange}
-                  />
-                  {item.label}
-                </label>
-              ))}
-              <br />
-              <button onClick={handleButtonClick}>Show Checked Values</button>
-            </div> */}
               </div>
             </div>
-            <div className="map">
+            <div
+              style={{
+                paddingTop: "50px",
+                paddingLeft: "10% ",
+              }}
+            >
               <h2>Select location from map:</h2>
-              <MapContainer
-                className="deviceMap"
-                center={[33.702299, 73.13]}
-                zoom={14}
-                scrollWheelZoom={true}
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
-               contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                {/* <Marker position={[33.702299, 73.130]}>
-              <Popup>
-                Location of this Project: <br /> Rawal Lake, Islamabad
-              </Popup>
-            </Marker> */}
-              </MapContainer>
+              {map}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
+
+function MapEvents({ onClick }) {
+  useMapEvents({
+    click(e) {
+      onClick(e);
+    },
+  });
+  return null;
+}
 
 export default DeviceDeployment;

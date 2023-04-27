@@ -14,8 +14,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from "../navbar/navbar.js";
-import Sidebar from "../sidebar/side-bar.js";
 import MenuItem from '@mui/material/MenuItem';
+import Sidebar2 from "../sidebar/Sidebar2";
 
 function Copyright(props) {
     return (
@@ -136,7 +136,7 @@ export default function SignUp() {
     return (
         <div>
             <Navbar />
-            <Sidebar />
+            <Sidebar2 />
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="sm">
                     {/* <CssBaseline /> */}
