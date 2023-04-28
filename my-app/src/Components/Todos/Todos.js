@@ -209,12 +209,12 @@ function Todos() {
         <div>
           <Sidebar2 name="Tasks" />
         </div>
-        <div style={{ marginLeft: 60 }}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Typography variant="h3" sx={{ marginTop: 2, marginBottom: 3}} align="left">
+        <div style={{ marginLeft: 85 }}>
+          {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
+            <Typography variant="h3" sx={{ marginTop: 2, marginBottom: 3, marginLeft:"42%"}} align="left">
               <span style={{ fontWeight: "bold" }}>Tasks</span>
             </Typography>
-          </div>
+          {/* </div> */}
           <Box sx={{marginLeft: 3}}>
           <CreateTodo tasks={allTodo} setAllTodo={setAllTodo} />
           </Box>
