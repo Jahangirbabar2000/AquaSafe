@@ -15,6 +15,22 @@ const projects1 = ["Tarbela Dam", "Rawal Lake", "Nust Lake"];
 
 function SingleTodoCard(props) {
   const todo = props.todo;
+  
+  function onCheckBoxClick(id) {
+    const updatedTodos = props.todo.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          status: !todo.status
+        };
+      }
+      return todo;
+    });
+    props.setTodos(updatedTodos);
+  }
+
+
+
   if (!isNaN(todo.priority)) {
     todo.priority = priority1[props.todo.priority];
   }
@@ -40,11 +56,15 @@ function SingleTodoCard(props) {
         justifyContent: "space-between",
         boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
         overflow: "auto"
+        
       }}
     >
       <Grid container spacing={1}>
         <Grid item xs={2}>
-          <Checkbox />
+          <Checkbox
+            checked={todo.status}
+            onChange={() => onCheckBoxClick(todo.id)}
+          />
         </Grid>
         <Grid sx={{ wordWrap: "breakWord" }} item xs={6}>
           <Typography align="left">
@@ -90,22 +110,41 @@ function BigTodoBox(props) {
   const [currentPage, setCurrentPage] = useState("All");
   const todos = props.todos;
   const completed = todos.filter(item => item.status === true);
-
   const active = todos.filter(item => item.status === false);
 
   let componentToRender;
   switch (currentPage) {
     case "active":
-      componentToRender = <SingleTodoCard todo={active} />;
+      componentToRender = active.map(todo => (
+        <SingleTodoCard
+          key={todo.id}
+          todo={todo}
+          setAllTodo={props.setAllTodo}
+          allTodo={props.todo}
+        />
+      ));
       break;
     case "completed":
-      componentToRender = <SingleTodoCard todo={completed} />;
+      componentToRender = completed.map(todo => (
+        <SingleTodoCard
+          key={todo.id}
+          todo={todo}
+          setAllTodo={props.setAllTodo}
+          allTodo={props.todo}
+        />
+      ));
       break;
     default:
-      componentToRender = <SingleTodoCard todo={todos} />;
+      componentToRender = todos.map(todo => (
+        <SingleTodoCard
+          key={todo.id}
+          todo={todo}
+          setAllTodo={props.setAllTodo}
+          allTodo={props.todo}
+        />
+      ));
       break;
   }
-
   return (
     <Box
       sx={{
@@ -113,7 +152,8 @@ function BigTodoBox(props) {
         height: "85vh",
         backgroundColor: "#f5f5f5",
         margin: 3,
-        overflow: "auto"
+        overflow: "auto",
+        border: "grey solid 2px"
       }}
     >
       <Box
@@ -127,72 +167,34 @@ function BigTodoBox(props) {
         <Button
           onClick={() => setCurrentPage("All")}
           variant="contained"
-          style={{ width: "100%", borderRadius: 0 }}
+          style={{ width: "100%", borderRadius: 0, backgroundColor: currentPage === "All" ? "green" : "" }}
+          
         >
           All
         </Button>
         <Button
           onClick={() => setCurrentPage("active")}
           variant="contained"
-          style={{ width: "100%", borderRadius: 0 }}
+          style={{ width: "100%", borderRadius: 0, backgroundColor: currentPage === "active" ? "green" : "" }}
         >
           Active
         </Button>
         <Button
           onClick={() => setCurrentPage("completed")}
           variant="contained"
-          style={{ width: "100%", borderRadius: 0 }}
+          style={{ width: "100%", borderRadius: 0, backgroundColor: currentPage === "completed" ? "green" : "" }}
         >
           Completed
         </Button>
       </Box>
-      <Box>
-        {currentPage === "All" &&
-          todos.map(todo => <SingleTodoCard key={todo.id} todo={todo} />)}
-        {currentPage === "active" &&
-          active.map(todo => <SingleTodoCard key={todo.id} todo={todo} />)}
-        {currentPage === "completed" &&
-          completed.map(todo => <SingleTodoCard key={todo.id} todo={todo} />)}
-      </Box>
+      <Box>{componentToRender}</Box>
     </Box>
   );
 }
 
+
 function Todos() {
   const [allTodo, setAllTodo] = useState(data);
-  // this is used to navigate between all, active, and completed
-
-  //   const [inProgress, setInProgress] = useState([]);
-  //   const [todo, setTodo] = useState([])
-
-  // const showAll = () => {
-  //   console.log("Completed values")
-  //   console.log(completed);
-  //   console.log("active values")
-  //   console.log(active);
-  // };
-
-  // const showTodos = () => {
-  //     const todos = allTodo.filter(
-  //         (item) => item.status === "todo"
-  //     );
-  //     setTodo(todos);
-  //     console.log(todo)
-  // };
-
-  // const showProgress = () => {
-  //             const progress = allTodo.filter(
-  //         (item) => item.status === "in progress"
-  //     );
-  //     setInProgress(progress);
-  //     console.log(inProgress);
-  // };
-  // const completed = allTodo.filter(item => item.status === "completed");
-  // setCompleted(completed);
-  // function showCompleted() {
-  // const completed = data.filter(item => item.status === 'completed');
-  //   console.log(isCompleted)
-  // }
 
   return (
     <div>
@@ -208,20 +210,15 @@ function Todos() {
           <Sidebar2 name="Tasks" />
         </div>
         <div style={{ marginLeft: 60 }}>
-          {/* <Button variant="contained" onClick={showAll}>
-            All{" "}
-          </Button> */}
-          {/*  <Button variant="contained" onClick={showTodos}>
-            Todos{" "}
-          </Button>
-                  <Button variant="contained" onClick={showProgress}>
-            In Progress{" "}
-          </Button>
-                  <Button variant="contained" onClick={showCompleted()}>
-            Completed{" "}
-          </Button> */}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Typography variant="h3" sx={{ marginTop: 2, marginBottom: 3}} align="left">
+              <span style={{ fontWeight: "bold" }}>Tasks</span>
+            </Typography>
+          </div>
+          <Box sx={{marginLeft: 3}}>
           <CreateTodo tasks={allTodo} setAllTodo={setAllTodo} />
-          <BigTodoBox todos={allTodo} />
+          </Box>
+          <BigTodoBox todos={allTodo} setAllTodo={setAllTodo} />
         </div>
       </div>
     </div>

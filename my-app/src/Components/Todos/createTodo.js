@@ -29,7 +29,7 @@ const id_setter = props.tasks.length;
   let task = {};
 
   return (
-    <div style={{ width: "30%", border: "black solid 2px", padding: 10 }}>
+    <div style={{ width: "90%", border: "grey solid 2px", padding: 10, backgroundColor: "#f5f5f5"}}>
       <Formik
         initialValues={{
           ...INITIAL_FORM_STATES
@@ -53,10 +53,10 @@ const id_setter = props.tasks.length;
         }}
       >
         <Form>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
+          <Grid container spacing={1} sx={{}}>
+            {/* <Grid item xs={12}>
               <Typography align="center">Enter Task Details</Typography>
-            </Grid>
+            </Grid> */}
 
             <Grid
               item
@@ -85,7 +85,7 @@ const id_setter = props.tasks.length;
                 name="details"
                 label="Details"
                 multiline={true}
-                rows={2}
+                rows={1}
               />
             </Grid>
 
