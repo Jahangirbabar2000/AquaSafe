@@ -7,7 +7,8 @@
         "priority": "medium",
         "project": "rawal lake",
         "user": "John",
-        "time": "10:00"
+        "time": "10:00",
+        "status": false
     },
     {
         "id": 2,
@@ -17,7 +18,8 @@
         "priority": "high",
         "project": "nust lake",
         "user": "Mary",
-        "time": "14:00"
+        "time": "14:00",
+        "status": true
     },
     {
         "id": 3,
@@ -27,7 +29,8 @@
         "priority": "low",
         "project": "tarbela dam",
         "user": "John",
-        "time": "09:00"
+        "time": "09:00",
+        "status": true
     },
     {
         "id": 4,
@@ -37,7 +40,8 @@
         "priority": "medium",
         "project": "rawal lake",
         "user": "Mary",
-        "time": "16:00"
+        "time": "16:00",
+        "status": true
     },
     {
         "id": 5,
@@ -47,6 +51,7 @@
         "priority": "high",
         "project": "nust lake",
         "user": "John",
-        "time": "11:00"
+        "time": "11:00",
+        "status": false
     }
 ]

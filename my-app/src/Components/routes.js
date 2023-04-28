@@ -19,6 +19,7 @@ import AddParameter from "./parameters/AddParameterForm";
 import Readings from "./Readings/Readings.js";
 import DeviceTemplates from "./devices/devices-components/deviceTemplate";
 import ProjectApp from "./projects/ProjectApp";
+import Todos from "./Todos/Todos"
 
 function routes() {
   return (
@@ -41,7 +42,7 @@ function routes() {
       <Route path="/parameters" element={<ParameterTable />} />
       <Route path="/addParameter" element={<AddParameter />} />
       <Route path="/readings" element={<Readings />} />
-
+      <Route path="/todos" element={<Todos />} />
     </Routes>
   );
 }
