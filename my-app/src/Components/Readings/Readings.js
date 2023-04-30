@@ -5,12 +5,19 @@ import Button from "@mui/material/Button";
 import ReadingsTable from "./ReadingsTable.js";
 import CsvTokenizer from "./importCSV.js";
 import Papa from "papaparse";
-
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 
 import "./Readings.css";
+import CsvDownloadButton from "./TemplateDownload.js";
+
+
+
+
+
+//Creating
+
 
 // retrieve the data from the database here. Then pass it to the ReadingsTable component
 // as
@@ -48,9 +55,9 @@ export default function Readings() {
   };
 
   // This function downloads the template. It is in the public folder
-  function downLoadCSV() {
-    window.location.href = "/template.csv";
-  }
+  // function downLoadCSV() {
+  //   window.location.href = "/template.csv";
+  // }
 
   return (
     <div>
@@ -66,13 +73,15 @@ export default function Readings() {
           <Sidebar2 name="Readings" />
         </div>
         <div style={{ marginLeft: 150, marginTop: 20 }}>
-          <Button
+          {/* <Button
             variant="contained"
             style={{ marginLeft: "1%", padding: "0.5%", marginTop: "10px" }}
-            onClick={downLoadCSV}
+            //onClick={downLoadCSV}
+            
           >
-            Download Template
-          </Button>
+            <CSVLink {...csvReport}>Download Template</CSVLink>
+          </Button> */}
+          <CsvDownloadButton />
 
           <Button
             variant="contained"
@@ -101,7 +110,6 @@ function CSVTable(props){
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
-    // { field: "id", headerName: "ID", cellClassName: "name-column--cell" },
     {
       field: "Location",
       headerName: "Location",
@@ -169,17 +177,11 @@ function CSVTable(props){
       field: "BOD5",
       headerName: "BOD5 (mg/L)",
       cellClassName: "name-column--cell",
-      // type: "number",
-      // headerAlign: "left",
-      // align: "left"
       flex: 1
     },
     {
       field: "TotalPhosphorus",
       headerName: "Total Phosphorus (mg/L)",
-      // type: "number",
-      // headerAlign: "left",
-      // align: "left"
       flex: 2,
       cellClassName: "name-column--cell"
     },
@@ -188,8 +190,6 @@ function CSVTable(props){
       headerName: "Ammonia Nitrogen (mg/L)",
       cellClassName: "name-column--cell",
       flex: 2,
-
-      // flex: 1
     }
   ];
 
