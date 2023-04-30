@@ -93,7 +93,7 @@ const Sidebar2 = (props) => {
             <Item
               title="Dashboard"
               to="/dashboard"
-              icon={<TvRoundedIcon  />}
+              icon={<TvRoundedIcon />}
               selected={selected}
               setSelected={setSelected}
             />

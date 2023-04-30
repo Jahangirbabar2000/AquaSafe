@@ -8,6 +8,7 @@ import TextField from "./components-form/textfield.js";
 import Select from "./components-form/select.js";
 import Button from "./components-form/button.js";
 import axios from "axios";
+import { useSearchParams } from 'react-router-dom';
 
 const INITIAL_FORM_STATES = {
   latitude: "",
@@ -26,7 +27,10 @@ const checkboxOptions = ["Minute", "Hour", "Day", "month"];
 
 const DeviceDeployment = () => {
   const [sensors, setSensors] = useState([]);
-  const [markerPosition, setMarkerPosition] = useState([33.702299, 73.13]);
+  const [searchParams] = useSearchParams();
+  const latitude = searchParams.get('latitude');
+  const longitude = searchParams.get('longitude');
+  const [markerPosition, setMarkerPosition] = useState([parseFloat(latitude) || 33.703055, parseFloat(longitude) || 73.128089]);
 
   function handleMapClick(e) {
     const { lat, lng } = e.latlng;
@@ -43,7 +47,7 @@ const DeviceDeployment = () => {
     fetchSensors();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP
     const L = require("leaflet");
 

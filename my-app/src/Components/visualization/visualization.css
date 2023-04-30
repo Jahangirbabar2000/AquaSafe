@@ -42,3 +42,7 @@ h3 {
 .popup-text {
     font-size: 13px;
 }
+
+.leaflet-control-attribution{
+    font-size: 0;
+}

@@ -7,7 +7,7 @@ import LineGraph from "./graphs/LineChart";
 import BarGraph from "./graphs/BarGraph";
 import Box from "@mui/material/Box";
 import { ResponsiveContainer } from "recharts";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import "./visualization.css";
@@ -22,6 +22,7 @@ import Button from '@mui/material/Button';
 import { Icon } from "leaflet";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate } from "react-router-dom";
 
 const mdTheme = createTheme();
 
@@ -47,10 +48,16 @@ function App(props) {
     setMenuOpen(false); // Close the menu
   };
 
-
-  const handleMarkerClick = (marker) => {
+  function handleMarkerClick(marker) {
     setSelectedMarker(marker);
-    setSelectedStation(marker.Station)
+    setSelectedStation(marker.Station);
+  }
+
+  const navigate = useNavigate();
+  const handleDeviceSubmit = async (event) => {
+    event.preventDefault();
+    console.log(selectedMarker);
+    navigate(`/deviceDeployment?latitude=${selectedMarker.Latitude}&longitude=${selectedMarker.Longitude}`);
   };
 
 
@@ -100,6 +107,8 @@ function App(props) {
     axios.get("http://localhost:8080/stationCoordinates")
       .then((response) => {
         setStationCoordinates(response.data);
+        setSelectedMarker(response.data[0])
+        console.log(selectedMarker)
       })
       .catch((error) => {
         console.log(error);
@@ -152,6 +161,55 @@ function App(props) {
   }
 
 
+  function MapComponent({ stationCoordinates, selectedMarker, handleMarkerClick }) {
+    function CustomMap() {
+      const map = useMap();
+
+      React.useEffect(() => {
+        if (selectedMarker) {
+          const { Latitude, Longitude } = selectedMarker;
+          map.setView([Latitude, Longitude], map.getZoom());
+        }
+      }, [selectedMarker, map]);
+
+      return null;
+    }
+
+    return (
+      <MapContainer
+        center={selectedMarker ? [selectedMarker.Latitude, selectedMarker.Longitude] : [22.449919, 114.163583]}
+        zoom={15}
+        scrollWheelZoom={true}
+        style={{
+          marginLeft: '6vh',
+          width: '53vh',
+          height: '65vh',
+        }}
+      >
+        <CustomMap />
+        <TileLayer
+          url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
+        />
+        {stationCoordinates.map((marker) => (
+          <Marker
+            key={marker.Station}
+            position={[marker.Latitude, marker.Longitude]}
+            icon={selectedMarker === marker ? selectedIcon : customIcon}
+            eventHandlers={{
+              click: () => {
+                handleMarkerClick(marker);
+              },
+            }}
+          >
+            <Popup className="popup-text">{marker.Station}</Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    );
+  }
+
+
+
   return (
     <ThemeProvider theme={mdTheme}>
 
@@ -169,13 +227,14 @@ function App(props) {
               {/*           Right big section        */}
               {/**************************************/}
 
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, margin: 2 }}>
-                <Typography variant="h5" >Site: Lam Tsuen River</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                  <Typography variant="h5">Station: {selectedStation}</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, margin: 2 }}>
+                <Typography variant="h5">Site: Lam Tsuen River</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Typography variant="h5">Device: {selectedMarker.Station}</Typography>
                   <IconButton onClick={handleMenuOpen}>
                     <ExpandMoreIcon sx={{ fontSize: '2rem' }} />
                   </IconButton>
+                  <Button onClick={handleDeviceSubmit} variant="contained" color="primary">Add Device</Button> {/* Add your button component here */}
                 </Box>
                 <Menu
                   anchorEl={menuAnchor}
@@ -183,23 +242,28 @@ function App(props) {
                   onClose={() => setMenuOpen(false)}
                   PaperProps={{
                     sx: {
-                      '& .MuiMenuItem-root': { fontSize: '1.2rem', padding: '10px 20px', },
-                      '& .Mui-selected': { backgroundColor: '#f0f0f0', },
-                      '& .MuiMenu-list': { minWidth: '170px', maxHeight: '400px', overflow: 'auto', },
+                      '& .MuiMenuItem-root': { fontSize: '1.2rem', padding: '10px 20px' },
+                      '& .Mui-selected': { backgroundColor: '#f0f0f0' },
+                      '& .MuiMenu-list': { minWidth: '170px', maxHeight: '400px', overflow: 'auto' },
                     },
-                  }}>
+                  }}
+                >
                   {stationNames.map((name) => (
-                    <MenuItem key={name} onClick={() => {
-                      setMenuOpen(false);
-                      handleMenuItemClick(name);
-                    }} selected={selectedStation === name}>
+                    <MenuItem
+                      key={name}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        handleMenuItemClick(name);
+                      }}
+                      selected={selectedStation === name}
+                    >
                       {name}
                     </MenuItem>
                   ))}
                 </Menu>
               </Box>
-              <Paper sx={{ p: 2 }}>
 
+              <Paper sx={{ p: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="h6" display="inline">
                     TOP PARAMETERS
@@ -292,34 +356,11 @@ function App(props) {
                 {/**************************************/}
 
                 <Grid item sx={{ mt: 5 }} md={5} sm={5} alignItems="flex=end" justifyContent="flex=end">
-                  <MapContainer
-                    center={[22.449919, 114.163583]}
-                    zoom={15}
-                    scrollWheelZoom={true}
-                    style={{
-                      marginLeft: '6vh',
-                      width: '53vh',
-                      height: '65vh',
-                    }}
-                  >
-                    <TileLayer
-                      url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
-                    />
-                    {stationCoordinates.map((marker) => (
-                      <Marker
-                        key={marker.Station}
-                        position={[marker.Latitude, marker.Longitude]}
-                        icon={selectedMarker === marker ? selectedIcon : customIcon}
-                        eventHandlers={{
-                          click: (event) => {
-                            handleMarkerClick(marker);
-                          },
-                        }}
-                      >
-                        <Popup className="popup-text">{marker.Station}</Popup>
-                      </Marker>
-                    ))}
-                  </MapContainer>
+                  <MapComponent
+                    stationCoordinates={stationCoordinates}
+                    selectedMarker={selectedMarker}
+                    handleMarkerClick={handleMarkerClick}
+                  />
                   <Box container pl={20} pt={3}>
                   </Box>
                 </Grid>

@@ -25,7 +25,7 @@ const ProjectApp = () => {
             <Navbar />
             <Sidebar2 name="Projects" />
             <Grid marginLeft={47} marginTop={5}>
-                <Grid item xs={12} md={12}>
+                <Grid>
                     <Projects projects={projectList} />
                 </Grid>
             </Grid>
