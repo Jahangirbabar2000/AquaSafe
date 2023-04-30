@@ -13,6 +13,7 @@ import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import GroupIcon from "@mui/icons-material/Group";
 import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 import TableRowsOutlinedIcon from "@mui/icons-material/TableRowsOutlined";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
 
@@ -173,6 +174,13 @@ const Sidebar2 = (props) => {
               title="Users"
               to="/userstable"
               icon={<GroupIcon />}
+              selected={selected}
+            // setSelected={setSelected}
+            />
+            <Item
+              title="Tasks"
+              to="/todos"
+              icon={<EngineeringIcon />}
               selected={selected}
             // setSelected={setSelected}
             />

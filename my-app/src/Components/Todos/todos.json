@@ -1,52 +1,57 @@
 [
     {
         "id": 1,
-        "title": "Buy groceries",
-        "details": "Milk, eggs, bread, cheese",
+        "title": "Deploy new device",
+        "details": "Deploy A1 device at south-west corner of the lake",
         "date": "2023-05-01",
         "priority": "medium",
         "project": "rawal lake",
         "user": "John",
-        "time": "10:00"
+        "time": "10:00",
+        "status": false
     },
     {
         "id": 2,
-        "title": "Submit report",
-        "details": "Complete sales report and submit to boss",
+        "title": "Remove Device",
+        "details": "Remove device ID: AD3",
         "date": "2023-05-03",
         "priority": "high",
         "project": "nust lake",
         "user": "Mary",
-        "time": "14:00"
+        "time": "14:00",
+        "status": true
     },
     {
         "id": 3,
-        "title": "Book flight tickets",
-        "details": "Book flight tickets for summer vacation",
+        "title": "Add New Sensor",
+        "details": "Add pH sensor to device type 4",
         "date": "2023-05-10",
         "priority": "low",
         "project": "tarbela dam",
         "user": "John",
-        "time": "09:00"
+        "time": "09:00",
+        "status": true
     },
     {
         "id": 4,
-        "title": "Pay electricity bill",
-        "details": "Pay electricity bill for the month of May",
+        "title": "Move Device ID: AR4",
+        "details": "Move the device to the North-East corner of the Lake",
         "date": "2023-05-15",
         "priority": "medium",
         "project": "rawal lake",
         "user": "Mary",
-        "time": "16:00"
+        "time": "16:00",
+        "status": true
     },
     {
         "id": 5,
-        "title": "Attend meeting",
-        "details": "Attend team meeting to discuss project status",
+        "title": "Fix device ID: AN4",
+        "details": "The device is malfunctioning. Look into it.",
         "date": "2023-05-20",
         "priority": "high",
         "project": "nust lake",
         "user": "John",
-        "time": "11:00"
+        "time": "11:00",
+        "status": false
     }
 ]
