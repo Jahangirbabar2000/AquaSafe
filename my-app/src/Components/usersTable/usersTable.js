@@ -17,6 +17,17 @@ import { Link } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -43,20 +54,43 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function UsersTable() {
   const [usersData, setUsersData] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
 
   const getUsersData = async (req, res) => {
     res = await axios.get("http://localhost:8080/activeUsers");
-    console.log(res.data);
     setUsersData(res.data);
   };
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/users/${id}`);
+      await axios.delete(`http://localhost:8080/api/users/${id}`);
       setUsersData(usersData.filter((user) => user.Id !== id));
+      closeDeleteDialog();
+      setSnackbarOpen(true); // Show Snackbar on successful deletion
     } catch (err) {
       console.error(err);
     }
+  };
+
+
+
+  const openDeleteDialog = (id) => {
+    setOpenDialog(true);
+    setSelectedId(id);
+  };
+
+  const closeDeleteDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   useEffect(() => {
@@ -71,15 +105,14 @@ function UsersTable() {
         </Grid>
         <Grid item xs={8} sm={7} md={9}>
           <br />
-          <br />
           <h1>Active Users</h1>
-          <br />
           <br />
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell>First Name</StyledTableCell>
+                  <StyledTableCell>Last Name</StyledTableCell>
                   <StyledTableCell align="right">Email</StyledTableCell>
                   <StyledTableCell align="right">Designation</StyledTableCell>
                   <StyledTableCell align="right">Country</StyledTableCell>
@@ -94,6 +127,7 @@ function UsersTable() {
                     <StyledTableCell component="th" scope="row">
                       {row.FirstName}
                     </StyledTableCell>
+                    <StyledTableCell>{row.LastName}</StyledTableCell>
                     <StyledTableCell align="right">{row.Email}</StyledTableCell>
                     <StyledTableCell align="right">
                       {row.Designation}
@@ -103,12 +137,12 @@ function UsersTable() {
                     </StyledTableCell>
                     <StyledTableCell align="right">{row.Site}</StyledTableCell>
                     <StyledTableCell className="smallColumn" align="right">
-                      <Link to={`/edit/${row.Id}`}>
+                      <Link to={`/editUser/${row.Id}`}>
                         <EditIcon />
                       </Link>
                     </StyledTableCell>
                     <StyledTableCell className="smallColumn" align="right">
-                      <IconButton onClick={() => handleDelete(row.Id)}>
+                      <IconButton onClick={() => openDeleteDialog(row.Id)}>
                         <DeleteIcon />
                       </IconButton>
                     </StyledTableCell>
@@ -118,10 +152,51 @@ function UsersTable() {
             </Table>
           </TableContainer>
         </Grid>
-        <Grid container pt={5} pl={150}>
-          <Link to="/signup"></Link>
-        </Grid>
       </Grid>
+      <Dialog
+        open={openDialog}
+        onClose={closeDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Delete User Confirmation"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This action will remove this user from the system and unassign him/her from any assigned projects. Are you sure?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<CancelIcon />}
+            onClick={closeDeleteDialog}
+          >
+            No
+          </Button>
+          <Button
+            variant="outlined"
+            color="success"
+            startIcon={<CheckCircleIcon />}
+            onClick={() => handleDelete(selectedId)}
+          >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={handleCloseSnackbar} variant="filled" severity="success" sx={{ width: '100%' }}>
+          User deletion successful
+        </Alert>
+      </Snackbar>
+
     </div>
   );
 }

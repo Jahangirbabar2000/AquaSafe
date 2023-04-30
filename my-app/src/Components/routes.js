@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useContext } from 'react';
+import UserContext from './userAuth/UserContext';
 import UsersTable from "./usersTable/usersTable";
-import SignUp from "./signUp/signUp";
-import Login from "./login/login";
-// import Notifications from './notifications/notifications';
-// import dummyData from './dummyData/dummy.json'
-import { Route, Routes } from "react-router-dom";
+import SignUp from "./userAuth/signUp/signUp";
+import Login from "./userAuth/login/login";
+import { Route, Routes, Outlet, Navigate } from "react-router-dom";
 import Visualization from "./visualization/visualization";
 import Sites from "./sites/sites";
 import Homepage from "./homepage/homepage";
@@ -19,12 +18,25 @@ import AddParameter from "./parameters/AddParameterForm";
 import Readings from "./Readings/Readings.js";
 import DeviceTemplates from "./devices/devices-components/deviceTemplate";
 import ProjectApp from "./projects/ProjectApp";
+import EditUser from './usersTable/editUser';
+import Error404 from './userAuth/errorPage';
+
+const ProtectedOutlet = ({ allowedDesignations }) => {
+  const { user } = useContext(UserContext);
+  if (!user || !allowedDesignations.includes(user.designation)) {
+    return <Navigate to="/error404" />;
+  }
+  return <Outlet />;
+};
 
 function routes() {
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
-      <Route path="/userstable" element={<UsersTable />} />
+      <Route path="/userstable"
+        element={<ProtectedOutlet allowedDesignations={['Local Admin']} />}>
+        <Route index element={<UsersTable />} />
+      </Route>
       <Route path="/notifications" element={<NotificationTable />} />
       <Route path="/dashboard" element={<Visualization />} />
       <Route path="/sites" element={<Sites />} />
@@ -41,7 +53,8 @@ function routes() {
       <Route path="/parameters" element={<ParameterTable />} />
       <Route path="/addParameter" element={<AddParameter />} />
       <Route path="/readings" element={<Readings />} />
-
+      <Route path="/editUser/:id" element={<EditUser />} />
+      <Route path="/error404" element={<Error404 />} />
     </Routes>
   );
 }

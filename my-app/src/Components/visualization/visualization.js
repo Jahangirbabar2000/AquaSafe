@@ -160,56 +160,6 @@ function App(props) {
     )
   }
 
-
-  function MapComponent({ stationCoordinates, selectedMarker, handleMarkerClick }) {
-    function CustomMap() {
-      const map = useMap();
-
-      React.useEffect(() => {
-        if (selectedMarker) {
-          const { Latitude, Longitude } = selectedMarker;
-          map.setView([Latitude, Longitude], map.getZoom());
-        }
-      }, [selectedMarker, map]);
-
-      return null;
-    }
-
-    return (
-      <MapContainer
-        center={selectedMarker ? [selectedMarker.Latitude, selectedMarker.Longitude] : [22.449919, 114.163583]}
-        zoom={15}
-        scrollWheelZoom={true}
-        style={{
-          marginLeft: '6vh',
-          width: '53vh',
-          height: '65vh',
-        }}
-      >
-        <CustomMap />
-        <TileLayer
-          url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
-        />
-        {stationCoordinates.map((marker) => (
-          <Marker
-            key={marker.Station}
-            position={[marker.Latitude, marker.Longitude]}
-            icon={selectedMarker === marker ? selectedIcon : customIcon}
-            eventHandlers={{
-              click: () => {
-                handleMarkerClick(marker);
-              },
-            }}
-          >
-            <Popup className="popup-text">{marker.Station}</Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    );
-  }
-
-
-
   return (
     <ThemeProvider theme={mdTheme}>
 
@@ -356,11 +306,34 @@ function App(props) {
                 {/**************************************/}
 
                 <Grid item sx={{ mt: 5 }} md={5} sm={5} alignItems="flex=end" justifyContent="flex=end">
-                  <MapComponent
-                    stationCoordinates={stationCoordinates}
-                    selectedMarker={selectedMarker}
-                    handleMarkerClick={handleMarkerClick}
-                  />
+                  <MapContainer
+                    center={selectedMarker ? [selectedMarker.Latitude, selectedMarker.Longitude] : [22.449919, 114.163583]}
+                    zoom={15}
+                    scrollWheelZoom={true}
+                    style={{
+                      marginLeft: '6vh',
+                      width: '53vh',
+                      height: '65vh',
+                    }}
+                  >
+                    <TileLayer
+                      url="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
+                    />
+                    {stationCoordinates.map((marker) => (
+                      <Marker
+                        key={marker.Station}
+                        position={[marker.Latitude, marker.Longitude]}
+                        icon={selectedMarker === marker ? selectedIcon : customIcon}
+                        eventHandlers={{
+                          click: () => {
+                            handleMarkerClick(marker);
+                          },
+                        }}
+                      >
+                        <Popup className="popup-text">{marker.Station}</Popup>
+                      </Marker>
+                    ))}
+                  </MapContainer>
                   <Box container pl={20} pt={3}>
                   </Box>
                 </Grid>

@@ -12,7 +12,6 @@ const ProjectApp = () => {
         // Make Axios request to fetch project details from the backend
         axios.get('http://localhost:8080/projects')
             .then(response => {
-                console.log(response.data)
                 setProjectList(response.data);
             })
             .catch(error => {

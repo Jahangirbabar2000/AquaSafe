@@ -111,12 +111,12 @@ INSERT INTO Users VALUES (1, 'John', 'Doe', 'johndoe@gmail.com', '8c0dcb6d09f07c
 (5, 'Michael', 'Brown', 'michaelbrown@gmail.com','9876543210fedcba9876543210fedcba9');
 
 INSERT INTO Projects (Name, Location, Country, Longitude, Latitude, Description) VALUES 
-('Rawal Lake', 'Islamabad', 'Pakistan', 33.702092, 73.126568, 'Rawal Lake in Pakistan is an artificial reservoir that provides the water needs for the cities of 
+('Rawal Lake', 'Islamabad', 'Pakistan',  73.126568, 33.702092,'Rawal Lake in Pakistan is an artificial reservoir that provides the water needs for the cities of 
 Rawalpindi and Islamabad. Korang River along with some other small streams coming from Margalla Hills have
 been set to form this artificial lake which covers an area of 8.8 km². Korang River is the outlet stream of 
 Rawal Dam. Rawal Lake is located within an isolated section of the Village Malpur, Bani Gala and Margalla Hills National Park'),
 
-('Khanpur Dam', 'Khanpur, Khyber Pakhtunkhwa', 'Pakistan', 33.809096, 72.935843, 'Khanpur Dam is a dam located on the Haro River in Khanpur,
+('Khanpur Dam', 'Khanpur, Khyber Pakhtunkhwa', 'Pakistan', 72.935843,33.809096,'Khanpur Dam is a dam located on the Haro River in Khanpur,
  Khyber Pakhtunkhwa about 50 km from Islamabad. It forms Khanpur Lake, a reservoir which supplies drinking water to Islamabad and Rawalpindi and 
  irrigation water to many of the agricultural and industrial areas surrounding the cities.');
 
