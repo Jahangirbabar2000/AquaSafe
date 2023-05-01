@@ -14,15 +14,16 @@ const Projects = ({ projects }) => {
   };
 
   return (
-    <Container>
+    <Container maxWidth="lg">
       <Grid container spacing={2}>
         {projects.map((project) => (
-          <Grid item key={project.Id}>
+          <Grid item key={project.Id} xs={12} sm={6} md={4} lg={3}>
             <ProjectCard project={project} onCardClick={handleCardClick} />
           </Grid>
         ))}
       </Grid>
     </Container>
+
   );
 };
 

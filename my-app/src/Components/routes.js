@@ -55,6 +55,8 @@ function routes() {
       <Route path="/readings" element={<Readings />} />
       <Route path="/editUser/:id" element={<EditUser />} />
       <Route path="/error404" element={<Error404 />} />
+      <Route path="*" element={<Error404 />} />
+
     </Routes>
   );
 }

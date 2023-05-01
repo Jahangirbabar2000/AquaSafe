@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
-import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { Box, Typography } from "@mui/material";
+import { ProSidebar, Menu, MenuItem, SidebarHeader, SidebarFooter } from "react-pro-sidebar";
+import { Box, Typography, IconButton, useMediaQuery } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import TvRoundedIcon from "@mui/icons-material/TvRounded";
@@ -14,7 +14,8 @@ import GroupIcon from "@mui/icons-material/Group";
 import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 import TableRowsOutlinedIcon from "@mui/icons-material/TableRowsOutlined";
 import UserContext from '../userAuth/UserContext'
-
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   return (
@@ -30,14 +31,14 @@ const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   );
 };
 
-
 const Sidebar2 = (props) => {
-
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  
   const [selected, setSelected] = useState(props.name);
   const { user, setUser } = useContext(UserContext);
-
   const navigate = useNavigate();
+  const isMobile = useMediaQuery(theme => theme.breakpoints.down("sm"));
+  const [isCollapsed, setIsCollapsed] = useState(isMobile);
+  console.log(isMobile)
 
   const renderMenuItem = (designation, item) => {
     if (user && user.designation === designation) {
@@ -52,6 +53,10 @@ const Sidebar2 = (props) => {
     navigate('/'); // Navigate to homepage
   };
 
+  const iconButtonStyle = {
+    color: 'rgba(255, 255, 255, 1)',
+    transition: 'background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+  };
 
   return (
     <Box
@@ -62,19 +67,30 @@ const Sidebar2 = (props) => {
         "& .pro-inner-item:hover": { color: "#EF7E18 !important" },
         "& .pro-menu-item.active": { color: "#EF7E18 !important" },
         "& .pro-sidebar": {
-          position: "fixed",// boxSizing: "border-box",
+          position: "fixed",
           height: "100vh",
           fontSize: "50px"
-          // background:"blue"
-        },
-        "& .pro-sidebar.collapsed": { width: "100px" }
-      }}>
+        }
+      }}
+    >
       <ProSidebar collapsed={isCollapsed}>
+        {isMobile && (
+          <SidebarHeader style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+            <IconButton
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              style={iconButtonStyle}
+            >
+              {isCollapsed ? <MenuIcon /> : <CloseIcon />}
+            </IconButton>
+          </SidebarHeader>
+        )}
         <Menu iconShape="square">
           <Box paddingLeft={isCollapsed ? undefined : "5%"}>
-            <Typography variant="h6" color="#f5f5ff" sx={{ m: "15px 0 0 20px" }}>
-              Projects
-            </Typography>
+            {!isMobile && (
+              <Typography variant="h6" color="#f5f5ff" sx={{ m: "15px 0 0 20px" }}>
+                Projects
+              </Typography>
+            )}
             <Item
               title="Dashboard"
               to="/dashboard"
@@ -102,13 +118,15 @@ const Sidebar2 = (props) => {
               selected={selected}
             />
 
-            <Typography
-              variant="h6"
-              color="#f5f5ff"
-              sx={{ m: "15px 0 0 20px" }}
-            >
-              IoT
-            </Typography>
+            {!isMobile && (
+              <Typography
+                variant="h6"
+                color="#f5f5ff"
+                sx={{ m: "15px 0 0 20px" }}
+              >
+                IoT
+              </Typography>
+            )}
             <Item
               title="Devices"
               to="/deviceTemplate"
@@ -127,13 +145,15 @@ const Sidebar2 = (props) => {
               icon={<ScienceRoundedIcon />}
               selected={selected}
             />
-            <Typography
-              variant="h6"
-              color="#f5f5ff"
-              sx={{ m: "15px 0 0 20px" }}
-            >
-              Notifications
-            </Typography>
+            {!isMobile && (
+              <Typography
+                variant="h6"
+                color="#f5f5ff"
+                sx={{ m: "15px 0 0 20px" }}
+              >
+                Notifications
+              </Typography>
+            )}
             <Item
               title="Notifications"
               to="/notifications"
@@ -141,13 +161,15 @@ const Sidebar2 = (props) => {
               selected={selected}
             />
             {renderMenuItem('Local Admin', (
-              <Typography
-                variant="h6"
-                color="#f5f5ff"
-                sx={{ m: "15px 0 0 20px" }}
-              >
-                User Management
-              </Typography>
+              !isMobile && (
+                <Typography
+                  variant="h6"
+                  color="#f5f5ff"
+                  sx={{ m: "15px 0 0 20px" }}
+                >
+                  User Management
+                </Typography>
+              )
             ))}
             {renderMenuItem('Local Admin', (
               <Item
@@ -166,6 +188,11 @@ const Sidebar2 = (props) => {
             />
           </Box>
         </Menu>
+
+
+        <SidebarFooter>
+          {/* You can add any footer content here */}
+        </SidebarFooter>
       </ProSidebar>
     </Box>
   );

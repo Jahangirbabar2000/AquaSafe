@@ -3,10 +3,12 @@ import axios from 'axios';
 import Projects from './Projects';
 import Sidebar2 from '../sidebar/Sidebar2';
 import Navbar from '../navbar/navbar';
-import { Grid } from '@mui/material';
+import { Grid, useMediaQuery, useTheme } from '@mui/material';
 
 const ProjectApp = () => {
     const [projectList, setProjectList] = useState([]);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(() => {
         // Make Axios request to fetch project details from the backend
@@ -23,11 +25,12 @@ const ProjectApp = () => {
         <div style={{ backgroundColor: '#f2f2f2' }}>
             <Navbar />
             <Sidebar2 name="Projects" />
-            <Grid marginLeft={47} marginTop={5}>
-                <Grid>
+            <Grid container spacing={2} sx={{ marginTop: '1rem', marginLeft: isMobile ? '3.2rem' : '0' }}>
+                <Grid item xs={12}>
                     <Projects projects={projectList} />
                 </Grid>
             </Grid>
+
         </div>
     );
 };
