@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Sidebar2 from "../../sidebar/Sidebar2";
 import Navbar from "../../navbar/navbar";
-import { Formik, Form, Field, useFormik } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
-import TextField from "./components-form/textfield.js";
-import Select from "./components-form/select.js";
-import Button from "./components-form/button.js";
 import axios from "axios";
 import { useSearchParams } from 'react-router-dom';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, FormControlLabel, MenuItem, Paper, TextField, Button } from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Check from '@mui/icons-material/Check';
+
 
 const INITIAL_FORM_STATES = {
   latitude: "",
@@ -25,6 +26,20 @@ const FORM_VALIDATION = Yup.object().shape({
 
 const checkboxOptions = ["Minute", "Hour", "Day", "month"];
 
+const SENSOR_UNITS = {
+  "pH": ["pH"],
+  "Water Temperature": ["°C", "°F"],
+  "Turbidity": ["NTU", "FTU"],
+  "Total Phosphorus": ["mg/L", "µg/L"],
+  "Suspended solids": ["mg/L"],
+  "Nitrite-Nitrogen (NO2-N)": ["mg/L"],
+  "Nitrate-Nitrogen (NO3-N)": ["mg/L"],
+  "Dissolved Oxygen": ["mg/L", "ppm", "% saturation"],
+  "Ammonia-Nitrogen (NH3-N)": ["mg/L"],
+  "5-day Biochemical Oxygen Demand (BOD5)": ["mg/L"],
+};
+
+
 const DeviceDeployment = () => {
   const [sensors, setSensors] = useState([]);
   const [searchParams] = useSearchParams();
@@ -38,6 +53,23 @@ const DeviceDeployment = () => {
     const newLng = parseFloat(lng.toFixed(6));
     setMarkerPosition([newLat, newLng]);
   }
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            backgroundColor: 'whitesmoke',
+          },
+          root: {
+            paddingTop: 8,
+            paddingBottom: 7,
+          },
+        },
+      },
+    },
+  });
+
 
   useEffect(() => {
     const fetchSensors = async () => {
@@ -91,7 +123,6 @@ const DeviceDeployment = () => {
         style={{
           display: "grid",
           gridTemplateColumns: "27vh auto"
-          // gridGap: "2px"
         }}
       >
         <div>
@@ -129,106 +160,151 @@ const DeviceDeployment = () => {
                 <Formik
                   initialValues={{
                     ...INITIAL_FORM_STATES,
-                    sensors: sensors.map((sensor) => sensor.name),
+                    timeUnit: "Minute", // Set default value for timeUnit
+                    sensors: [],
+                    ...sensors.reduce((acc, sensor) => {
+                      acc[`${sensor.Name}_unit`] = SENSOR_UNITS[sensor.Name][0];
+                      return acc;
+                    }, {}),
                   }}
                   validationSchema={FORM_VALIDATION}
                   onSubmit={(values) => {
                     console.log(values);
                   }}
                 >
-                  <Form>
-                    <div style={{ display: "flex" }}>
-                      <TextField
-                        name="latitude"
-                        label="Latitude"
-                        value={markerPosition[0]}
-                        onChange={(e) => {
-                          const inputValue = e.target.value;
-                          let newLatitude = 0;
 
-                          if (inputValue !== "") {
-                            newLatitude = parseFloat(inputValue);
-                            if (isNaN(newLatitude)) {
-                              newLatitude = 0;
+                  {(props) => (
+                    <Form>
+                      <div style={{ display: "flex" }}>
+                        <TextField
+                          name="latitude"
+                          label="Latitude"
+                          value={markerPosition[0]}
+                          variant="standard"
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            let newLatitude = 0;
+                            if (inputValue !== "") {
+                              newLatitude = parseFloat(inputValue);
+                              if (isNaN(newLatitude)) {
+                                newLatitude = 0;
+                              }
                             }
-                          }
-                          setMarkerPosition([newLatitude, markerPosition[1]]);
-                        }}
-                        style={{ marginRight: "10px" }}
-                      />
+                            setMarkerPosition([newLatitude, markerPosition[1]]);
+                          }}
+                          style={{ marginRight: "10px" }}
+                        />
 
-                      <TextField
-                        name="longitude"
-                        label="Longitude"
-                        value={markerPosition[1]}
-                        onChange={(e) => {
-                          const inputValue = e.target.value;
-                          let newLongitude = 0;
+                        <TextField
+                          name="longitude"
+                          label="Longitude"
+                          variant="standard"
+                          value={markerPosition[1]}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            let newLongitude = 0;
 
-                          if (inputValue !== "") {
-                            newLongitude = parseFloat(inputValue);
-                            if (isNaN(newLongitude)) {
-                              newLongitude = 0;
+                            if (inputValue !== "") {
+                              newLongitude = parseFloat(inputValue);
+                              if (isNaN(newLongitude)) {
+                                newLongitude = 0;
+                              }
                             }
-                          }
-                          setMarkerPosition([markerPosition[0], newLongitude]);
-                        }}
-                      />
-                    </div>
-
-                    <div style={{ display: "flex", marginBottom: "10px" }}>
-                      <TextField
-                        name="frequency"
-                        label="Frequency"
-                        style={{ marginRight: "10px" }}
-                      />
-                      <Select
-                        name="timeUnit"
-                        label="Unit"
-                        options={checkboxOptions}
-                      />
-                    </div>
-
-                    <div>
-                      <h2>Sensors</h2>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                        }}
-                      >
-                        {sensors.map((sensor) => (
-                          <label
-                            key={sensor.Name}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              margin: "5px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <Field
-                              type="checkbox"
-                              name="sensors"
-                              value={sensor.Name}
-                              style={{ marginRight: "5px" }}
-                            />
-                            <span style={{ fontSize: "16px" }}>
-                              {sensor.Name}
-                            </span>
-                          </label>
-                        ))}
+                            setMarkerPosition([markerPosition[0], newLongitude]);
+                          }}
+                        />
                       </div>
-                    </div>
 
-                    <div style={{ height: 25 }}></div>
-                    <Button
-                      style={{ fontSize: "100px" }}
-                      sx={{ fontSize: "100px" }}
-                    >
-                      Add Device
-                    </Button>
-                  </Form>
+                      <div style={{ display: "flex", marginBottom: "10px" }}>
+                        <TextField
+                          name="frequency"
+                          label="Frequency"
+                          variant="standard"
+                          style={{ marginRight: "10px" }}
+                        />
+                        <TextField
+                          name="timeUnit"
+                          label="Unit"
+                          select
+                          fullWidth
+                          variant="standard"
+                          style={{ marginLeft: "15px" }}
+                        >
+                          {checkboxOptions.map((option, index) => (
+                            <MenuItem key={index} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </div>
+                      <div>
+                        <h2>Sensors</h2>
+                        <TableContainer component={Paper} style={{ maxHeight: 200, overflow: 'auto' }}>
+                          <ThemeProvider theme={theme}>
+                            <Table stickyHeader>
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell padding="checkbox">
+                                    <Check />
+                                  </TableCell>
+
+                                  <TableCell>Sensor Name</TableCell>
+                                  <TableCell>Unit</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {sensors.map((sensor) => (
+                                  <TableRow key={sensor.Name} style={{ backgroundColor: 'whitesmoke' }}>
+                                    <TableCell padding="checkbox">
+                                      <FormControlLabel
+                                        control={
+                                          <Field
+                                            as={Checkbox}
+                                            name="sensors"
+                                            value={sensor.Name}
+                                          />
+                                        }
+                                        label=""
+                                      />
+                                    </TableCell>
+                                    <TableCell>{sensor.Name}</TableCell>
+                                    <TableCell>
+                                      <TextField
+                                        name={`${sensor.Name}_unit`}
+                                        select
+                                        fullWidth
+                                        variant="standard"
+                                        value={props.values[`${sensor.Name}_unit`]} // Set the value attribute here
+                                      >
+
+                                        {SENSOR_UNITS[sensor.Name].map((unit, index) => (
+                                          <MenuItem key={index} value={unit}>
+                                            {unit}
+                                          </MenuItem>
+                                        ))}
+                                      </TextField>
+                                    </TableCell>
+
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </ThemeProvider>
+                        </TableContainer>
+
+                      </div>
+
+                      <div style={{ height: 25 }}></div>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        onClick={props.submitForm}
+                      >
+                        Add Device
+                      </Button>
+                    </Form>
+                  )}
                 </Formik>
               </div>
             </div>

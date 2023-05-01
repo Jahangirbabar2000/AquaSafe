@@ -11,17 +11,19 @@ function CsvTokenizer() {
             complete: (results) => {
                 const rows = results.data;
                 const headers = results.meta.fields;
-                const json = rows.slice(0,-1).map((row) =>
-                    headers.reduce((acc, header) => {
-                        acc[header] = row[header];
-                        return acc;
-                    }, {})
+                const json = rows.slice(0, -1).map((row, index) =>
+                    headers.reduce(
+                        (acc, header) => {
+                            acc[header] = row[header];
+                            return acc;
+                        },
+                        { id: index } // Add a unique id property to each row
+                    )
                 );
                 setJsonData(json);
             },
         });
     };
-
 
     const tokenizeCsv = () => {
         console.log(jsonData);

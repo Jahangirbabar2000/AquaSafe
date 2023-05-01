@@ -5,7 +5,7 @@ import { useField, useFormikContext } from 'formik';
 
 const SelectWrapper = ({
     name,
-    options,
+    options = {}, // Set a default value for options
     ...otherProps
 }) => {
     const { setFieldValue } = useFormikContext();

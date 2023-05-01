@@ -87,7 +87,10 @@ const Sidebar2 = (props) => {
         <Menu iconShape="square">
           <Box paddingLeft={isCollapsed ? undefined : "5%"}>
             {!isMobile && (
-              <Typography variant="h6" color="text.primary" sx={{ m: "15px 0 0 20px" }}>
+              <Typography variant="h6" sx={{
+                margin: "15px 0 0 20px",
+                color: "rgba(255, 255, 255, 1)",
+              }}>
                 Projects
               </Typography>
             )}
@@ -122,19 +125,14 @@ const Sidebar2 = (props) => {
             {!isMobile && (
               <Typography
                 variant="h6"
-                color="text.primary"
-                sx={{ m: "15px 0 0 20px" }}
+                sx={{
+                  margin: "15px 0 0 20px",
+                  color: "rgba(255, 255, 255, 1)",
+                }}
               >
                 IoT
               </Typography>
             )}
-            <Item
-              title="Devices"
-              to="/deviceTemplate"
-              icon={<RouterRoundedIcon />}
-              selected={selected}
-              onClick={() => setSelected("Devices")}
-            />
             <Item
               title="Projects"
               to="/projects"
@@ -152,8 +150,10 @@ const Sidebar2 = (props) => {
             {!isMobile && (
               <Typography
                 variant="h6"
-                color="text.primary"
-                sx={{ m: "15px 0 0 20px" }}
+                sx={{
+                  margin: "15px 0 0 20px",
+                  color: "rgba(255, 255, 255, 1)",
+                }}
               >
                 Notifications
               </Typography>
@@ -174,15 +174,18 @@ const Sidebar2 = (props) => {
               onClick={() => setSelected("Tasks")}
             />
 
-            {renderMenuItem('Local Admin', (
+            {!isMobile && renderMenuItem('Local Admin', (
               <Typography
                 variant="h6"
-                color="text.primary"
-                sx={{ m: "15px 0 0 20px" }}
+                sx={{
+                  margin: "15px 0 0 20px",
+                  color: "rgba(255, 255, 255, 1)",
+                }}
               >
                 User Management
               </Typography>
             ))}
+
             {renderMenuItem('Local Admin', (
               <Item
                 title="Users"

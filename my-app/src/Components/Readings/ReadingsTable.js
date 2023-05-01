@@ -1,7 +1,6 @@
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
-import "./Readings.css";
 import { Grid, TablePagination } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -35,22 +34,25 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function ReadingsTable() {
-
   const [ReadingsData, setReadingsData] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     // FIRST API REQUEST - Data
     axios.get(`http://localhost:8080/hkdata`)
       .then(response => {
-        setReadingsData(response.data);
+        const updatedData = response.data.map((row) => ({
+          ...row,
+          Location: "Lam Tsuen River, Hong Kong",
+          Dates: new Date(row.Dates).toLocaleDateString(),
+        }));
+        setReadingsData(updatedData);
       })
       .catch(error => console.log(error));
   }, []);
 
   const columns = [
-    { id: 'Location', label: 'Location', align: 'center' },
     { id: 'Station', label: 'Station', align: 'center' },
     { id: 'Date', label: 'Date', align: 'center' },
     { id: 'Temperature', label: 'Temperature (C)', align: 'center' },
@@ -78,16 +80,14 @@ function ReadingsTable() {
       <Grid spacing={40} container>
         <Grid item md={11}>
           <br />
-          <br />
           <div style={{ display: "flex", alignItems: "center" }}>
             <h1 style={{ flex: 1 }}>Existing Readings</h1>
+            {/* Add Location as h1 heading on the right end */}
+            <h1 style={{ flex: 1, textAlign: 'right' }}>Lam Tsuen River, Hong Kong</h1>
           </div>
           <br />
-          <br />
-
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
-
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
@@ -99,30 +99,35 @@ function ReadingsTable() {
               </TableHead>
 
               <TableBody>
-                {ReadingsData.map(row => (
+                {ReadingsData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
                   <StyledTableRow key={row.Id}>
-                    <StyledTableCell component="th" scope="row">{row.Location}</StyledTableCell>
                     <StyledTableCell align="center">{row.Station}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">{row.Dates}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">{row["Water Temperature (°C)"]}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">{row["pH"]}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">{row["Dissolved Oxygen (mg/L)"]}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">{row["Conductivity (µS/cm)"]}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">{row["Nitrite-Nitrogen (mg/L)"]}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">{row["5-Day Biochemical Oxygen Demand (mg/L)"]}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">{row["Total Phosphorus (mg/L)"]}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="center">{row["Ammonia-Nitrogen (mg/L)"]}</StyledTableCell>
+                    <StyledTableCell align="center">{row.Dates}</StyledTableCell>
+                    <StyledTableCell align="center">{row["Water Temperature (°C)"]}</StyledTableCell>
+                    <StyledTableCell align="center">{row["pH"]}</StyledTableCell>
+                    <StyledTableCell align="center">{row["Dissolved Oxygen (mg/L)"]}</StyledTableCell>
+                    <StyledTableCell align="center">{row["Conductivity (µS/cm)"]}</StyledTableCell>
+                    <StyledTableCell align="center">{row["Nitrite-Nitrogen (mg/L)"]}</StyledTableCell>
+                    <StyledTableCell align="center">{row["5-Day Biochemical Oxygen Demand (mg/L)"]}</StyledTableCell>
+                    <StyledTableCell align="center">{row["Total Phosphorus (mg/L)"]}</StyledTableCell>
+                    <StyledTableCell align="center">{row["Ammonia-Nitrogen (mg/L)"]}</StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
               <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
+                sx={{ overflow: 'unset' }} // <-- Added to remove scroll
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 component="div"
                 count={ReadingsData.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
+                style={{ // <-- Added to move TablePagination to the right bottom end
+                  display: 'flex',
+                  alignContent: 'flex-end',
+                  padding: '12px',
+                }}
               />
             </Table>
           </TableContainer>

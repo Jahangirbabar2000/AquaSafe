@@ -1,38 +1,33 @@
-import { React, useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { CSVLink } from "react-csv";
 import Button from "@mui/material/Button";
 
 const CsvDownloadButton = () => {
+  const [parameterNames, setParameterNames] = useState([]);
 
-  //Retrieve the Names of the parameters from the database.
-  //I have already written a function in index.js (backend)
-  //The retrieved data should look like this.
-  //Set this retrieved data equal to the variable "data" given below
-  const data = [
-    { Name: "Oxygen" },
-    { Name: "pH" },
-    { Name: "Nitrogen" },
-    { Name: "CO2" }
-  ];
-    const [parameterNames, setParameterNames] = useState(data);
-  
+  // Function to retrieve parameter names
+  const getParameterNames = async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/parameters");
+      setParameterNames(res.data);
+    } catch (error) {
+      console.error("Error fetching parameter names", error);
+    }
+  };
 
-    // Code to retrieve parameter names
+  // Fetch parameter names on component mount
+  useEffect(() => {
+    getParameterNames();
+  }, []);
 
-    // const getParameterNames = async (req, res) => {
-    //     res = await axios.get("http://localhost:8080/parameterNames");
-    //     console.log(res.data);
-    //     setParametersData(res.data);
-    // };
-
-    const names = parameterNames.map(item => item.Name);
+  const names = parameterNames.map(item => item.Name);
 
   const csvReport = {
     filename: "template.csv",
-    headers: names, // Use the names array as headers
-    data: data,
+    headers: names,
+    data: [],
   };
-
 
   return (
     <Button
@@ -43,13 +38,16 @@ const CsvDownloadButton = () => {
         marginTop: "10px"
       }}
     >
-      {" "}
-          <CSVLink style={{
-              textDecoration: "none",
-              width: "100%",
-              color: "white"
-
-          }} {...csvReport}>Download Template</CSVLink>
+      <CSVLink
+        style={{
+          textDecoration: "none",
+          width: "100%",
+          color: "white"
+        }}
+        {...csvReport}
+      >
+        Download Template
+      </CSVLink>
     </Button>
   );
 };

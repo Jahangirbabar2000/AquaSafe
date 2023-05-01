@@ -25,7 +25,8 @@ const ProjectApp = () => {
         <div style={{ backgroundColor: '#f2f2f2' }}>
             <Navbar />
             <Sidebar2 name="Projects" />
-            <Grid container spacing={2} sx={{ marginTop: '1rem', marginLeft: isMobile ? '3.2rem' : '0' }}>
+            <Grid container spacing={2}
+                sx={{ marginTop: '1rem', marginLeft: isMobile ? '3.2rem' : '8rem' }}>
                 <Grid item xs={12}>
                     <Projects projects={projectList} />
                 </Grid>

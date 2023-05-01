@@ -44,18 +44,9 @@ CREATE TABLE `Communication` (
   `Transmitter/recieverID` VARCHAR (20),
   PRIMARY KEY (`Id`)
 );
-CREATE TABLE `DevicesCatalogue` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `Model` VARCHAR (20),
-  `Name` VARCHAR (50),
-  `CommTech` INT NOT NULL,
-  `Sensors` JSON,
-  FOREIGN KEY (`CommTech`) REFERENCES `Communication`(`Id`),
-  PRIMARY KEY (`Id`)
-);
+
 CREATE TABLE `DeployedDevices` (
   `Id` INT NOT NULL AUTO_INCREMENT,
-  `DeviceType` INT NOT NULL,
   `Name` VARCHAR (20),
   `Longitude` Float,
   `Latitude` Float,
@@ -64,28 +55,20 @@ CREATE TABLE `DeployedDevices` (
   `Locality` VARCHAR (50),
   `CommTech` Enum ('LORAWAN', 'GSM'),
   `StatusCode` Int,
+  `Sensors` JSON,
   PRIMARY KEY (`Id`),
-  FOREIGN KEY (`DeviceType`) REFERENCES `DevicesCatalogue`(`Id`),
   FOREIGN KEY (`Project`) REFERENCES `Projects`(`Id`)
 );
-CREATE TABLE `SensorsCatalogue` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `Parameter` VARCHAR (50) not null,
-  `Model` VARCHAR (20),
-  `SensorMin` Float,
-  `SensorMax` Float,
-   PRIMARY KEY (`Id`),
-   FOREIGN KEY (`Parameter`) REFERENCES `WaterParameters`(`Name`)
-);
+
 CREATE TABLE `Readings` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Time` Date,
   `Reading` VARCHAR (20),
   `Device` INT NOT NULL,
-  `Sensor` INT NOT NULL,
+  `Parameter` INT NOT NULL,
   PRIMARY KEY (`Id`),
   FOREIGN KEY (`Device`) REFERENCES `DeployedDevices`(`Id`),
-  FOREIGN KEY (`Sensor`) REFERENCES `SensorsCatalogue`(`Id`)
+  FOREIGN KEY (`Parameter`) REFERENCES `WaterParameters`(`Name`)
 );
 CREATE TABLE `Notifications` (
   `Id` INT NOT NULL AUTO_INCREMENT,
@@ -98,7 +81,7 @@ CREATE TABLE `Notifications` (
   `User` INT NOT NULL,
   PRIMARY KEY (`Id`),
   FOREIGN KEY (`Sensor`) REFERENCES `Readings`(`Id`),
-  FOREIGN KEY (`Device`) REFERENCES `DevicesCatalogue`(`Id`),
+  FOREIGN KEY (`Device`) REFERENCES `DeployedDevices`(`Id`),
   FOREIGN KEY (`User`) REFERENCES `Users`(`Id`)
 );
 CREATE TABLE `Action` (

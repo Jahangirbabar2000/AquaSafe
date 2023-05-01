@@ -39,19 +39,16 @@ export default function Readings() {
       complete: results => {
         const rows = results.data;
         const headers = results.meta.fields;
-        const json = rows.slice(0, -1).map(row =>
+        const json = rows.slice(0, -1).map((row, index) =>
           headers.reduce((acc, header) => {
             acc[header] = row[header];
             return acc;
-          }, {})
+          }, { id: index }) // Add a unique id property to each row
         );
         setJsonData(json);
         setCSV(true);
-      
       }
     });
-    console.log(jsonData);
-      console.log("data hasbeen uploaded");
   };
 
   // This function downloads the template. It is in the public folder
@@ -72,15 +69,7 @@ export default function Readings() {
         <div>
           <Sidebar2 name="Readings" />
         </div>
-        <div style={{ marginLeft: 150, marginTop: 20 }}>
-          {/* <Button
-            variant="contained"
-            style={{ marginLeft: "1%", padding: "0.5%", marginTop: "10px" }}
-            //onClick={downLoadCSV}
-            
-          >
-            <CSVLink {...csvReport}>Download Template</CSVLink>
-          </Button> */}
+        <div style={{ marginLeft: 150, marginTop: 20 }}>    
           <CsvDownloadButton />
 
           <Button

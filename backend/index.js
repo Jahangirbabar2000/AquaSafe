@@ -348,13 +348,6 @@ app.post('/sensors', (req, res) => {
     });
 });
 
-app.get('/deviceTemplates', (req, res) => {
-    connection.query('SELECT sc.Name, sc.Model, sc.Sensors, c.Type as CommTech FROM AquaSafe.DevicesCatalogue as sc, AquaSafe.Communication as c where sc.CommTech = c.Id;', (err, rows) => {
-        if (err) throw err;
-        res.send(rows);
-    });
-});
-
 // Create route to retrieve parameters data from database
 app.get('/parameters', (req, res) => {
     connection.query('select * from WaterParameters', (err, rows) => {
@@ -362,15 +355,6 @@ app.get('/parameters', (req, res) => {
         res.send(rows);
     });
 });
-
-// Create route to retrieve parameter Names for csv template download in Readings Page
-app.get('/parameterNames', (req, res) => {
-    connection.query('select Name from WaterParameters', (err, rows) => {
-        if (err) throw err;
-        res.send(rows);
-    });
-});
-
 
 app.post('/parameters', (req, res) => {
     const data = req.body;

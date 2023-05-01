@@ -9,10 +9,8 @@ import Sites from "./sites/sites";
 import Homepage from "./homepage/homepage";
 import DeviceDeployment from "./devices/devices-components/device-deployment";
 import NewProject from "./NewProjectForm/NewProject";
-import AddSensor from "./Sensor/addSensor";
 import WaterQualityPage from "./parameters/parameters";
 import NotificationTable from "./notifications/NotificationTable/NotificationTable";
-import SensorsTable from "./Sensor/sensorsTable";
 import ParameterTable from "./parameters/ParameterTable"
 import AddParameter from "./parameters/AddParameterForm";
 import Readings from "./Readings/Readings.js";
@@ -48,8 +46,6 @@ function routes() {
       <Route path="/deviceDeployment" element={<DeviceDeployment />} />
       <Route path="/newProject" element={<NewProject />} />
       <Route path="/projects" element={<ProjectApp />} />
-      <Route path="/addSensor" element={<AddSensor />} />
-      <Route path="/sensors" element={<SensorsTable />} />
       <Route path="/WaterQualityPage" element={<WaterQualityPage />} />
       <Route path="/parameters" element={<ParameterTable />} />
       <Route path="/addParameter" element={<AddParameter />} />
