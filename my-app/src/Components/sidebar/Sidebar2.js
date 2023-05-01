@@ -13,11 +13,12 @@ import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import GroupIcon from "@mui/icons-material/Group";
 import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 import TableRowsOutlinedIcon from "@mui/icons-material/TableRowsOutlined";
-import UserContext from '../userAuth/UserContext'
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import UserContext from '../userAuth/UserContext';
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
-const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
+const Item = ({ title, to, icon, selected, onClick }) => {
   return (
     <MenuItem
       active={selected === title}
@@ -25,20 +26,19 @@ const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
       icon={icon}
       onClick={onClick} // Pass the onClick prop here
     >
-      <Typography sx={{ fontSize: 16 }}>{title}</Typography>
+      <Typography variant="body1">{title}</Typography>
       <Link to={to} />
     </MenuItem>
   );
 };
 
 const Sidebar2 = (props) => {
-  
   const [selected, setSelected] = useState(props.name);
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
-  const isMobile = useMediaQuery(theme => theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
-  console.log(isMobile)
+  console.log(isMobile);
 
   const renderMenuItem = (designation, item) => {
     if (user && user.designation === designation) {
@@ -87,7 +87,7 @@ const Sidebar2 = (props) => {
         <Menu iconShape="square">
           <Box paddingLeft={isCollapsed ? undefined : "5%"}>
             {!isMobile && (
-              <Typography variant="h6" color="#f5f5ff" sx={{ m: "15px 0 0 20px" }}>
+              <Typography variant="h6" color="text.primary" sx={{ m: "15px 0 0 20px" }}>
                 Projects
               </Typography>
             )}
@@ -96,32 +96,33 @@ const Sidebar2 = (props) => {
               to="/dashboard"
               icon={<TvRoundedIcon />}
               selected={selected}
-              setSelected={setSelected}
+              onClick={() => setSelected("Dashboard")}
             />
             <Item
               title="Sites"
               to="/sites"
               icon={<LocationOnRoundedIcon />}
               selected={selected}
-              setSelected={setSelected}
+              onClick={() => setSelected("Sites")}
             />
             <Item
               title="Create New Project"
               to="/newProject"
               icon={<ContentPasteRoundedIcon />}
               selected={selected}
+              onClick={() => setSelected("Create New Project")}
             />
             <Item
               title="Readings"
               to="/readings"
               icon={<TableRowsOutlinedIcon />}
               selected={selected}
+              onClick={() => setSelected("Readings")}
             />
-
             {!isMobile && (
               <Typography
                 variant="h6"
-                color="#f5f5ff"
+                color="text.primary"
                 sx={{ m: "15px 0 0 20px" }}
               >
                 IoT
@@ -132,23 +133,26 @@ const Sidebar2 = (props) => {
               to="/deviceTemplate"
               icon={<RouterRoundedIcon />}
               selected={selected}
+              onClick={() => setSelected("Devices")}
             />
             <Item
               title="Projects"
               to="/projects"
               icon={<SensorsRoundedIcon />}
               selected={selected}
+              onClick={() => setSelected("Projects")}
             />
             <Item
               title="Parameters"
               to="/parameters"
               icon={<ScienceRoundedIcon />}
               selected={selected}
+              onClick={() => setSelected("Parameters")}
             />
             {!isMobile && (
               <Typography
                 variant="h6"
-                color="#f5f5ff"
+                color="text.primary"
                 sx={{ m: "15px 0 0 20px" }}
               >
                 Notifications
@@ -159,17 +163,25 @@ const Sidebar2 = (props) => {
               to="/notifications"
               icon={<NotificationsRoundedIcon />}
               selected={selected}
+              onClick={() => setSelected("Notifications")}
             />
+
+            <Item
+              title="Tasks"
+              to="/todos"
+              icon={<EngineeringIcon />}
+              selected={selected}
+              onClick={() => setSelected("Tasks")}
+            />
+
             {renderMenuItem('Local Admin', (
-              !isMobile && (
-                <Typography
-                  variant="h6"
-                  color="#f5f5ff"
-                  sx={{ m: "15px 0 0 20px" }}
-                >
-                  User Management
-                </Typography>
-              )
+              <Typography
+                variant="h6"
+                color="text.primary"
+                sx={{ m: "15px 0 0 20px" }}
+              >
+                User Management
+              </Typography>
             ))}
             {renderMenuItem('Local Admin', (
               <Item
@@ -177,6 +189,7 @@ const Sidebar2 = (props) => {
                 to="/userstable"
                 icon={<GroupIcon />}
                 selected={selected}
+                onClick={() => setSelected("Users")}
               />
             ))}
 
