@@ -18,6 +18,7 @@ import AddParameter from "./parameters/AddParameterForm";
 import Readings from "./Readings/Readings.js";
 import DeviceTemplates from "./devices/devices-components/deviceTemplate";
 import ProjectApp from "./projects/ProjectApp";
+import Todos from "./Todos/Todos"
 import EditUser from './usersTable/editUser';
 import Error404 from './userAuth/errorPage';
 
@@ -53,6 +54,7 @@ function routes() {
       <Route path="/parameters" element={<ParameterTable />} />
       <Route path="/addParameter" element={<AddParameter />} />
       <Route path="/readings" element={<Readings />} />
+      <Route path="/todos" element={<Todos />} />
       <Route path="/editUser/:id" element={<EditUser />} />
       <Route path="/error404" element={<Error404 />} />
     </Routes>

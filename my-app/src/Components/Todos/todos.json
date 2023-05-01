@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "title": "Deploy new device",
+        "details": "Deploy A1 device at south-west corner of the lake",
+        "date": "2023-05-01",
+        "priority": "medium",
+        "project": "rawal lake",
+        "user": "John",
+        "time": "10:00",
+        "status": false
+    },
+    {
+        "id": 2,
+        "title": "Remove Device",
+        "details": "Remove device ID: AD3",
+        "date": "2023-05-03",
+        "priority": "high",
+        "project": "nust lake",
+        "user": "Mary",
+        "time": "14:00",
+        "status": true
+    },
+    {
+        "id": 3,
+        "title": "Add New Sensor",
+        "details": "Add pH sensor to device type 4",
+        "date": "2023-05-10",
+        "priority": "low",
+        "project": "tarbela dam",
+        "user": "John",
+        "time": "09:00",
+        "status": true
+    },
+    {
+        "id": 4,
+        "title": "Move Device ID: AR4",
+        "details": "Move the device to the North-East corner of the Lake",
+        "date": "2023-05-15",
+        "priority": "medium",
+        "project": "rawal lake",
+        "user": "Mary",
+        "time": "16:00",
+        "status": true
+    },
+    {
+        "id": 5,
+        "title": "Fix device ID: AN4",
+        "details": "The device is malfunctioning. Look into it.",
+        "date": "2023-05-20",
+        "priority": "high",
+        "project": "nust lake",
+        "user": "John",
+        "time": "11:00",
+        "status": false
+    }
+]

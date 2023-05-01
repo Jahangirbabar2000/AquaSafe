@@ -363,6 +363,15 @@ app.get('/parameters', (req, res) => {
     });
 });
 
+// Create route to retrieve parameter Names for csv template download in Readings Page
+app.get('/parameterNames', (req, res) => {
+    connection.query('select Name from WaterParameters', (err, rows) => {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
+
 app.post('/parameters', (req, res) => {
     const data = req.body;
     const query = `INSERT into WaterParameters(Name, Description, Unit, Min, Max) VALUES('${data.ParameterName}', '${data.ParameterDescription}', '${data.ParameterUnit}', ${data.ParameterMin}, ${data.ParameterMax});`;

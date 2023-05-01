@@ -13,8 +13,8 @@ import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import GroupIcon from "@mui/icons-material/Group";
 import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 import TableRowsOutlinedIcon from "@mui/icons-material/TableRowsOutlined";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 import UserContext from '../userAuth/UserContext'
-
 
 const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   return (
@@ -29,7 +29,6 @@ const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
     </MenuItem>
   );
 };
-
 
 const Sidebar2 = (props) => {
 
@@ -140,6 +139,26 @@ const Sidebar2 = (props) => {
               icon={<NotificationsRoundedIcon />}
               selected={selected}
             />
+            
+            <Item
+              title="Tasks"
+              to="/todos"
+              icon={<EngineeringIcon />}
+              selected={selected}
+            // setSelected={setSelected}
+            />
+            {/* <SubMenu
+              icon={<MapOutlinedIcon />}
+              style={{ color: "#f5f5ff" }}
+              title="Submenu"
+            >
+              <Item
+                title="item 1"
+                to="/sites"
+                icon={<MapOutlinedIcon />}
+                selected={selected}
+              // setSelected={setSelected}
+              
             {renderMenuItem('Local Admin', (
               <Typography
                 variant="h6"
