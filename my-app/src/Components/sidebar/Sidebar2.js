@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Box, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import TvRoundedIcon from "@mui/icons-material/TvRounded";
 import ContentPasteRoundedIcon from "@mui/icons-material/ContentPasteRounded";
@@ -14,18 +14,15 @@ import GroupIcon from "@mui/icons-material/Group";
 import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
 import TableRowsOutlinedIcon from "@mui/icons-material/TableRowsOutlined";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import UserContext from '../userAuth/UserContext'
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
-
+const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   return (
     <MenuItem
-      // onClick={() => setSelected(title)}
       active={selected === title}
-      style={{
-        color: "#f5f5ff"
-      }}
-
+      style={{ color: "#f5f5ff" }}
       icon={icon}
+      onClick={onClick} // Pass the onClick prop here
     >
       <Typography sx={{ fontSize: 16 }}>{title}</Typography>
       <Link to={to} />
@@ -34,10 +31,26 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 };
 
 const Sidebar2 = (props) => {
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState(props.name);
+  const { user, setUser } = useContext(UserContext);
 
-  // setSelected(props.name);
+  const navigate = useNavigate();
+
+  const renderMenuItem = (designation, item) => {
+    if (user && user.designation === designation) {
+      return item;
+    }
+    return null;
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwt'); // Remove JWT token from local storage
+    setUser(null); // Update userContext to null
+    navigate('/'); // Navigate to homepage
+  };
+
 
   return (
     <Box
@@ -55,38 +68,8 @@ const Sidebar2 = (props) => {
         },
         "& .pro-sidebar.collapsed": { width: "100px" }
       }}>
-
       <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
-          {/* LOGO AND MENU ICON */}
-          {/* <MenuItem
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            icon={
-              isCollapsed ? (
-                <MenuOutlinedIcon style={{ fontSize: 30 }} />
-              ) : (
-                undefined
-              )
-            }
-            style={{
-              margin: "10px 0 15px 7px",
-              color: "#f5f5ff"
-            }}
-          >
-            {!isCollapsed && (
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                ml="15px"
-              >
-                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                  <MenuOutlinedIcon style={{ color: "#f5f5ff" }} />
-                </IconButton>
-              </Box>
-            )}
-          </MenuItem> */}
-
           <Box paddingLeft={isCollapsed ? undefined : "5%"}>
             <Typography variant="h6" color="#f5f5ff" sx={{ m: "15px 0 0 20px" }}>
               Projects
@@ -110,14 +93,12 @@ const Sidebar2 = (props) => {
               to="/newProject"
               icon={<ContentPasteRoundedIcon />}
               selected={selected}
-            // setSelected={setSelected}
             />
             <Item
               title="Readings"
               to="/readings"
               icon={<TableRowsOutlinedIcon />}
               selected={selected}
-            // setSelected={setSelected}
             />
 
             <Typography
@@ -132,22 +113,18 @@ const Sidebar2 = (props) => {
               to="/deviceTemplate"
               icon={<RouterRoundedIcon />}
               selected={selected}
-            // setSelected={setSelected}
             />
             <Item
               title="Projects"
               to="/projects"
               icon={<SensorsRoundedIcon />}
               selected={selected}
-            // setSelected={setSelected}
             />
-
             <Item
               title="Parameters"
               to="/parameters"
               icon={<ScienceRoundedIcon />}
               selected={selected}
-            // setSelected={setSelected}
             />
             <Typography
               variant="h6"
@@ -161,22 +138,8 @@ const Sidebar2 = (props) => {
               to="/notifications"
               icon={<NotificationsRoundedIcon />}
               selected={selected}
-            // setSelected={setSelected}
             />
-            <Typography
-              variant="h6"
-              color="#f5f5ff"
-              sx={{ m: "15px 0 0 20px" }}
-            >
-              User Management
-            </Typography>
-            <Item
-              title="Users"
-              to="/userstable"
-              icon={<GroupIcon />}
-              selected={selected}
-            // setSelected={setSelected}
-            />
+            
             <Item
               title="Tasks"
               to="/todos"
@@ -195,27 +158,30 @@ const Sidebar2 = (props) => {
                 icon={<MapOutlinedIcon />}
                 selected={selected}
               // setSelected={setSelected}
+              
+            {renderMenuItem('Local Admin', (
+              <Typography
+                variant="h6"
+                color="#f5f5ff"
+                sx={{ m: "15px 0 0 20px" }}
               >
-                {" "}
-              </Item>
+                User Management
+              </Typography>
+            ))}
+            {renderMenuItem('Local Admin', (
               <Item
-                title="item 2"
-                to="/sites"
-                icon={<MapOutlinedIcon />}
+                title="Users"
+                to="/userstable"
+                icon={<GroupIcon />}
                 selected={selected}
-              // setSelected={setSelected}
-              >
-                {" "}
-              </Item>
-            </SubMenu> */}
-            {/* <br/> */}
-            {/* <br/> */}
+              />
+            ))}
+
             <Item
               title="Logout"
-              to="/homepage"
               icon={<LogoutRoundedIcon />}
               selected={selected}
-            // setSelected={setSelected}
+              onClick={handleLogout}
             />
           </Box>
         </Menu>

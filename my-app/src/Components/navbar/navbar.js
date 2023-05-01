@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../homepage/homepage.css";
 import { Link } from "react-router-dom";
 import aquasafeLogo from "../../AquaSafe.png";
@@ -14,24 +14,37 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import data from "../notifications/NotificationBox/notification.json";
 import RenderNotifications from "../notifications/NotificationBox/notification.js";
 import { styled } from '@mui/system';
+import UserContext from "../userAuth/UserContext";
+import { Typography } from "@mui/material";
 
 const Root = styled("div")(({ theme }) => ({
-  "& .MuiPaper-root": {
-    color: "black",
-    height: 55
-  }
+    "& .MuiPaper-root": {
+        color: "black",
+        height: 55
+    }
 }));
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 export default function Navbar() {
+    const { user } = useContext(UserContext);  // Access the user property from UserContext
+
+    // Display user's full name if available
+    const userFullName = user && user.firstName && user.lastName
+        ? `${user.firstName} ${user.lastName}`
+        : "";
+
+    // Display user's designation with parentheses
+    const userDesignation = user && user.designation
+        ? `(${user.designation})`
+        : "";
+
     let [isNotification, setNotification] = useState(false);
     const notificationCount = Object.keys(data).length;
     const handleNotificationClick = () => {
         setNotification(!isNotification);
     };
+
     return (
         <Root>
-
             <Box sx={{ flexGrow: 1, paddingBottom: 7 }}>
                 <AppBar position="fixed" sx={{ background: "white" }}>
                     <Toolbar>
@@ -40,6 +53,16 @@ export default function Navbar() {
                         </Link>
 
                         <Box sx={{ flexGrow: 1 }} />
+                        <Box sx={{ marginRight: 2 }}>
+                            <Typography variant="h6" sx={{ color: "#00356B" }}>
+                                {userFullName}
+                                {/* <span> </span>
+                                <Typography component="span" variant="subtitle1" sx={{ color: "#777" }}>
+                                    {userDesignation}
+                                </Typography> */}
+                            </Typography>
+                        </Box>
+
                         <Box sx={{ display: { xs: "none", md: "flex" } }}>
                             <IconButton
                                 size="large"
@@ -93,8 +116,8 @@ export default function Navbar() {
                         </Box>
                     </Toolbar>
                 </AppBar>
-                {/* {renderMobileMenu} */}
-                {/* {renderMenu} */}
+                {/* {renderMobileMenu} /}
+{/ {renderMenu} */}
             </Box>
         </Root>
     );

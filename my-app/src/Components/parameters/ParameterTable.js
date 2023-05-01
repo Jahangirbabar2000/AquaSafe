@@ -16,6 +16,8 @@ import TableRow from "@mui/material/TableRow";
 import { Link } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Alert from '@mui/material/Alert';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -120,14 +122,14 @@ function ParameterTable() {
                     </StyledTableCell>
                     <StyledTableCell className="smallColumn" align="center">
                       <Tooltip title="Edit">
-                        <Link to={`/edit/${row.Id}`}>
+                        <Link to={`/edit/${row.Name}`}>
                           <EditIcon />
                         </Link>
                       </Tooltip>
                     </StyledTableCell>
                     <StyledTableCell className="smallColumn" align="center">
                       <Tooltip title="Delete">
-                        <IconButton onClick={() => handleDelete(row.Id)}>
+                        <IconButton onClick={() => handleDelete(row.Name)}>
                           <DeleteIcon />
                         </IconButton>
                       </Tooltip>
@@ -142,11 +144,12 @@ function ParameterTable() {
             open={open}
             autoHideDuration={3000}
             onClose={() => setOpen(false)}
-            message={message}
-          />
-        </Grid>
-        <Grid container pt={5} pl={150}>
-          <Link to="/signup"></Link>
+          >
+            <Alert onClose={() => setOpen(false)} severity="success" variant="filled">
+              {message}
+            </Alert>
+          </Snackbar>
+
         </Grid>
       </Grid>
     </div>
