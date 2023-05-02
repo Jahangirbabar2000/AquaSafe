@@ -56,10 +56,10 @@ export default function Navbar() {
                         <Box sx={{ marginRight: 2 }}>
                             <Typography variant="h6" sx={{ color: "#00356B" }}>
                                 {userFullName}
-                                {/* <span> </span>
+                                <span> </span>
                                 <Typography component="span" variant="subtitle1" sx={{ color: "#777" }}>
                                     {userDesignation}
-                                </Typography> */}
+                                </Typography>
                             </Typography>
                         </Box>
 

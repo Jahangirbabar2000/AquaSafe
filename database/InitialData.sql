@@ -103,6 +103,38 @@ during the breakdown of nitrate by bacteria in water. Like nitrate, nitrite can 
  safe for human consumption, and that it meets the standards for Nitrite-Nitrogen established by the World Health Organization 
  (WHO) and national and local regulatory agencies.', 'mg/L' , 0, 1);
 
+INSERT INTO `waterparameters` (`Name`, `Description`) VALUES
+('Total Dissolved Solids (TDS)', 'Measurement of the total amount of dissolved solids in water, including minerals, salts, and organic compounds.'),
+('Conductivity', 'Measurement of the ability of water to conduct an electric current, which is influenced by the presence of dissolved ions and can indicate water salinity or contamination.'),
+('Total Coliforms', 'Indicator of the presence of coliform bacteria in water, which can be an indication of fecal contamination and potential health risks.'),
+('Escherichia coli (E. coli)', 'Presence of Escherichia coli bacteria in water, which is an indicator of recent fecal contamination and potential pathogens.'),
+('Chemical Oxygen Demand (COD)', 'Measurement of the amount of oxygen required to chemically oxidize organic and inorganic matter in water, which indicates water pollution and the oxygen-consuming capacity of the water.'),
+('Total Organic Carbon (TOC)', 'Measurement of the total amount of organic carbon in water, which can indicate the presence of organic pollutants and affect water treatment processes.'),
+('Total Nitrogen (TN)', 'Concentration of total nitrogen in water, which includes various forms such as ammonia, nitrate, and organic nitrogen compounds, and can indicate nutrient pollution.'),
+('Fecal Coliforms', 'Indicator of the presence of fecal coliform bacteria in water, which specifically indicates recent fecal contamination and potential health risks.'),
+('Chloride (Cl-)', 'Concentration of chloride ions in water, which can originate from natural sources or human activities and can indicate saltwater intrusion or pollution.'),
+('Total Hardness', 'Measurement of the total concentration of calcium and magnesium ions in water, which can affect water quality and the performance of water treatment processes.'),
+('Alkalinity', 'Measurement of the water\'s capacity to neutralize acids, which is influenced by the presence of bicarbonate, carbonate, and hydroxide ions and can affect pH stability.'),
+('Total Iron', 'Concentration of total iron in water, which can originate from natural sources or industrial activities and can affect water quality and aesthetics.'),
+('Total Manganese', 'Concentration of total manganese in water, which can originate from natural sources or industrial activities and can affect water quality and aesthetics.'),
+('Dissolved Metals (such as lead, copper, zinc)', 'Concentration of specific metals, such as lead, copper, and zinc, that are dissolved in water and can indicate pollution from industrial discharges or plumbing systems.'),
+('Arsenic', 'Concentration of arsenic in water, which can occur naturally or be introduced through industrial activities and can pose significant health risks.'),
+('Fluoride (F-)', 'Concentration of fluoride ions in water, which can occur naturally or be added for dental health purposes and can affect dental health and overall water quality.'),
+('Sulfate (SO4 2-)', 'Concentration of sulfate ions in water, which can occur naturally or be introduced through industrial activities and can affect water quality, taste, and odor.'),
+('Chlorine Residual', 'Measurement of the remaining concentration of chlorine in water after disinfection, which ensures the maintenance of a disinfectant residual for microbial control.'),
+('Pesticides (e.g., herbicides, insecticides)', 'Presence of various pesticides, including herbicides and insecticides, in water, which can indicate pollution from agricultural or urban sources.'),
+('Petroleum hydrocarbons', 'Presence of hydrocarbons, such as gasoline or oil, in water, which can indicate pollution from spills or leaks.'),
+('Heavy metals (such as mercury, cadmium, chromium)', 'Concentration of specific heavy metals, such as mercury, cadmium, and chromium, in water, which can indicate pollution from industrial activities and pose environmental and health risks.'),
+('Radon', 'Concentration of radon gas in water, which can occur naturally and can pose health risks when released into indoor air during water use.'),
+('Radioactive isotopes (e.g., tritium, uranium)', 'Presence of radioactive isotopes, such as tritium or uranium, in water, which can occur naturally or as a result of nuclear activities and can pose health risks.'),
+('Total Organic Halogens (TOX)', 'Measurement of the total concentration of organic compounds containing halogen atoms, such as chlorine or bromine, in water, which can indicate the presence of disinfection by-products or other organic pollutants.'),
+('Total Volatile Organic Compounds (VOCs)', 'Measurement of the total concentration of volatile organic compounds in water, which can originate from industrial activities, fuel spills, or other sources and can pose health risks.'),
+('Polycyclic aromatic hydrocarbons (PAHs)', 'Concentration of specific organic compounds, such as polycyclic aromatic hydrocarbons, in water, which can originate from combustion processes or industrial discharges and can pose environmental and health risks.'),
+('Phosphate (PO4 3-)', 'Concentration of phosphate ions in water, which can originate from fertilizers, detergents, or other sources and can contribute to nutrient pollution and eutrophication.'),
+('Dissolved Silica', 'Concentration of dissolved silica in water, which can occur naturally and can affect water treatment processes and the performance of certain industrial systems.'),
+('Dissolved Organic Matter (DOM)', 'Measurement of the total concentration of organic compounds in water, which can indicate the presence of natural or anthropogenic organic substances and affect water treatment processes.');
+
+
 
 INSERT INTO Users VALUES (1, 'John', 'Doe', 'johndoe@gmail.com', '8c0dcb6d09f07ccfbf126793e6c80f4a'),
 (2, 'Jane', 'Smith', 'janesmith@gmail.com', 'bef9e89bcd01cabed41a3cce0d3ca3d2'),
@@ -192,12 +224,50 @@ VALUES
 ('TR12C', 22.45068,114.16838, 'Lam Tsuen River'),
 ('TR12B', 22.44947,114.17651, 'Lam Tsuen River');
 
-INSERT into DevicesCatalogue (Model, Name, CommTech, Sensors) 
-VALUES ('Arduino54B', 'Device215' , 1, '{"sensor1": "temperature", "sensor2": "humidity", "sensor3": "pressure"}');
-
-INSERT INTO DevicesCatalogue (Model, Name, CommTech, Sensors)
-VALUES ('Arduino54B', 'Device215', 1, '{"sensor1": "Water Temperature", "sensor2": "Total Phosphorus", "sensor3": "Suspended solids", "sensor4": "pH", "sensor5": "Nitrite-Nitrogen (NO2-N)", "sensor6": "Nitrate-Nitrogen (NO3-N)", "sensor7": "Dissolved Oxygen", "sensor8": "Conductivity", "sensor9": "Ammonia-Nitrogen (NH3-N)", "sensor10": "5-day Biochemical Oxygen Demand (BOD5)"}');
-
-INSERT INTO DevicesCatalogue (Model, Name, CommTech, Sensors)
-VALUES ('Arduino54B', 'Device215', 1, '{"sensor1": "Water Temperature", "sensor2": "Total Phosphorus", "sensor3": "Suspended solids", "sensor4": "pH", "sensor5": "Nitrite-Nitrogen (NO2-N)", "sensor6": "Nitrate-Nitrogen (NO3-N)", "sensor7": "Dissolved Oxygen", "sensor9": "Ammonia-Nitrogen (NH3-N)"}');
+INSERT INTO `parameterunits` (`ParameterName`, `Unit`, `Min`, `Max`) VALUES
+('5-day Biochemical Oxygen Demand (BOD5)', 'mg/L', 0.1, 10),
+('5-day Biochemical Oxygen Demand (BOD5)', 'ppm', 0.1, 10),
+('Ammonia-Nitrogen (NH3-N)', 'mg/L', 0.01, 1),
+('Ammonia-Nitrogen (NH3-N)', 'ppm', 0.01, 1),
+('Ammonia-Nitrogen (NH3-N)', '% saturation', 0, 100),
+('Arsenic', 'µg/L', 1, 10),
+('Chemical Oxygen Demand (COD)', 'mg/L', 5, 50),
+('Chloride (Cl-)', 'mg/L', 10, 250),
+('Chlorine Residual', 'mg/L', 0.1, 4),
+('Conductivity', 'µS/cm', 100, 1500),
+('Dissolved Metals (such as lead, copper, zinc)', 'µg/L', 1, 50),
+('Dissolved Organic Matter (DOM)', 'mg/L', 1, 10),
+('Dissolved Oxygen', 'mg/L', 5, 10),
+('Dissolved Oxygen', 'ppm', 5, 10),
+('Dissolved Oxygen', '% saturation', 80, 100),
+('Dissolved Silica', 'mg/L', 5, 50),
+('Escherichia coli (E. coli)', 'CFU/100 mL', 0, 10),
+('Fecal Coliforms', 'CFU/100 mL', 0, 10),
+('Fluoride (F-)', 'mg/L', 0.5, 1.5),
+('Heavy metals (such as mercury, cadmium, chromium)', 'µg/L', 1, 10),
+('Nitrate-Nitrogen (NO3-N)', 'mg/L', 0.1, 10),
+('Nitrite-Nitrogen (NO2-N)', 'mg/L', 0.01, 1),
+('Pesticides (e.g., herbicides, insecticides)', 'µg/L', 0.1, 1),
+('Petroleum hydrocarbons', 'mg/L', 0.1, 1),
+('pH', 'pH units', 6, 8),
+('Phosphate (PO4 3-)', 'mg/L', 0.01, 0.1),
+('Polycyclic aromatic hydrocarbons (PAHs)', 'µg/L', 0.1, 1),
+('Radioactive isotopes (e.g., tritium, uranium)', 'Bq/L', 1, 10),
+('Radon', 'Bq/L', 1, 10),
+('Sulfate (SO4 2-)', 'mg/L', 10, 250),
+('Suspended solids', 'mg/L', 1, 30),
+('Total Coliforms', 'CFU/100 mL', 0, 10),
+('Total Dissolved Solids (TDS)', 'mg/L', 100, 500),
+('Total Dissolved Solids (TDS)', 'ppm', 100, 500),
+('Total Hardness', 'mg/L (as CaCO3)', 50, 500),
+('Total Iron', 'µg/L', 10, 300),
+('Total Manganese', 'µg/L', 10, 400),
+('Total Nitrogen (TN)', 'mg/L', 0.1, 10),
+('Total Organic Carbon (TOC)', 'mg/L', 1, 10),
+('Total Organic Halogens (TOX)', 'µg/L', 1, 10),
+('Total Phosphorus', 'mg/L', 0.01, 0.1),
+('Total Volatile Organic Compounds (VOCs)', 'µg/L', 1, 10),
+('Turbidity', 'NTU', 1, 5),
+('Water Temperature', '°C', 5, 25),
+('Water Temperature', '°F', 41, 77);
 
