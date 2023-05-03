@@ -274,8 +274,6 @@ app.put('/api/users/:id', (req, res) => {
     });
 });
 
-
-
 // Defining API endpoint for deleting a user by ID
 app.delete('/api/users/:id', (req, res) => {
     const id = req.params.id;
@@ -350,11 +348,12 @@ app.post('/sensors', (req, res) => {
 
 // Create route to retrieve parameters data from database
 app.get('/parameters', (req, res) => {
-    connection.query('select * from WaterParameters', (err, rows) => {
+    connection.query('SELECT wp.Name, wp.Description, pu.Unit, pu.Min, pu.Max FROM waterparameters wp JOIN parameterunits pu ON wp.Name = pu.ParameterName', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
 });
+
 
 app.post('/parameters', (req, res) => {
     const data = req.body;
@@ -406,6 +405,29 @@ app.post('/projects', (req, res) => {
         }
     });
 });
+
+app.post('/api/deployeddevices', (req, res) => {
+    const { Name, Longitude, Latitude, Frequency, Project, Locality, CommTech, StatusCode, Sensors } = req.body;
+    // Validate user input (you can add more validation as per your requirements)
+    if (!Name || !Project) {
+        return res.status(400).json({ message: 'Please provide a device name and project ID.' });
+    }
+
+    // Insert the new deployed device into the deployeddevices table
+    const insertDeviceQuery = `
+        INSERT INTO deployeddevices (Name, Longitude, Latitude, Frequency, Project, Locality, CommTech, StatusCode, Sensors)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    connection.query(insertDeviceQuery, [Name, Longitude, Latitude, Frequency, Project, Locality, CommTech, StatusCode, Sensors], (err, result) => {
+        if (err) {
+            console.error('Error inserting deployed device: ', err);
+            return res.status(500).json({ message: 'Internal server error.' });
+        }
+
+        return res.status(201).json({ message: 'Device added successfully.' });
+    });
+});
+
 
 // Start the server
 app.listen(8080, () => {

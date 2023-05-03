@@ -38,7 +38,6 @@ const Sidebar2 = (props) => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
-  console.log(isMobile);
 
   const renderMenuItem = (designation, item) => {
     if (user && user.designation === designation) {

@@ -136,4 +136,15 @@ CREATE TABLE `stationCoordinates` (
   `Site` VARCHAR(255) DEFAULT 'Lam Tsuen River'
 );
 
+CREATE TABLE `parameterunits` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `ParameterName` varchar(50) NOT NULL,
+  `Unit` varchar(20) NOT NULL,
+  `Min` float DEFAULT NULL,
+  `Max` float DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `ParameterName` (`ParameterName`),
+  CONSTRAINT `fk_parameterunits_waterparameters` FOREIGN KEY (`ParameterName`) REFERENCES `waterparameters` (`Name`)
+);
+
 -- ----------------------------------------------
