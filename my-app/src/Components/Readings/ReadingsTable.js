@@ -10,8 +10,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Link } from "react-router-dom";
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -40,31 +38,43 @@ function ReadingsTable() {
 
   useEffect(() => {
     // FIRST API REQUEST - Data
-    axios.get(`http://localhost:8080/hkdata`)
+    axios.get(`http://localhost:8080/api/readings`)
       .then(response => {
-        const updatedData = response.data.map((row) => ({
-          ...row,
-          Location: "Lam Tsuen River, Hong Kong",
-          Dates: new Date(row.Dates).toLocaleDateString(),
-        }));
-        setReadingsData(updatedData);
+        setReadingsData(response.data);
       })
       .catch(error => console.log(error));
   }, []);
 
   const columns = [
-    { id: 'Station', label: 'Station', align: 'center' },
-    { id: 'Date', label: 'Date', align: 'center' },
-    { id: 'Temperature', label: 'Temperature (C)', align: 'center' },
-    { id: 'pH', label: 'pH', align: 'center' },
-    { id: 'DissolvedOxygen', label: 'Dissolved Oxygen (mg/L)', align: 'center' },
-    { id: 'Conductivity', label: 'Conductivity (µS/cm)', align: 'center' },
-    { id: 'NitriteNitrogen', label: 'Nitrite-Nitrogen (mg/L)', align: 'center' },
-    { id: 'BOD5', label: 'BOD5 (mg/L)', align: 'center' },
-    { id: 'TotalPhosphorus', label: 'Total Phosphorus (mg/L)', align: 'center' },
-    { id: 'AmmoniaNitrogen', label: 'Ammonia Nitrogen (mg/L)', align: 'center' },
+    { id: 'DeviceName', label: 'Device Name', align: 'center' },
+    { id: 'Time', label: 'Date', align: 'center' },
   ];
 
+  ReadingsData.forEach((row) => {
+    const parameterWithUnit = `${row.Parameter} (${row.Unit})`;
+    if (!columns.find(col => col.id === parameterWithUnit)) {
+      columns.push({ id: parameterWithUnit, label: parameterWithUnit, align: 'center' });
+    }
+  });
+
+  const formatDataForTable = () => {
+    const formattedData = {};
+
+    ReadingsData.forEach((row) => {
+      if (!formattedData[row.Time]) {
+        formattedData[row.Time] = {
+          DeviceName: row.DeviceName,
+          Time: new Date(row.Time).toLocaleDateString(),
+          ProjectName: row.ProjectName,
+        };
+      }
+      formattedData[row.Time][`${row.Parameter} (${row.Unit})`] = row.Reading;
+    });
+
+    return Object.values(formattedData);
+  };
+
+  const tableData = formatDataForTable();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -82,8 +92,7 @@ function ReadingsTable() {
           <br />
           <div style={{ display: "flex", alignItems: "center" }}>
             <h1 style={{ flex: 1 }}>Existing Readings</h1>
-            {/* Add Location as h1 heading on the right end */}
-            <h1 style={{ flex: 1, textAlign: 'right' }}>Lam Tsuen River, Hong Kong</h1>
+            {tableData[0] && <h1 style={{ flex: 1, textAlign: 'right' }}>{tableData[0].ProjectName}</h1>}
           </div>
           <br />
           <TableContainer component={Paper}>
@@ -97,40 +106,38 @@ function ReadingsTable() {
                   ))}
                 </TableRow>
               </TableHead>
-
               <TableBody>
-                {ReadingsData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
-                  <StyledTableRow key={row.Id}>
-                    <StyledTableCell align="center">{row.Station}</StyledTableCell>
-                    <StyledTableCell align="center">{row.Dates}</StyledTableCell>
-                    <StyledTableCell align="center">{row["Water Temperature (°C)"]}</StyledTableCell>
-                    <StyledTableCell align="center">{row["pH"]}</StyledTableCell>
-                    <StyledTableCell align="center">{row["Dissolved Oxygen (mg/L)"]}</StyledTableCell>
-                    <StyledTableCell align="center">{row["Conductivity (µS/cm)"]}</StyledTableCell>
-                    <StyledTableCell align="center">{row["Nitrite-Nitrogen (mg/L)"]}</StyledTableCell>
-                    <StyledTableCell align="center">{row["5-Day Biochemical Oxygen Demand (mg/L)"]}</StyledTableCell>
-                    <StyledTableCell align="center">{row["Total Phosphorus (mg/L)"]}</StyledTableCell>
-                    <StyledTableCell align="center">{row["Ammonia-Nitrogen (mg/L)"]}</StyledTableCell>
-                  </StyledTableRow>
-                ))}
+                {tableData
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => (
+                    <StyledTableRow key={index}>
+                      {columns.map((column) => (
+                        <StyledTableCell key={column.id} align="center">
+                          {row[column.id] || "-"}
+                        </StyledTableCell>
+                      ))}
+                    </StyledTableRow>
+                  ))}
               </TableBody>
-              <TablePagination
-                sx={{ overflow: 'unset' }} // <-- Added to remove scroll
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                component="div"
-                count={ReadingsData.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                style={{ // <-- Added to move TablePagination to the right bottom end
-                  display: 'flex',
-                  alignContent: 'flex-end',
-                  padding: '12px',
-                }}
-              />
             </Table>
+            <TablePagination
+              sx={{ overflow: "unset" }} // <-- Added to remove scroll
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
+              component="div"
+              count={tableData.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              style={{
+                // <-- Added to move TablePagination to the right bottom end
+                display: "flex",
+                alignContent: "flex-end",
+                padding: "12px",
+              }}
+            />
           </TableContainer>
+
 
         </Grid>
       </Grid>
@@ -139,3 +146,4 @@ function ReadingsTable() {
 }
 
 export default ReadingsTable;
+

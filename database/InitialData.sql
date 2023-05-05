@@ -195,3 +195,79 @@ INSERT INTO `parameterunits` (`ParameterName`, `Unit`, `Min`, `Max`) VALUES
 ('Water Temperature', '°C', 5, 25),
 ('Water Temperature', '°F', 41, 77);
 
+-- Dummy data for Date = '2023-01-01'
+INSERT INTO readings (`Time`, `Reading`, `Device`, `Parameter`, `UnitId`)
+VALUES
+    ('2023-01-01', '10.2', 10, '5-day Biochemical Oxygen Demand (BOD5)', 1),
+    ('2023-01-01', '7.8', 10, 'Chemical Oxygen Demand (COD)', 1),
+    ('2023-01-01', '250', 10, 'Conductivity', 10),
+    ('2023-01-01', '0.8', 10, 'Ammonia-Nitrogen (NH3-N)', 2),
+    ('2023-01-01', '5', 10, 'Dissolved Oxygen', 13),
+    ('2023-01-01', '1.5', 10, 'Fluoride (F-)', 19),
+    ('2023-01-01', '7', 10, 'pH', 25),
+    ('2023-01-01', '0.03', 10, 'Phosphate (PO4 3-)', 26);
+    -- Add dummy data for other parameters on the same date
+    
+-- Dummy data for Date = '2023-01-02'
+INSERT INTO readings (`Time`, `Reading`, `Device`, `Parameter`, `UnitId`)
+VALUES
+    ('2023-01-02', '10', 10, '5-day Biochemical Oxygen Demand (BOD5)', 1),
+    ('2023-01-02', '8', 10, 'Chemical Oxygen Demand (COD)', 1),
+    ('2023-01-02', '200', 10, 'Conductivity', 10),
+    ('2023-01-02', '0.7', 10, 'Ammonia-Nitrogen (NH3-N)', 2),
+    ('2023-01-02', '4.5', 10, 'Dissolved Oxygen', 13),
+    ('2023-01-02', '1.3', 10, 'Fluoride (F-)', 19),
+    ('2023-01-02', '7.2', 10, 'pH', 25),
+    ('2023-01-02', '0.02', 10, 'Phosphate (PO4 3-)', 26);
+    -- Add dummy data for other parameters on the same date
+    
+-- Dummy data for Date = '2023-01-03'
+INSERT INTO readings (`Time`, `Reading`, `Device`, `Parameter`, `UnitId`)
+VALUES
+    ('2023-01-03', '9.5', 10, '5-day Biochemical Oxygen Demand (BOD5)', 1),
+    ('2023-01-03', '6.2', 10, 'Chemical Oxygen Demand (COD)', 1),
+    ('2023-01-03', '180', 10, 'Conductivity', 10),
+    ('2023-01-03', '0.6', 10, 'Ammonia-Nitrogen (NH3-N)', 2),
+    ('2023-01-03', '4.8', 10, 'Dissolved Oxygen', 13),
+        ('2023-01-03', '1.1', 10, 'Fluoride (F-)', 19),
+    ('2023-01-03', '7.5', 10, 'pH', 25),
+    ('2023-01-03', '0.025', 10, 'Phosphate (PO4 3-)', 26);
+    -- Add dummy data for other parameters on the same date
+    
+-- Dummy data for Date = '2023-01-04'
+INSERT INTO readings (`Time`, `Reading`, `Device`, `Parameter`, `UnitId`)
+VALUES
+    ('2023-01-04', '8.8', 10, '5-day Biochemical Oxygen Demand (BOD5)', 1),
+    ('2023-01-04', '5.5', 10, 'Chemical Oxygen Demand (COD)', 1),
+    ('2023-01-04', '150', 10, 'Conductivity', 10),
+    ('2023-01-04', '0.5', 10, 'Ammonia-Nitrogen (NH3-N)', 2),
+    ('2023-01-04', '3.5', 10, 'Dissolved Oxygen', 13),
+    ('2023-01-04', '1.0', 10, 'Fluoride (F-)', 19),
+    ('2023-01-04', '7.8', 10, 'pH', 25),
+    ('2023-01-04', '0.03', 10, 'Phosphate (PO4 3-)', 26);
+    -- Add dummy data for other parameters on the same date
+    
+-- Dummy data for Date = '2023-01-05'
+INSERT INTO readings (`Time`, `Reading`, `Device`, `Parameter`, `UnitId`)
+VALUES
+    ('2023-01-05', '7.2', 10, '5-day Biochemical Oxygen Demand (BOD5)', 1),
+    ('2023-01-05', '4.2', 10, 'Chemical Oxygen Demand (COD)', 1),
+    ('2023-01-05', '120', 10, 'Conductivity', 10),
+    ('2023-01-05', '0.4', 10, 'Ammonia-Nitrogen (NH3-N)', 2),
+    ('2023-01-05', '3.0', 10, 'Dissolved Oxygen', 13),
+    ('2023-01-05', '0.8', 10, 'Fluoride (F-)', 19),
+    ('2023-01-05', '7.0', 10, 'pH', 25),
+    ('2023-01-05', '0.02', 10, 'Phosphate (PO4 3-)', 26);
+    -- Add dummy data for other parameters on the same date
+    
+-- Continue inserting dummy data for other dates and devices
+
+-- Dummy data for Device with Id = 11
+-- Insert dummy data for Device with Id = 11, following a similar pattern as above
+
+-- Dummy data for Device with Id = 12
+-- Insert dummy data for Device with Id = 12, following a similar pattern as above
+
+-- Continue inserting dummy data for other devices
+
+

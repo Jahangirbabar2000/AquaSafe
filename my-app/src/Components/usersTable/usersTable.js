@@ -105,7 +105,21 @@ function UsersTable() {
         </Grid>
         <Grid item xs={8} sm={7} md={9}>
           <br />
-          <h1>Active Users</h1>
+
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <h1 style={{ flex: 1 }}>Active Users</h1>
+            {/* EDIT LINE BELOW */}
+            <Link to="/signup" style={{ textDecoration: 'none' }}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+              >
+                Register New User
+              </Button>
+            </Link>
+          </div>
           <br />
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">

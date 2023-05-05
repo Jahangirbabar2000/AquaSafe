@@ -428,6 +428,45 @@ app.post('/api/deployeddevices', (req, res) => {
     });
 });
 
+// Create route to fetch readings from database
+app.get('/api/readings', (req, res) => {
+    const query = `
+        SELECT r.Id, r.Time, r.Reading, dd.Name as DeviceName, r.Parameter, r.UnitId, wp.Description, pu.Unit, dd.Project, p.Name as ProjectName
+        FROM AquaSafe.Readings r
+        JOIN AquaSafe.DeployedDevices dd ON r.Device = dd.Id
+        JOIN AquaSafe.Projects p ON dd.Project = p.Id
+        JOIN AquaSafe.ParameterUnits pu ON r.UnitId = pu.Id
+        JOIN AquaSafe.WaterParameters wp ON pu.ParameterName = wp.Name;
+    `;
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            console.error('Error fetching readings: ', err);
+            res.status(500).json({ message: 'Internal server error.' });
+        } else {
+            res.status(200).json(rows);
+        }
+    });
+});
+
+// Create route to retrieve deployed devices by project name
+app.get('/api/deployeddevices/byproject/:projectName', (req, res) => {
+    const projectName = req.params.projectName;
+    const query = `
+    SELECT dd.*
+    FROM DeployedDevices dd
+    JOIN Projects p ON dd.Project = p.Id
+    WHERE p.Name = ?
+  `;
+    connection.query(query, [projectName], (err, rows) => {
+        if (err) {
+            console.error('Error fetching deployed devices by project name: ', err);
+            res.status(500).json({ message: 'Internal server error.' });
+        } else {
+            res.status(200).json(rows);
+        }
+    });
+});
 
 // Start the server
 app.listen(8080, () => {

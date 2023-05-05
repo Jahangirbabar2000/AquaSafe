@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import axios from "axios";
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, FormControlLabel, MenuItem, Paper, TextField, Button, Grid } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Check from '@mui/icons-material/Check';
 import Sidebar2 from "../../sidebar/Sidebar2";
 import Navbar from "../../navbar/navbar";
+
 
 const INITIAL_FORM_STATE = {
   latitude: "",
@@ -18,8 +19,7 @@ const INITIAL_FORM_STATE = {
 
 const DeviceDeployment = () => {
   const [sensors, setSensors] = useState([]);
-  const { latitude, longitude } = useParams();
-  const [markerPosition, setMarkerPosition] = useState([parseFloat(latitude) || 33.703055, parseFloat(longitude) || 73.128089]);
+  const [markerPosition, setMarkerPosition] = useState([33.703055, 73.128089]);
   const [parameterUnits, setParameterUnits] = useState({});
   const [formState, setFormState] = useState(INITIAL_FORM_STATE);
   const [timeUnit, setTimeUnit] = useState("Minute");
@@ -47,6 +47,28 @@ const DeviceDeployment = () => {
     },
   });
 
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+
+  const query = useQuery();
+
+  useEffect(() => {
+    const latitude = query.get("latitude");
+    const longitude = query.get("longitude");
+    setMarkerPosition([latitude, longitude])
+  }, []);
+
+  function UpdateMapCenter({ center }) {
+    const map = useMap();
+
+    useEffect(() => {
+      map.setView(center);
+    }, [center, map]);
+
+    return null;
+  }
+
   const map = useMemo(() => (
     <MapContainer
       style={{ marginRight: "10vh", width: "70vh", height: "60vh" }}
@@ -61,6 +83,7 @@ const DeviceDeployment = () => {
         </Popup>
       </Marker>
       <MapEvents onClick={handleMapClick} />
+      <UpdateMapCenter center={markerPosition} />
     </MapContainer>
   ), [handleMapClick, markerPosition]);
 
@@ -73,7 +96,10 @@ const DeviceDeployment = () => {
     return null;
   }
 
+
+
   useEffect(() => {
+
     const fetchSensors = async () => {
       try {
         const response = await axios.get("http://localhost:8080/parameters");

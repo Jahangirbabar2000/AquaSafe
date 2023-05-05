@@ -184,7 +184,7 @@ function App(props) {
                   <IconButton onClick={handleMenuOpen}>
                     <ExpandMoreIcon sx={{ fontSize: '2rem' }} />
                   </IconButton>
-                  <Button onClick={handleDeviceSubmit} variant="contained" color="primary">Add Device</Button> {/* Add your button component here */}
+                  <Button onClick={handleDeviceSubmit} variant="contained" color="primary">Add Device</Button>
                 </Box>
                 <Menu
                   anchorEl={menuAnchor}
