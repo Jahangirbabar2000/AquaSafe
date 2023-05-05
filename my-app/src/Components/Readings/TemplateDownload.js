@@ -208,7 +208,7 @@ const CsvDownloadButton = () => {
                   <FormControl
                     variant="outlined"
                     size="small"
-                    style={{ minWidth: 120, marginLeft: 16, marginLeft: "auto" }}
+                    style={{ minWidth: 120, marginLeft: 16 }}
                   >
                     <InputLabel>Unit</InputLabel>
                     <Select

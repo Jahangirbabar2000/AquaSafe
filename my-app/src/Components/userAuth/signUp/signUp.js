@@ -14,15 +14,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Sidebar2 from "../../sidebar/Sidebar2.js";
 import { useNavigate } from 'react-router-dom';
 
-function Copyright(props) {
-    return (
-        <Typography variant="h6" color="text.secondary" align="center" {...props}>
-            {'Copyright © AsiaConnect '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+// function Copyright(props) {
+//     return (
+//         <Typography variant="h6" color="text.secondary" align="center" {...props}>
+//             {'Copyright © AsiaConnect '}
+//             {new Date().getFullYear()}
+//             {'.'}
+//         </Typography>
+//     );
+// }
 
 const theme = createTheme();
 
