@@ -392,6 +392,21 @@ app.get('/projects', (req, res) => {
     });
 });
 
+app.get('/api/projects/:id', (req, res) => {
+    const projectId = req.params.id;
+    connection.query('SELECT Name FROM AquaSafe.Projects WHERE Id = ?', [projectId], (err, rows) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error fetching project name');
+        } else if (rows.length === 0) {
+            res.status(404).send('Project not found');
+        } else {
+            const projectName = rows[0].Name;
+            res.send({ name: projectName });
+        }
+    });
+});
+
 app.post('/projects', (req, res) => {
     const data = req.body;
     const query = ` INSERT into AquaSafe.Projects (Name, Location, Country, Longitude, Latitude, Description) VALUES('${data.Name}', '${data.Location}', '${data.Country}', ${data.Longitude}, ${data.Latitude}, '${data.Description}');`;
@@ -467,6 +482,81 @@ app.get('/api/deployeddevices/byproject/:projectName', (req, res) => {
         }
     });
 });
+
+app.post('/readings/upload', async (req, res) => {
+    const { projectName, deviceName, data } = req.body;
+
+    connection.query('SELECT Id FROM AquaSafe.deployeddevices WHERE Name = ?', [deviceName], async (deviceErr, deviceRows) => {
+        if (deviceErr) {
+            console.error(deviceErr);
+            res.status(500).send('Error fetching device');
+            return;
+        } else if (deviceRows.length === 0) {
+            res.status(404).send('Device not found');
+            return;
+        }
+
+        const deviceId = deviceRows[0].Id;
+
+        // Store promises for each query
+        const promises = [];
+
+        data.forEach(row => {
+            for (const [key, value] of Object.entries(row)) {
+                // Skip the 'Date' key
+                if (key === 'Date') {
+                    continue;
+                }
+
+                const originalDate = row.Date;
+                const [month, day, year] = originalDate.split('/');
+                const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+                const [parameter, unitWithBrackets] = key.split('_(');
+                const unit = unitWithBrackets.slice(0, -1); // Remove the closing parenthesis               
+                console.log(parameter, unit)
+                const promise = new Promise((resolve, reject) => {
+                    connection.query('SELECT Id FROM AquaSafe.parameterunits WHERE Unit = ? and ParameterName = ?', [unit, parameter], (unitErr, unitRows) => {
+                        if (unitErr) {
+                            reject(unitErr);
+                        } else if (unitRows.length === 0) {
+                            reject(new Error(`Unit not found for ${unit}`));
+                        } else {
+                            const unitId = unitRows[0].Id;
+
+                            const reading = {
+                                Time: formattedDate,
+                                Reading: value,
+                                Device: deviceId,
+                                Parameter: parameter,
+                                UnitId: unitId,
+                            };
+
+                            connection.query('INSERT INTO AquaSafe.Readings SET ?', reading, (readingErr) => {
+                                if (readingErr) {
+                                    reject(readingErr);
+                                } else {
+                                    resolve();
+                                }
+                            });
+                        }
+                    });
+                });
+
+                promises.push(promise);
+            }
+        });
+
+        try {
+            await Promise.all(promises);
+            res.status(201).send('Readings uploaded successfully');
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send('Error: ' + error.message);
+        }
+    });
+});
+
 
 // Start the server
 app.listen(8080, () => {

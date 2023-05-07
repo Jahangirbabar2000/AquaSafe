@@ -57,7 +57,7 @@ function App(props) {
   const handleDeviceSubmit = async (event) => {
     event.preventDefault();
     console.log(selectedMarker);
-    navigate(`/deviceDeployment?latitude=${selectedMarker.Latitude}&longitude=${selectedMarker.Longitude}`);
+    navigate(`/deviceDeployment?latitude=${selectedMarker.Latitude}&longitude=${selectedMarker.Longitude}&project=${21}`);
   };
 
 
@@ -78,8 +78,6 @@ function App(props) {
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
   });
-
-  ////////////////////////////////////////////
 
   React.useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP

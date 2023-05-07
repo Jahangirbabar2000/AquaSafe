@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { CSVLink } from "react-csv";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -19,7 +18,6 @@ const CsvDownloadButton = () => {
   const [selectedParameters, setSelectedParameters] = useState([]);
   const [open, setOpen] = useState(false);
   const [uniqueParameters, setUniqueParameters] = useState([]);
-  const csvLink = useRef();
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState('');
   const [devices, setDevices] = useState([]);
@@ -30,7 +28,6 @@ const CsvDownloadButton = () => {
   const getProjects = async () => {
     try {
       const res = await axios.get("http://localhost:8080/projects");
-      console.log(res.data)
       setProjects(res.data);
     } catch (error) {
       console.error("Error fetching projects", error);
@@ -115,8 +112,12 @@ const CsvDownloadButton = () => {
 
   const handleDownload = () => {
     setOpen(false);
-    csvLink.current.link.click();
+    const link = document.createElement("a");
+    link.href = csvUrl;
+    link.download = `${selectedProjectName}_${selectedDeviceName}_template.csv`;
+    link.click();
   };
+
 
   const handleUnitChange = (name, event) => {
     setSelectedParameters((prevSelected) =>
@@ -127,28 +128,37 @@ const CsvDownloadButton = () => {
   };
 
   const selectedProjectName = projects.find((project) => project.Id === selectedProject)?.Name;
-  const selectedDeviceName = devices.find((device) => device.Id === selectedDevice)?.DeviceName;
+  const selectedDeviceName = devices.find((device) => device.Id === selectedDevice)?.Name;
 
-  const csvReport = {
-    filename: `${selectedProjectName}_${selectedDeviceName}_template.csv`,
-    headers: [
-      { key: "ProjectName", label: "Project Name" },
-      { key: "DeviceName", label: "Device Name" },
-      ...selectedParameters.map((param) => ({
-        key: `${param.Name}_${param.Unit}`,
-        label: `${param.Name} (${param.Unit})`,
-      })),
-    ],
-    data: [],
-  };
+  const csvData = [
+    ["Project Name:", selectedProjectName],
+    ["Device Name:", selectedDeviceName],
+    [],
+    ["Date", ...selectedParameters.map((param) => `${param.Name}_(${param.Unit})`)],
+    [],
+  ];
+
+
+
+  const csvString = csvData
+    .map((row) => row.map((cell) => `"${cell || ""}"`).join(","))
+    .join("\r\n");
+
+  const BOM = "\uFEFF";
+  const csvBlob = new Blob([BOM + csvString], { type: "text/csv;charset=utf-8;" });
+  const csvUrl = URL.createObjectURL(csvBlob);
+
+
+
 
   return (
     <div>
       <Button
         variant="contained"
         style={{
-          marginLeft: "1%",
-          padding: "0.5%",
+          marginLeft: "5%",
+          marginRight: "5%",
+          padding: "1%",
           marginTop: "10px",
         }}
         onClick={handleClickOpen}
@@ -208,7 +218,7 @@ const CsvDownloadButton = () => {
                   <FormControl
                     variant="outlined"
                     size="small"
-                    style={{ minWidth: 120, marginLeft: 16 }}
+                    style={{ minWidth: 120, marginLeft: "auto" }}
                   >
                     <InputLabel>Unit</InputLabel>
                     <Select
@@ -234,11 +244,7 @@ const CsvDownloadButton = () => {
           <Button onClick={handleDownload}>Download</Button>
         </DialogActions>
       </Dialog>
-      <CSVLink
-        style={{ display: "none" }}
-        ref={csvLink}
-        {...csvReport}
-      ></CSVLink>
+
     </div>
   );
 

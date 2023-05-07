@@ -5,7 +5,6 @@ import "./notification.css";
 
 function DisplayNotfication(props) {
   const notification = props.item;
-  console.log(notification);
 
   if (notification.code === 10) {
     notification.details = notification.sensor + " is at dangerous level.";

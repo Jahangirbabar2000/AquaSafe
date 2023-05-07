@@ -89,12 +89,10 @@ function ReadingsTable() {
     <div style={{ marginLeft: 10 }}>
       <Grid spacing={40} container>
         <Grid item md={11}>
-          <br />
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", marginTop: 8, marginBottom: 8 }}>
             <h1 style={{ flex: 1 }}>Existing Readings</h1>
             {tableData[0] && <h1 style={{ flex: 1, textAlign: 'right' }}>{tableData[0].ProjectName}</h1>}
           </div>
-          <br />
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>

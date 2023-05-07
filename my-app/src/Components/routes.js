@@ -13,7 +13,7 @@ import WaterQualityPage from "./parameters/parameters";
 import NotificationTable from "./notifications/NotificationTable/NotificationTable";
 import ParameterTable from "./parameters/ParameterTable"
 import AddParameter from "./parameters/AddParameterForm";
-import Readings from "./Readings/Readings.js";
+import ReadingsPage from "./Readings/ReadingsPage.js";
 import DeviceTemplates from "./devices/devices-components/deviceTemplate";
 import ProjectApp from "./projects/ProjectApp";
 import Todos from "./Todos/Todos"
@@ -49,7 +49,7 @@ function routes() {
       <Route path="/WaterQualityPage" element={<WaterQualityPage />} />
       <Route path="/parameters" element={<ParameterTable />} />
       <Route path="/addParameter" element={<AddParameter />} />
-      <Route path="/readings" element={<Readings />} />
+      <Route path="/readings" element={<ReadingsPage />} />
       <Route path="/todos" element={<Todos />} />
       <Route path="/editUser/:id" element={<EditUser />} />
       <Route path="/error404" element={<Error404 />} />

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import axios from "axios";
-import { useParams, useLocation } from 'react-router-dom';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, FormControlLabel, MenuItem, Paper, TextField, Button, Grid } from "@mui/material";
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, FormControlLabel, Typography, MenuItem, Paper, TextField, Button, Grid } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Check from '@mui/icons-material/Check';
 import Sidebar2 from "../../sidebar/Sidebar2";
@@ -22,8 +22,11 @@ const DeviceDeployment = () => {
   const [markerPosition, setMarkerPosition] = useState([33.703055, 73.128089]);
   const [parameterUnits, setParameterUnits] = useState({});
   const [formState, setFormState] = useState(INITIAL_FORM_STATE);
-  const [timeUnit, setTimeUnit] = useState("Minute");
+  const [timeUnit, setTimeUnit] = useState('');
+  const [projectName, setProjectName] = useState('');
+  const [projectId, setProjectId] = useState('');
 
+  const navigate = useNavigate();
   const handleMapClick = useCallback((e) => {
     const { lat, lng } = e.latlng;
     const newLat = parseFloat(lat.toFixed(6));
@@ -56,7 +59,19 @@ const DeviceDeployment = () => {
   useEffect(() => {
     const latitude = query.get("latitude");
     const longitude = query.get("longitude");
+    const Id = query.get("project");
+    setProjectId(Id)
     setMarkerPosition([latitude, longitude])
+
+    axios.get(`http://localhost:8080/api/projects/${Id}`)
+      .then(response => {
+        const projectName = response.data.name;
+        setProjectName(projectName);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function UpdateMapCenter({ center }) {
@@ -96,10 +111,7 @@ const DeviceDeployment = () => {
     return null;
   }
 
-
-
   useEffect(() => {
-
     const fetchSensors = async () => {
       try {
         const response = await axios.get("http://localhost:8080/parameters");
@@ -207,14 +219,15 @@ const DeviceDeployment = () => {
     ))
   ), [sensors, formState, parameterUnits]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Add this line to prevent the default form submission behavior
     try {
       const response = await axios.post("http://localhost:8080/api/deployeddevices", {
-        Name: "DeviceName",
+        Name: formState.name,
         Longitude: markerPosition[1],
         Latitude: markerPosition[0],
         Frequency: formState.frequency,
-        Project: 1,
+        Project: projectId,
         Locality: "Locality",
         CommTech: "LORAWAN",
         StatusCode: 200,
@@ -222,7 +235,7 @@ const DeviceDeployment = () => {
       });
 
       if (response.status === 201) {
-        // Handle successful response
+        navigate('/dashboard');
       } else {
         alert("Error adding device.");
       }
@@ -231,6 +244,7 @@ const DeviceDeployment = () => {
       alert("Error adding device.");
     }
   };
+
 
   return (
     <div style={{ backgroundColor: "#f2f2f2" }}>
@@ -245,10 +259,38 @@ const DeviceDeployment = () => {
               <div style={{ display: "flex", flexDirection: "row", height: "100vh" }}>
                 <div style={{ marginTop: "1vh", marginLeft: "18vh" }}>
                   <div style={{ minWidth: "450px", paddingTop: "2%", paddingBottom: "3%", background: "whitesmoke", borderRadius: "5%", marginTop: "15px", padding: "7%", boxShadow: "0px 0px 10px #888888", marginLeft: "1rem" }}>
-                    <h2>General Device Details</h2>
+                    <Typography variant="h5" gutterBottom>General Device Details</Typography>
                     <form onSubmit={handleSubmit}>
-                      <div style={{ display: "flex" }}>
+                      <div style={{ display: "flex", marginBottom: 5 }}>
                         <TextField
+                          name="name"
+                          label="Name"
+                          fullWidth
+                          variant="standard"
+                          value={formState.name}
+                          onChange={(e) => {
+                            const name = e.target.value;
+                            setFormState(prevState => ({ ...prevState, name }));
+                          }}
+                          style={{ marginRight: "10px" }}
+                        />
+                        <TextField
+                          disabled
+                          name="project"
+                          label="Project"
+                          fullWidth
+                          variant="standard"
+                          value={projectName}
+                          onChange={(e) => {
+                            const name = e.target.value;
+                            setFormState(prevState => ({ ...prevState, name }));
+                          }}
+                          style={{ marginLeft: "10px" }}
+                        />
+                      </div>
+                      <div style={{ display: "flex", marginBottom: 5 }}>
+                        <TextField
+                          fullWidth
                           name="latitude"
                           label="Latitude"
                           value={markerPosition[0]}
@@ -264,16 +306,20 @@ const DeviceDeployment = () => {
                           name="longitude"
                           label="Longitude"
                           variant="standard"
+                          fullWidth
                           value={markerPosition[1]}
                           onChange={(e) => {
                             const inputValue = e.target.value;
                             const newLongitude = inputValue !== "" ? parseFloat(inputValue) : 0;
                             setMarkerPosition([markerPosition[0], newLongitude]);
                           }}
+                          style={{ marginLeft: "10px" }}
                         />
                       </div>
+
                       <div style={{ display: "flex", marginBottom: "10px" }}>
                         <TextField
+                          fullWidth
                           name="frequency"
                           label="Frequency"
                           variant="standard"
@@ -292,7 +338,7 @@ const DeviceDeployment = () => {
                           variant="standard"
                           value={timeUnit}
                           onChange={(e) => setTimeUnit(e.target.value)}
-                          style={{ marginLeft: "15px" }}
+                          style={{ marginLeft: "10px" }}
                         >
                           {['Minute', 'Hour', 'Day', 'Month'].map((option, index) => (
                             <MenuItem key={index} value={option}>
@@ -302,7 +348,6 @@ const DeviceDeployment = () => {
                         </TextField>
                       </div>
                       <div>
-                        <h2>Sensors</h2>
                         <TableContainer component={Paper} style={{ maxHeight: 250, overflow: 'auto' }}>
                           <ThemeProvider theme={theme}>
                             <Table stickyHeader>
@@ -330,7 +375,7 @@ const DeviceDeployment = () => {
                   </div>
                 </div>
                 <div style={{ paddingTop: "50px", paddingLeft: "13%" }}>
-                  <h2>Select location from map:</h2>
+                  <Typography variant="h5" gutterBottom>Select location from map:</Typography>
                   {map}
                 </div>
               </div>
