@@ -1,14 +1,11 @@
 import React from 'react';
-import { ReferenceLine, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
+import { ReferenceLine, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 function LineGraph(props) {
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <LineChart
-        data={props.data}
-        margin={0}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
+      <LineChart margin={{
+        top: 0,
+      }} data={props.data}>
         <XAxis dataKey="Dates" reversed={true} />
         <YAxis dataKey={props.datakey} />
         <Tooltip />

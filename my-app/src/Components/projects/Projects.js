@@ -8,9 +8,7 @@ const Projects = ({ projects }) => {
   const navigate = useNavigate();
 
   const handleCardClick = (project) => {
-    console.log('Clicked project: ', project);
-    // Navigate to a different page
-    navigate('/dashboard');
+    navigate(`/dashboard/${project.Id}`);
   };
 
   return (

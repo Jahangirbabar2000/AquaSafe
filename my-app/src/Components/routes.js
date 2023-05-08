@@ -37,7 +37,7 @@ function routes() {
         <Route index element={<UsersTable />} />
       </Route>
       <Route path="/notifications" element={<NotificationTable />} />
-      <Route path="/dashboard" element={<Visualization />} />
+      <Route path="/dashboard/:projectId" element={<Visualization />} />
       <Route path="/sites" element={<Sites />} />
       <Route path="/homepage" element={<Homepage />} />
       <Route path="/signup" element={<SignUp />} />

@@ -197,8 +197,83 @@ app.get('/hkdata2', (req, res) => {
     });
 });
 
+app.get('/api/dashboard/:id', async (req, res) => {
+
+    const projectId = req.params.id;
+    try {
+
+        const [project] = await connection.promise().query('SELECT * FROM AquaSafe.Projects WHERE Id = ?', [projectId]);
+
+        const [deployedDevices] = await connection.promise().query('SELECT * FROM AquaSafe.DeployedDevices WHERE Project = ?', [projectId]);
+
+        const deviceIds = deployedDevices.map(device => device.Id);
+        const [readings] = await connection.promise().query('SELECT * FROM AquaSafe.Readings WHERE Device IN (?)', [deviceIds]);
+
+        const unitIds = Array.from(new Set(readings.map(reading => reading.UnitId)));
+        const [units] = await connection.promise().query('SELECT * FROM AquaSafe.ParameterUnits WHERE Id IN (?)', [unitIds]);
+
+        const response = {
+            project,
+            deployedDevices,
+            readings,
+            units
+        };
+        res.send(response);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: 'Error fetching data' });
+    }
+});
+
+
+// app.get('/api/dashboard/:projectId', (req, res) => {
+
+//     const projectId = req.params.projectId;
+
+//     // retrieve data from deployedDevices table based on projectId
+//     const deployedDevicesQuery = `SELECT * FROM AquaSafe.DeployedDevices WHERE Project = ${projectId}`;
+//     connection.query(deployedDevicesQuery, (error, deployedDevicesResults, fields) => {
+//         if (error) {
+//             console.error(error);
+//             res.status(500).send('Error retrieving deployedDevices data from database');
+//         } else {
+//             const deviceIds = deployedDevicesResults.map(device => device.Id);
+
+//             // retrieve data from readings table based on deviceIds
+//             const readingsQuery = `SELECT * FROM AquaSafe.Readings WHERE Device IN (${deviceIds.join()})`;
+//             connection.query(readingsQuery, (error, readingsResults, fields) => {
+//                 if (error) {
+//                     console.error(error);
+//                     res.status(500).send('Error retrieving readings data from database');
+//                 } else {
+//                     const unitIds = readingsResults.map(reading => reading.UnitId);
+
+//                     // retrieve unit names from parameterunits table based on unitIds
+//                     const unitsQuery = `SELECT * FROM parameterunits WHERE Id IN (${unitIds.join()})`;
+//                     connection.query(unitsQuery, (error, unitsResults, fields) => {
+//                         if (error) {
+//                             console.error(error);
+//                             res.status(500).send('Error retrieving units data from database');
+//                         } else {
+//                             // combine all retrieved data and send as response
+//                             const data = {
+//                                 deployedDevices: deployedDevicesResults,
+//                                 readings: readingsResults,
+//                                 units: unitsResults
+//                             };
+//                             res.send(data);
+//                         }
+//                     });
+//                 }
+//             });
+//         }
+//     });
+// });
+
 
 // Create route to retrieve stationCoordinates from  hong kong dataset 
+
 app.get('/stationCoordinates', (req, res) => {
     connection.query('SELECT * FROM AquaSafe.stationCoordinates;', (err, rows) => {
         if (err) throw err;
@@ -514,7 +589,7 @@ app.post('/readings/upload', async (req, res) => {
 
                 const [parameter, unitWithBrackets] = key.split('_(');
                 const unit = unitWithBrackets.slice(0, -1); // Remove the closing parenthesis               
-                console.log(parameter, unit)
+
                 const promise = new Promise((resolve, reject) => {
                     connection.query('SELECT Id FROM AquaSafe.parameterunits WHERE Unit = ? and ParameterName = ?', [unit, parameter], (unitErr, unitRows) => {
                         if (unitErr) {

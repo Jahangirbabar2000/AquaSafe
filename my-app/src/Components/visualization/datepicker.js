@@ -52,7 +52,7 @@ export default function Datepicker({ startDate, setStartDate, endDate, setEndDat
                     onChange={handleChange1}
                     minDate={moment('2013-01-03 00:00:00')}
                     maxDate={moment('2018-12-17 00:00:00')}
-                    renderInput={(params) => <TextField {...params} />}
+                    TextFieldComponent={TextField}
                 />
                 <span> ___ </span>
                 <DesktopDatePicker
@@ -66,7 +66,7 @@ export default function Datepicker({ startDate, setStartDate, endDate, setEndDat
                     onChange={handleChange2}
                     minDate={moment(startDate)}
                     maxDate={moment('2018-12-17 00:00:00')}
-                    renderInput={(params) => <TextField {...params} />}
+                    TextFieldComponent={TextField}
                 />
             </LocalizationProvider>
         </ThemeProvider>

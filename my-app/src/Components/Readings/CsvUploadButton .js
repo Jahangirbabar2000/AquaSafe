@@ -104,12 +104,13 @@ const CsvUploadButton = () => {
 
     return (
         <div>
-            <Button
+            <Button                
                 variant="contained"
                 style={{
-                    marginLeft: "5%",
-                    padding: "1%",
+                    marginLeft: "20%",
                     marginTop: "10px",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
                 }}
                 onClick={handleOpen}
             >

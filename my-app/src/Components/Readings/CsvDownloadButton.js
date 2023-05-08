@@ -157,8 +157,8 @@ const CsvDownloadButton = () => {
         variant="contained"
         style={{
           marginLeft: "5%",
-          marginRight: "5%",
-          padding: "1%",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
           marginTop: "10px",
         }}
         onClick={handleClickOpen}

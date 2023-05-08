@@ -22,26 +22,105 @@ import Button from '@mui/material/Button';
 import { Icon } from "leaflet";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import CircularProgress from '@mui/material/CircularProgress';
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const mdTheme = createTheme();
 
 
 function App(props) {
+  const { projectId } = useParams();
+  ///// data = readings and stationCoordinates = modified deployedDevcies  //////////////
+
+  const [project, setProject] = React.useState([]);
   const [data, setData] = React.useState([]);
+  const [units, setUnits] = React.useState([]);
+  const [selectedStation, setSelectedStation] = React.useState("IN3");
+  const [selectedMarker, setSelectedMarker] = React.useState(null);
+  const [stationCoordinates, setStationCoordinates] = React.useState([]); //Data of stations for the drop down menu
+
+  //////////////////////////////////////////////////////////////
   const [loading, setLoading] = React.useState(true);
   const [startDate, setStartDate] = React.useState(moment('2014-08-10T21:11:54'));
   const [endDate, setEndDate] = React.useState(moment('2018-08-20T21:11:54'));
-  const [selectedStation, setSelectedStation] = React.useState("IN3");
-  const [selectedMarker, setSelectedMarker] = React.useState(null);
   const [menuAnchor, setMenuAnchor] = React.useState(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const [stationCoordinates, setStationCoordinates] = React.useState([]); //Data of stations for the drop down menu
 
   const handleMenuOpen = (event) => {
     setMenuAnchor(event.currentTarget);
     setMenuOpen(true);
   };
+
+
+
+  const getDataNew = () => {
+    axios.get(`http://localhost:8080/api/dashboard/${projectId}`)
+      .then(response => {
+
+        const { project, deployedDevices, readings, units } = response.data;
+        const dateOnlyReadings = readings.map(obj => {
+          const dateOnlyString = new Date(obj.Time).toISOString().slice(0, 10);
+          return { ...obj, Dates: dateOnlyString };
+        });
+        setData(dateOnlyReadings);
+        setLoading(false);
+        setUnits(units)
+        setProject(project)
+        // Extract latitude and longitude information from the deployedDevices array
+        const stationCoordinatess = deployedDevices.map(device => {
+          return {
+            Id: device.Id,
+            Station: device.Name,
+            Latitude: device.Latitude,
+            Longitude: device.Longitude
+          };
+        });
+        setStationCoordinates(stationCoordinatess);
+        setSelectedMarker(stationCoordinatess[0])
+        setSelectedStation(stationCoordinatess[0])
+      })
+      .catch(error => console.log(error));
+  }
+
+
+  const stationNames = [...new Set(stationCoordinates.map((item) => item.Station))]; // Get distinct station names from data
+  const filteredData = data.filter((d) => d.Device === selectedMarker.Id);
+
+  // Initialize the averages array with ParameterName and set sum and count to 0
+  let averages = units.map(unit => ({
+    ParameterName: unit.ParameterName,
+    sum: 0,
+    count: 0
+  }));
+
+  // Update the sum and count for each parameter in the averages array
+  filteredData.forEach(reading => {
+    let unit = averages.find(avg => avg.ParameterName === reading.Parameter);
+    if (unit) {
+      unit.sum += parseFloat(reading.Reading);
+      unit.count += 1;
+    }
+  });
+
+  // Calculate the average for each parameter by dividing the sum by the count
+  averages = averages.map(avg => ({
+    ParameterName: avg.ParameterName,
+    average: avg.count > 0 ? avg.sum / avg.count : null
+  }));
+
+  React.useEffect(() => {
+    // CODE FOR FIXING MARKER PROBLEM ON MAP
+    const L = require("leaflet");
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+      iconUrl: require("leaflet/dist/images/marker-icon.png"),
+      shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+    });
+
+    getDataNew();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleMenuItemClick = (station) => {
     setSelectedStation(station); // Update selected station state
@@ -56,10 +135,8 @@ function App(props) {
   const navigate = useNavigate();
   const handleDeviceSubmit = async (event) => {
     event.preventDefault();
-    console.log(selectedMarker);
     navigate(`/deviceDeployment?latitude=${selectedMarker.Latitude}&longitude=${selectedMarker.Longitude}&project=${21}`);
   };
-
 
   const customIcon = new Icon({
     iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -79,72 +156,6 @@ function App(props) {
     shadowSize: [41, 41]
   });
 
-  React.useEffect(() => {
-    // CODE FOR FIXING MARKER PROBLEM ON MAP
-    const L = require("leaflet");
-    delete L.Icon.Default.prototype._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-      iconUrl: require("leaflet/dist/images/marker-icon.png"),
-      shadowUrl: require("leaflet/dist/images/marker-shadow.png")
-    });
-
-    // FIRST API REQUEST - Data
-    axios.get(`http://localhost:8080/hkdata`)
-      .then(response => {
-        const dateOnlyArray = response.data.map(obj => {
-          const dateOnlyString = new Date(obj.Dates).toISOString().slice(0, 10);
-          return { ...obj, Dates: dateOnlyString };
-        });
-        setData(dateOnlyArray);
-        setLoading(false);
-      })
-      .catch(error => console.log(error));
-
-    // SECOND API REQUEST - Station Coordinates
-    axios.get("http://localhost:8080/stationCoordinates")
-      .then((response) => {
-        setStationCoordinates(response.data);
-        setSelectedMarker(response.data[0])
-        console.log(selectedMarker)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-
-  const getData = () => {
-    const sd = moment(startDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
-    const ed = moment(endDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
-    axios.get(`http://localhost:8080/hkdata2?start_date=${sd}&end_date=${ed}`)
-      .then(response => {
-        const dateOnlyArray = response.data.map(obj => {
-          const dateOnlyString = new Date(obj.Dates).toISOString().slice(0, 10);
-          return { ...obj, Dates: dateOnlyString };
-        });
-        setData(dateOnlyArray);
-        setLoading(false);
-      })
-      .catch(error => console.log(error));
-  }
-
-  const stationNames = [...new Set(data.map((item) => item.Station))]; // Get distinct station names from data
-  const filteredData = data.filter((d) => d.Station === selectedStation);
-  // Calculate the average value for each parameter
-
-  let averages = {};
-  if (filteredData && filteredData.length > 0) {
-    averages = Object.keys(filteredData[0]).reduce((acc, key) => {
-      if (key !== 'Station') {
-        const sum = filteredData.reduce((total, d) => total + d[key], 0);
-        const average = sum / filteredData.length;
-        acc[key] = Number(average.toFixed(1)); // round to 1 decimal place
-      }
-      return acc;
-    }, {});
-  }
 
   if (loading) {
     return (
@@ -157,6 +168,13 @@ function App(props) {
       </div>
     )
   }
+
+  //////////////////////////////////////////////////////
+
+  console.log(units)
+
+  //////////////////////////////////////////////////////
+
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -176,7 +194,7 @@ function App(props) {
               {/**************************************/}
 
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, margin: 2 }}>
-                <Typography variant="h5">Site: Lam Tsuen River</Typography>
+                <Typography variant="h5">{project[0].Name + ', ' + project[0].Location + ', ' + project[0].Country}</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography variant="h5">Device: {selectedMarker.Station}</Typography>
                   <IconButton onClick={handleMenuOpen}>
@@ -226,40 +244,24 @@ function App(props) {
                 {/**************************************/}
                 {/*            TOP PARAMETERS          */}
                 {/**************************************/}
-                <Grid container justifyContent="space-around" sm={12} >
-                  <Parameters
-                    color={averages["Water Temperature (°C)"] >= 4 && averages["Water Temperature (°C)"] <= 22 ? '#83b854' : '#de4545'}
-                    parameterName="Temperature" value={averages["Water Temperature (°C)"] + " °C"}
-                  />
-                  <Parameters
-                    color={averages["pH"] >= 6.5 && averages["pH"] <= 8.5 ? '#83b854' : '#de4545'}
-                    parameterName="pH" value={averages["pH"]}
-                  />
-                  <Parameters
-                    color={averages["Dissolved Oxygen (mg/L)"] >= 5 && averages["Dissolved Oxygen (mg/L)"] <= 11 ? '#83b854' : '#de4545'}
-                    parameterName="Dissolved Oxygen" value={averages["Dissolved Oxygen (mg/L)"] + " mg/L"}
-                  />
-                  <Parameters
-                    color={averages["Conductivity (µS/cm)"] >= 100 && averages["Conductivity (µS/cm)"] <= 1000 ? '#83b854' : '#de4545'}
-                    parameterName="Conductivity" value={averages["Conductivity (µS/cm)"] + " µS/cm"}
-                  />
-                  <Parameters
-                    color={averages["Nitrite-Nitrogen (mg/L)"] >= 0 && averages["Nitrite-Nitrogen (mg/L)"] <= 1 ? '#83b854' : '#de4545'}
-                    parameterName="Nitrite-Nitrogen" value={averages["Nitrite-Nitrogen (mg/L)"] + "mg/L"}
-                  />
-                  <Parameters
-                    color={averages["5-Day Biochemical Oxygen Demand (mg/L)"] >= 1 && averages["5-Day Biochemical Oxygen Demand (mg/L)"] <= 5 ? '#83b854' : '#de4545'}
-                    parameterName="BOD5" value={averages["5-Day Biochemical Oxygen Demand (mg/L)"] + " mg/L"}
-                  />
-                  <Parameters
-                    color={averages["Total Phosphorus (mg/L)"] >= 0 && averages["Total Phosphorus (mg/L)"] <= 3 ? '#83b854' : '#de4545'}
-                    parameterName="Total Phosphorus" value={averages["Total Phosphorus (mg/L)"] + "mg/L"}
-                  />
-                  <Parameters
-                    color={averages["Ammonia-Nitrogen (mg/L)"] >= 0.25 && averages["Ammonia-Nitrogen (mg/L)"] <= 20 ? '#83b854' : '#de4545'}
-                    parameterName="Ammonia-Nitrogen" value={averages["Ammonia-Nitrogen (mg/L)"] + " mg/L"}
-                  />
+                <Grid container justifyContent="space-around">
+                  {averages.map(average => {
+                    const unit = units.find(unit => unit.ParameterName === average.ParameterName);
+                    let color = "#de4545";
+                    if (average.average !== null && average.average >= unit.Min && average.average <= unit.Max) {
+                      color = "#83b854";
+                    }
+                    return (
+                      <Parameters
+                        key={unit.ParameterName}
+                        color={color}
+                        parameterName={unit.ParameterName}
+                        value={`${average.average !== null ? average.average.toFixed(2) : 'N/A'} ${unit.Unit}`}
+                      />
+                    );
+                  })}
                 </Grid>
+
               </Paper>
 
               <Grid container>
@@ -270,7 +272,7 @@ function App(props) {
                   <Paper sx={{ p: 2, mt: 2, mb: 2, mr: 0 }}>
                     <Datepicker startDate={startDate} setStartDate={setStartDate}
                       endDate={endDate} setEndDate={setEndDate} />
-                    <Button variant="contained" onClick={getData} size="large"
+                    <Button variant="contained" onClick={getDataNew} size="large"
                       sx={{ ml: 4, mt: 1 }}>View </Button>
                   </Paper>
 
@@ -332,8 +334,6 @@ function App(props) {
                       </Marker>
                     ))}
                   </MapContainer>
-                  <Box container pl={20} pt={3}>
-                  </Box>
                 </Grid>
               </Grid>
 
@@ -342,71 +342,40 @@ function App(props) {
               {/*           Rest of charts           */}
               {/**************************************/}
 
-              <Grid>
-                <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <Typography sx={{ pt: 1 }} variant="h5" >Ammonia-Nitrogen</Typography>
-                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
-                  <ResponsiveContainer height={140}>
-                    <BarGraph data={filteredData} datakey={'Ammonia-Nitrogen (mg/L)'} min={'0.25'} max={'3'} />
-                  </ResponsiveContainer>
-                </Paper>
-
-                <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <Typography sx={{ pt: 1 }} variant="h5" >Total Phosphorus (mg/L)</Typography>
-                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
-                  <ResponsiveContainer height={140}>
-                    <LineGraph data={filteredData} datakey={'Total Phosphorus (mg/L)'} min={'0'} max={'3'} />
-                  </ResponsiveContainer>
-                </Paper>
-
-                <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <Typography sx={{ pt: 1 }} variant="h5" >5-Day Biochemical Oxygen Demand</Typography>
-                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
-                  <ResponsiveContainer height={140}>
-                    <BarGraph data={filteredData} datakey={'5-Day Biochemical Oxygen Demand (mg/L)'} min={'1'} max={'5'} />
-                  </ResponsiveContainer>
-                </Paper>
-
-                <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <Typography sx={{ pt: 1 }} variant="h5" >Water Temperature</Typography>
-                  <Typography sx={{ pt: 1 }} variant="body1" >(°C)</Typography>
-                  <ResponsiveContainer height={140}>
-                    <LineGraph data={filteredData} datakey={'Water Temperature (°C)'} min={'4'} max={'22'} />
-                  </ResponsiveContainer>
-                </Paper>
-
-                <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <Typography sx={{ pt: 1 }} variant="h5" >Suspended solids</Typography>
-                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
-                  <ResponsiveContainer height={140}>
-                    <BarGraph data={filteredData} datakey={'Suspended solids (mg/L)'} min={'1'} max={'5'} />
-                  </ResponsiveContainer>
-                </Paper>
-
-                <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <Typography sx={{ pt: 1 }} variant="h5" >Conductivity</Typography>
-                  <Typography sx={{ pt: 1 }} variant="body1" >(µS/cm)</Typography>
-                  <ResponsiveContainer height={140}>
-                    <LineGraph data={filteredData} datakey={'Conductivity (µS/cm)'} min={'100'} max={'1000'} />
-                  </ResponsiveContainer>
-                </Paper>
-
-                <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <Typography sx={{ pt: 1 }} variant="h5" >Nitrate-Nitrogen</Typography>
-                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
-                  <ResponsiveContainer height={140}>
-                    <BarGraph data={filteredData} datakey={'Nitrate-Nitrogen (mg/L)'} min={'0'} max={'10'} />
-                  </ResponsiveContainer>
-                </Paper>
-
-                <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 3 }}>
-                  <Typography sx={{ pt: 1 }} variant="h5" >Nitrite-Nitrogen</Typography>
-                  <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
-                  <ResponsiveContainer height={140}>
-                    <LineGraph data={filteredData} datakey={'Nitrite-Nitrogen (mg/L)'} min={'0'} max={'1'} />
-                  </ResponsiveContainer>
-                </Paper>
+              <Grid item>
+                {units.map((unit, index) => (
+                  <Paper key={unit.ParameterName} sx={{ pl: 3, pr: 5, pt: 2, mt: 2 }}>
+                    <Typography sx={{ pt: 1 }} variant="h5">{unit.ParameterName}</Typography>
+                    <Typography sx={{ pt: 1 }} variant="body1">({unit.Unit})</Typography>
+                    <ResponsiveContainer height={140}>
+                      {(index % 2 === 0) ? (
+                        <BarGraph
+                          data={filteredData
+                            .filter((d) => d.Parameter === unit.ParameterName)
+                            .map((d) => ({ ...d }))
+                          }
+                          datakey={'Reading'}
+                          min={unit.Min}
+                          max={unit.Max}
+                        />
+                      ) : (
+                        <LineGraph
+                          data={filteredData
+                            .filter((d) => d.Parameter === unit.ParameterName)
+                            .map((d) => ({ ...d }))
+                          }
+                          datakey={'Reading'}
+                          min={unit.Min}
+                          max={unit.Max}
+                        />
+                      )}
+                    </ResponsiveContainer>
+                  </Paper>
+                ))}
               </Grid>
+
+
+
             </Grid>
           </Grid>
         </div>

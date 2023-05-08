@@ -20,7 +20,7 @@ const ProjectApp = () => {
                 console.error('Error fetching projects:', error);
             });
     }, []);
-
+    console.log(projectList)
     return (
         <div style={{ backgroundColor: '#f2f2f2' }}>
             <Navbar />
