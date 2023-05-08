@@ -7,7 +7,7 @@ import LineGraph from "./graphs/LineChart";
 import BarGraph from "./graphs/BarGraph";
 import Box from "@mui/material/Box";
 import { ResponsiveContainer } from "recharts";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import "./visualization.css";
