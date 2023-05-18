@@ -14,7 +14,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import myImage from './water.jpg';
-import UserContext from '../UserContext'
+import UserContext from '../UserContext';
+import Snackbar from '@mui/material/Snackbar';
+import SnackbarContent from '@mui/material/SnackbarContent';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Copyright(props) {
     return (
@@ -29,46 +33,69 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-   
-
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [errorMessage, setErrorMessage] = React.useState('');
+    const [errorMessage, setErrorMessage] = React.useState('Kindly enter something in both fields before submitting.');
+    const [showSignupSnackbar, setShowSignupSnackbar] = React.useState(false);
+    const [showPasswordResetSnackbar, setShowPasswordResetSnackbar] = React.useState(false);
+    const [invalidFormSubmission, setInvalidFormSubmission] = React.useState(false);
+
     const navigate = useNavigate();
 
-    const handleEmailValidation = (email) => {
-        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-        if (!emailRegex.test(email)) {
-            // alert("Please enter a valid email address.");
-        }
-    };
-
-    const handlePasswordValidation = (password) => {
-        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z!@#$%^&*]{8,}$/;
-        if (!passwordRegex.test(password)) {
-            // alert("Please enter a valid password. It should be more than 7 characters long and include at least one uppercase character and one special character.");
-        }
-    };
 
     const config = {
-        "headers": {
-            "Content-Type": "application/json"
-        }
-    }
-    
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
     const userContext = React.useContext(UserContext);
+
     const postData = async (data) => {
+        // New function for subscribing user to push notifications
+        const subscribeUser = (user) => {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then(function (registration) {
+                    if (!registration.pushManager) {
+                        console.log('Push Manager not available.');
+                        return;
+                    }
+
+                    registration.pushManager.subscribe({
+                        userVisibleOnly: true, // Always show notifications
+                        applicationServerKey: 'BGuZgk5YaBkbYqc8J5YU0M_BqiAtBRozdgPU1zyNlrdIkWHsrEhNxf3ZYG2XqUlC5kMRq3uv0LdA-Iznb_aD_F0' // Replace with your VAPID public key
+                    })
+                        .then(function (subscription) {
+                            // Send subscription to server
+                            fetch('http://localhost:8080/api/subscribe', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    userId: user.id,
+                                    subscription: subscription
+                                })
+                            });
+                        })
+                        .catch(function (error) {
+                            console.error('Failed to subscribe user: ', error);
+                        })
+
+                })
+            }
+        }
         try {
             const response = await axios.post('http://localhost:8080/api/login', data, config);
-            console.log("Server response:", response.data); // Add this line
             if (response.status === 200) {
                 const { token, user } = response.data;
                 localStorage.setItem('jwt', token);
-                userContext.setUser({ ...user }); // Update the UserContext
+                userContext.setUser({ ...user });
+                subscribeUser(user);
                 navigate('/projects');
             } else {
-                // handle error response
-                console.log('Error: ', response.status, response.data);
+                setErrorMessage('Invalid email or password. Please try again.');
+                setInvalidFormSubmission(true); // Add this line
             }
         } catch (error) {
             if (error.response) {
@@ -83,20 +110,39 @@ export default function Login() {
                 console.error('Error posting data: ', error);
                 setErrorMessage('An error occurred. Please try again.');
             }
+            setInvalidFormSubmission(true); // Add this line
         }
-    }
+    };
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
         // validate form and submit data
 
+        if (!email || !password) {
+            setInvalidFormSubmission(true);
+            return; // Exit early if the form is invalid
+        }
+
         const formData = JSON.stringify({
             email,
-            password
+            password,
         });
-        // send formData as a JSON to the backend  
+        // send formData as a JSON to the backend
         postData(formData);
     };
+
+
+    const handleSignupAlert = (event) => {
+        event.preventDefault();
+        setShowSignupSnackbar(true);
+    };
+
+    const handlePasswordResetAlert = (event) => {
+        event.preventDefault();
+        setShowPasswordResetSnackbar(true);
+    };
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -128,13 +174,7 @@ export default function Login() {
                         <Typography component="h1" variant="h4">
                             Sign in
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                            {errorMessage && (
-                                <Alert severity="error" sx={{ mb: 2 }}>
-                                    <AlertTitle>Error</AlertTitle>
-                                    {errorMessage}
-                                </Alert>
-                            )}
+                        <Box component="form" noValidate onSubmit={(event) => event.preventDefault()} sx={{ mt: 1 }}>
                             <TextField
                                 margin="normal"
                                 inputProps={{ style: { fontSize: 14 } }}
@@ -146,7 +186,6 @@ export default function Login() {
                                 autoComplete="email"
                                 autoFocus
                                 onChange={(event) => setEmail(event.target.value)}
-                                onBlur={(event) => handleEmailValidation(event.target.value)}
                             />
                             <TextField
                                 margin="normal"
@@ -159,11 +198,8 @@ export default function Login() {
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={(event) => setPassword(event.target.value)}
-                                onBlur={(event) => handlePasswordValidation(event.target.value)}
                             />
-
                             <Button
-                                // type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2, fontSize: 14 }}
@@ -173,19 +209,73 @@ export default function Login() {
                             </Button>
                             <Grid container marginTop={1}>
                                 <Grid item xs>
-                                    <Link href="#" variant="inherit">
-                                        {"Forgot password?"}
+                                    <Link href="#" variant="inherit" onClick={handlePasswordResetAlert}>
+                                        Forgot password?
                                     </Link>
                                 </Grid>
                                 <Grid item xs>
-                                    <Link href="signup" variant="inherit">
-                                        {"Don't have an account? Sign Up"}
+                                    <Link href="signup" variant="inherit" onClick={handleSignupAlert}>
+                                        Don't have an account? Sign Up
                                     </Link>
                                 </Grid>
                             </Grid>
                             <Copyright sx={{ mt: 5 }} />
                         </Box>
                     </Box>
+                    <Snackbar
+                        open={showPasswordResetSnackbar}
+                        autoHideDuration={6000}
+                        onClose={() => setShowPasswordResetSnackbar(false)}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                    >
+                        <SnackbarContent
+                            sx={{ backgroundColor: 'warning.main' }}
+                            message="Only admins can reset your password for you. Kindly contact your admin if you have forgotten your password."
+                            action={
+                                <IconButton size="small" aria-label="close" color="inherit" onClick={() => setShowPasswordResetSnackbar(false)}>
+                                    <CloseIcon fontSize="small" />
+                                </IconButton>
+                            }
+                        />
+                    </Snackbar>
+
+                    <Snackbar
+                        open={showSignupSnackbar}
+                        autoHideDuration={6000}
+                        onClose={() => setShowSignupSnackbar(false)}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                    >
+                        <SnackbarContent
+                            sx={{ backgroundColor: 'warning.main' }}
+                            message="Kindly contact your admin to have an account registered."
+                            action={
+                                <IconButton size="small" aria-label="close" color="inherit" onClick={() => setShowSignupSnackbar(false)}>
+                                    <CloseIcon fontSize="small" />
+                                </IconButton>
+                            }
+                        />
+                    </Snackbar>
+                    <Snackbar
+                        open={invalidFormSubmission}
+                        autoHideDuration={6000}
+                        onClose={() => {
+                            setInvalidFormSubmission(false);
+                            setErrorMessage(''); // Clear the error message when the Snackbar is closed
+                        }}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                    >
+                        <SnackbarContent
+                            sx={{ backgroundColor: 'error.main' }}
+                            message={errorMessage}
+                            action={
+                                <IconButton size="small" aria-label="close" color="inherit" onClick={() => setInvalidFormSubmission(false)}>
+                                    <CloseIcon fontSize="small" />
+                                </IconButton>
+                            }
+                        />
+                    </Snackbar>
+
+
                 </Grid>
             </Grid>
         </ThemeProvider>

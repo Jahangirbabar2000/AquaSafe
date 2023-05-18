@@ -1,12 +1,17 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Button from "@mui/material/Button";
 import { readString } from "react-papaparse";
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router";
 
 const CsvUploadButton = () => {
     const fileInputRef = useRef();
+    const [uploading, setUploading] = useState(false);
 
     const handleError = (err) => {
         console.error("Error while parsing file:", err);
@@ -15,8 +20,9 @@ const CsvUploadButton = () => {
             message: "Error parsing CSV file",
             severity: "error",
         });
+        setUploading(false);
     };
-
+    const navigate = useNavigate();
     const [snackbar, setSnackbar] = React.useState({
         open: false,
         message: "",
@@ -29,19 +35,20 @@ const CsvUploadButton = () => {
             open: false,
         });
     };
+
     const handleOpen = () => {
         fileInputRef.current.click();
     };
 
     const handleFileUpload = async (results, projectName, deviceName) => {
-
         const readings = {
             projectName,
             deviceName,
             data: results.data,
         };
 
-        console.log(readings)
+        console.log(readings);
+        setUploading(true);
         try {
             await axios.post("http://localhost:8080/readings/upload", readings);
             setSnackbar({
@@ -53,32 +60,34 @@ const CsvUploadButton = () => {
             console.error("Error uploading data", error);
             setSnackbar({
                 open: true,
-                message: "Error uploading data",
+                message: "Error uploading data: " + error.message,
                 severity: "error",
             });
+        } finally {
+            setUploading(false);
         }
+        navigate(`/readings`);
     };
-
-
 
     const readCSV = (file) => {
         const reader = new FileReader();
 
         reader.onload = (e) => {
             const content = e.target.result;
-            const lines = content.split('\n');
+            const lines = content.split("\n");
 
             // Extract and set the Project Name and Device Name
             const projectNameLine = lines[0].split(",");
             const deviceNameLine = lines[1].split(",");
 
             const actualHeader = lines[3]; // Get the fourth row
-            const data = lines.slice(4).join('\n'); // Get the remaining rows (skip the first four)
+            const data = lines.slice(4).join("\n"); // Get the remaining rows (skip the first four)
 
-            readString(actualHeader + '\n' + data, {
+            readString(actualHeader + "\n" + data, {
                 header: true,
                 dynamicTyping: true,
-                complete: (results) => handleFileUpload(results, projectNameLine[1], deviceNameLine[1]),
+                complete: (results) =>
+                    handleFileUpload(results, projectNameLine[1], deviceNameLine[1]),
                 error: handleError,
             });
         };
@@ -94,9 +103,6 @@ const CsvUploadButton = () => {
         reader.readAsText(file);
     };
 
-
-
-
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         readCSV(file);
@@ -104,7 +110,7 @@ const CsvUploadButton = () => {
 
     return (
         <div>
-            <Button                
+            <Button
                 variant="contained"
                 style={{
                     marginLeft: "20%",
@@ -123,8 +129,22 @@ const CsvUploadButton = () => {
                 onChange={handleFileChange}
                 style={{ display: "none" }}
             />
+            <Backdrop
+                open={uploading}
+                style={{ color: '#fff', zIndex: 9999, display: "flex", flexDirection: "column", alignItems: "center" }}
+            >
+                <CircularProgress size={100} color="primary" />
+                <Typography
+                    variant="h5"
+                    style={{ marginTop: "10px", color: "white", textAlign: "center" }}
+                >
+                    Hold on while we upload your data to our servers
+                </Typography>
+            </Backdrop>
+
+
             <Snackbar
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 open={snackbar.open}
                 autoHideDuration={3000}
                 onClose={handleCloseSnackbar}

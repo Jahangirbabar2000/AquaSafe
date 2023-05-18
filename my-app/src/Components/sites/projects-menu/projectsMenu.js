@@ -1,87 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import Typography from '@mui/material/Typography';
 import "./projects.css";
 
-const data = {
-  countries: [
-    {
-      name: "Pakistan",
-      states: [
-        {
-          name: "Islamabad",
-          lakes: [
-            { name: "Rawal Lake", coordinates: '33.704196, 73.127151' },
-            { name: "Nust Lake", coordinates: '33.639924, 72.991497' }
-          ]
-        },
-        {
-          name: "Lahore",
-          lakes: [
-            { name: "Lahore Canal", coordinates: '31.456612, 74.225711' }
-          ]
-        }
-      ]
-    },
-    {
-      name: "India",
-      states: [
-        {
-          name: "Delhi",
-          lakes: [
-            { name: "Yamuna River", coordinates: '26.919072, 78.603781' },
-            { name: "Sanjay Lake", coordinates: '28.614334, 77.299822' }
-          ]
-        },
-        {
-          name: "Mumbai",
-          lakes: [
-            { name: "Tulsi Lake", coordinates: '19.191272, 72.917397' },
-            { name: "Pawai Lake", coordinates: '19.126180, 72.902860' }
-          ]
-        }
-      ]
-    },
-    {
-      name: "Bangladesh",
-      states: [
-        {
-          name: "Dhaka",
-          lakes: [
-            { name: "Turag River", coordinates: '23.908079, 90.333078' },
-            { name: "Hatir Jheel", coordinates: '23.768993, 90.416165' }
-          ]
-        },
-        {
-          name: "Chattogram",
-          lakes: [
-            { name: "Sangu River", coordinates: '21.836432, 92.417387' },
-            { name: "Kaptai Lake", coordinates: '22.673598, 92.161764' }
-          ]
-        }
-      ]
-    },
-  ]
-};
-
 function ProjectMenu(props) {
+
+  const [projectList, setProjectList] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedProject, setSelectedProject] = useState("");
 
+  useEffect(() => {
+    // Make Axios request to fetch project details from the backend
+    axios
+      .get('http://localhost:8080/projects')
+      .then((response) => {
+        setProjectList(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching projects:', error);
+      });
+  }, []);
+
+  // Group the data by country
+  const groupedByCountry = projectList.reduce((acc, curr) => {
+    const { Country, Location, Name, Longitude, Latitude } = curr;
+
+    // Find the country in the accumulator
+    let country = acc.find((c) => c.name === Country);
+
+    // If the country doesn't exist, create it
+    if (!country) {
+      country = { name: Country, states: [] };
+      acc.push(country);
+    }
+
+    // Find the state in the country
+    let state = country.states.find((s) => s.name === Location);
+
+    // If the state doesn't exist, create it
+    if (!state) {
+      state = { name: Location, lakes: [] };
+      country.states.push(state);
+    }
+
+    // Add the lake to the state
+    const coordinates = `${Latitude}, ${Longitude}`;
+    const lake = { name: Name, coordinates };
+    state.lakes.push(lake);
+
+    return acc;
+  }, []);
+
+  // Create the final data object
+  const data = { countries: groupedByCountry };
   const availableState = data.countries.find((c) => c.name === selectedCountry);
   const availableProjects = availableState?.states?.find(
     (s) => s.name === selectedCity
   );
 
+  useEffect(() => {
+    const project = projectList.find(project => project.Name === selectedProject);
+    if (project) {
+      props.setSelectedProjectId(project.Id);
+    }
+  }, [selectedProject, projectList]);
 
-  const handleClick1 = () => {
+  const handleClear = () => {
     setSelectedCity("");
     setSelectedCountry("");
     setSelectedProject("");
   };
-
   return (
     <div id="container-projects">
       <div>
@@ -108,7 +99,10 @@ function ProjectMenu(props) {
           className="select-projects"
           placeholder="City"
           value={selectedCity}
-          onChange={(e) => setSelectedCity(e.target.value)}
+          onChange={(e) => {
+            setSelectedCity(e.target.value);
+            setSelectedProject("");
+          }}
           disabled={!selectedCountry}
         >
           <option className="option-projects" value="" disabled>
@@ -149,7 +143,7 @@ function ProjectMenu(props) {
       </div>
 
       <div className="buttons-div">
-        <IconButton aria-label="delete" onClick={handleClick1}>
+        <IconButton aria-label="delete" onClick={handleClear}>
           <CancelRoundedIcon className="icon" style={{ fontSize: 20, marginRight: 4 }} />
           <Typography className="icon" variant="h6" >
             clear

@@ -6,7 +6,18 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const webpush = require('web-push');
 dotenv.config();
+
+// console.log(process.env.VAPID_PUBLIC_KEY);
+
+// Set VAPID keys
+webpush.setVapidDetails(
+    'mailto:example@yourdomain.org',
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+);
+
 
 // Initialize express app
 const app = express();
@@ -42,6 +53,129 @@ try {
     connection.connect();
 }
 catch (err) { console.log(err); }
+
+app.post('/api/reading', (req, res) => {
+    const { deviceId, sensorData } = req.body;
+
+    sensorData.forEach(data => {
+        const insertDataQuery = 'INSERT INTO Readings (Time, Reading, Device, Parameter, UnitId) VALUES (?, ?, ?, ?, ?)';
+        connection.query(insertDataQuery, [new Date(), data.reading, deviceId, data.parameter, data.unitId], (err, result) => {
+            if (err) {
+                console.error('Error inserting sensor data: ', err);
+                return res.status(500).json({ message: 'Internal server error.' });
+            }
+
+            const checkThresholdQuery = 'SELECT * FROM ParameterUnits WHERE Id = ? AND (Min > ? OR Max < ?)';
+            connection.query(checkThresholdQuery, [data.unitId, data.reading, data.reading], (err, results) => {
+                if (err) {
+                    console.error('Error checking thresholds: ', err);
+                    return res.status(500).json({ message: 'Internal server error.' });
+                }
+
+                if (results.length > 0) {
+                    const fetchProjectQuery = 'SELECT P.Name, P.Location, P.Country FROM Projects P INNER JOIN DeployedDevices D ON P.Id = D.Project WHERE D.Id = ?';
+                    connection.query(fetchProjectQuery, [deviceId], (err, projectResults) => {
+                        if (err) {
+                            console.error('Error fetching project: ', err);
+                            return res.status(500).json({ message: 'Internal server error.' });
+                        }
+
+                        const project = projectResults[0];
+                        const location = `${project.Name}, ${project.Location}, ${project.Country}`;
+
+                        const fetchUsersQuery = 'SELECT user FROM WorksOn WHERE project = (SELECT Project FROM DeployedDevices WHERE Id = ?)';
+                        connection.query(fetchUsersQuery, [deviceId], (err, users) => {
+                            if (err) {
+                                console.error('Error fetching users: ', err);
+                                return res.status(500).json({ message: 'Internal server error.' });
+                            }
+
+                            users.forEach(row => {
+                                const payload = {
+                                    title: 'Threshold Breached',
+                                    body: `The ${data.parameter} sensor on device ${deviceId} has breached its threshold.`
+                                };
+
+                                const fetchSubscriptionQuery = 'SELECT * FROM Subscriptions WHERE UserId = ?';
+                                connection.query(fetchSubscriptionQuery, [row.user], (err, results) => {
+                                    if (err) {
+                                        console.error('Error fetching subscriptions: ', err);
+                                        return res.status(500).json({ message: 'Internal server error.' });
+                                    }
+
+                                    if (results.length === 0) {
+                                        console.error('Subscription not found for user: ', row.user);
+                                        return; // We can't send a 404 here as it would stop the processing of the other users.
+                                    }
+
+                                    const subscription = JSON.parse(results[0].Subscription);
+                                    webpush.sendNotification(subscription, JSON.stringify(payload))
+                                        .catch(err => {
+                                            console.error('Error sending notification: ', err);
+                                        });
+
+                                    // Adding the entry to the Notifications table
+                                    const notificationPriority = data.reading < results[0].Min ? 'low' : 'high'; // Assuming low if below Min and high if above Max
+                                    const insertNotificationQuery = 'INSERT INTO Notifications (Priority, Location, Description, Device, Reading, Time, User, isViewed) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+                                    connection.query(insertNotificationQuery, [notificationPriority, location, payload.body, deviceId, result.insertId, new Date(), row.user, 0], (err) => {
+                                        if (err) {
+                                            console.error('Error inserting into Notifications: ', err);
+                                        }
+                                    });
+                                });
+                            });
+                        });
+                    });
+                }
+            });
+        });
+    });
+    res.json({ message: 'Data received.' });
+});
+
+app.post('/api/subscribe', (req, res) => {
+    const subscription = req.body.subscription;
+    const userId = req.body.userId;
+
+    // Insert subscription into the Subscriptions table
+    const insertSubscriptionQuery = 'INSERT INTO Subscriptions (UserId, Subscription) VALUES (?, ?)';
+    connection.query(insertSubscriptionQuery, [userId, JSON.stringify(subscription)], (err, result) => {
+        if (err) {
+            console.error('Error inserting subscription: ', err);
+            return res.status(500).json({ message: 'Internal server error.' });
+        }
+
+        return res.status(201).json({ message: 'Subscription stored successfully.' });
+    });
+});
+
+app.post('/api/notify', (req, res) => {
+    const userId = req.body.userId;
+    const payload = req.body.payload;
+
+    // Fetch subscription for the user
+    const fetchSubscriptionQuery = 'SELECT Subscription FROM Subscriptions WHERE UserId = ?';
+    connection.query(fetchSubscriptionQuery, [userId], (err, results) => {
+        if (err) {
+            console.error('Error fetching subscription: ', err);
+            return res.status(500).json({ message: 'Internal server error.' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Subscription not found.' });
+        }
+
+        const subscription = JSON.parse(results[0].Subscription);
+
+        // Send the notification
+        webpush.sendNotification(subscription, payload)
+            .then(() => res.status(200).json({ message: 'Notification sent.' }))
+            .catch(err => {
+                console.error('Error sending notification: ', err);
+                return res.status(500).json({ message: 'Internal server error.' });
+            });
+    });
+});
 
 app.post('/api/register', (req, res) => {
     const { firstName, lastName, email, password, designation, country, site } = req.body;
@@ -167,34 +301,41 @@ app.post('/api/login', (req, res) => {
     });
 });
 
+app.get('/api/dashboard2', async (req, res) => {
 
-// Create route to retrieve data from database
-app.get('/data', (req, res) => {
-    connection.query('SELECT r.Time, r.Reading, sc.Parameter FROM AquaSafe.readings as r, aquasafe.sensorscatalogue as sc where r.Sensor = sc.Id;', (err, rows) => {
-        if (err) throw err;
-        res.send(rows);
-    });
-});
-
-
-// Create route to retrieve data from  hong kong dataset
-app.get('/hkdata', (req, res) => {
-    connection.query('SELECT * from HongKongDataSet where Dates between "2014-01-01" and "2016-01-15";', (err, rows) => {
-        if (err) throw err;
-        res.send(rows);
-    });
-});
-
-
-
-// Create route to retrieve data from  hong kong dataset
-app.get('/hkdata2', (req, res) => {
+    const projectId = req.query.id;
     const startDate = req.query.start_date;
     const endDate = req.query.end_date;
-    connection.query(`SELECT * from HongKongDataSet where Dates between '${startDate}' and '${endDate}';`, (err, rows) => {
-        if (err) throw err;
-        res.send(rows);
-    });
+    try {
+
+        const [project] = await connection.promise().query('SELECT * FROM AquaSafe.Projects WHERE Id = ?;', [projectId]);
+
+        const [deployedDevices] = await connection.promise().query('SELECT * FROM AquaSafe.DeployedDevices WHERE Project = ?;', [projectId]);
+
+        const deviceIds = deployedDevices.map(device => device.Id);
+        const [readings] = await connection.promise().query(`SELECT * FROM AquaSafe.Readings WHERE Device IN (?) and Time between '${startDate}' and '${endDate}';`, [deviceIds]);
+
+        const unitIds = Array.from(new Set(readings.map(reading => reading.UnitId)));
+        let units;
+        if (unitIds.length > 0) {
+            [units] = await connection
+                .promise()
+                .query('SELECT * FROM AquaSafe.ParameterUnits WHERE Id IN (?);', [unitIds]);
+        } else {
+            units = []; // Empty array when unitIds is empty
+        }
+        const response = {
+            project,
+            deployedDevices,
+            readings,
+            units
+        };
+        res.send(response);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: 'Error fetching data' });
+    }
 });
 
 app.get('/api/dashboard/:id', async (req, res) => {
@@ -226,58 +367,50 @@ app.get('/api/dashboard/:id', async (req, res) => {
     }
 });
 
+app.get('/api/notifications', (req, res) => {
+    const fetchNotificationsQuery = 'SELECT * FROM Notifications ORDER BY Time DESC';
+    connection.query(fetchNotificationsQuery, (err, results) => {
+        if (err) {
+            console.error('Error fetching notifications: ', err);
+            return res.status(500).json({ message: 'Internal server error.' });
+        }
 
-// app.get('/api/dashboard/:projectId', (req, res) => {
+        // Transform the result to match the structure of your frontend
+        const notifications = results.map(row => {
+            return {
+                id: row.Id,
+                type: "sensor", // If the type is not available, it can be hardcoded or removed
+                code: row.Priority === 'high' ? 10 : (row.Priority === 'low' ? 12 : 11), // Mapping priority to a suitable code
+                location: row.Location,
+                description: row.Description,
+                device: row.Device,
+                reading: row.Reading,
+                status: row.Priority === 'high' ? "Urgent" : "Moderate", // You can adjust this according to your needs
+                isViewed: row.isViewed,
+                date: row.Time
+            };
+        });
 
-//     const projectId = req.params.projectId;
+        res.json(notifications);
+    });
+});
 
-//     // retrieve data from deployedDevices table based on projectId
-//     const deployedDevicesQuery = `SELECT * FROM AquaSafe.DeployedDevices WHERE Project = ${projectId}`;
-//     connection.query(deployedDevicesQuery, (error, deployedDevicesResults, fields) => {
-//         if (error) {
-//             console.error(error);
-//             res.status(500).send('Error retrieving deployedDevices data from database');
-//         } else {
-//             const deviceIds = deployedDevicesResults.map(device => device.Id);
+app.put('/api/notifications/view', (req, res) => {
+    const { notificationIds } = req.body;
 
-//             // retrieve data from readings table based on deviceIds
-//             const readingsQuery = `SELECT * FROM AquaSafe.Readings WHERE Device IN (${deviceIds.join()})`;
-//             connection.query(readingsQuery, (error, readingsResults, fields) => {
-//                 if (error) {
-//                     console.error(error);
-//                     res.status(500).send('Error retrieving readings data from database');
-//                 } else {
-//                     const unitIds = readingsResults.map(reading => reading.UnitId);
+    if (!Array.isArray(notificationIds)) {
+        return res.status(400).json({ message: 'Bad request. Expecting an array of notification IDs.' });
+    }
 
-//                     // retrieve unit names from parameterunits table based on unitIds
-//                     const unitsQuery = `SELECT * FROM parameterunits WHERE Id IN (${unitIds.join()})`;
-//                     connection.query(unitsQuery, (error, unitsResults, fields) => {
-//                         if (error) {
-//                             console.error(error);
-//                             res.status(500).send('Error retrieving units data from database');
-//                         } else {
-//                             // combine all retrieved data and send as response
-//                             const data = {
-//                                 deployedDevices: deployedDevicesResults,
-//                                 readings: readingsResults,
-//                                 units: unitsResults
-//                             };
-//                             res.send(data);
-//                         }
-//                     });
-//                 }
-//             });
-//         }
-//     });
-// });
+    const updateQuery = `UPDATE AquaSafe.Notifications SET isViewed = TRUE WHERE Id IN (${notificationIds.join(',')})`;
 
+    connection.query(updateQuery, (err, results) => {
+        if (err) {
+            console.error('Error updating notifications: ', err);
+            return res.status(500).json({ message: 'Internal server error.' });
+        }
 
-// Create route to retrieve stationCoordinates from  hong kong dataset 
-
-app.get('/stationCoordinates', (req, res) => {
-    connection.query('SELECT * FROM AquaSafe.stationCoordinates;', (err, rows) => {
-        if (err) throw err;
-        res.send(rows);
+        res.json({ message: 'Notifications updated successfully' });
     });
 });
 
@@ -306,7 +439,6 @@ app.get('/activeUsers', (req, res) => {
     });
 });
 
-// Add this route to update a user's data in the database
 app.put('/api/users/:id', (req, res) => {
     const id = req.params.id;
     const updatedUser = req.body;
@@ -332,15 +464,25 @@ app.put('/api/users/:id', (req, res) => {
                         console.error('Error updating password: ', err);
                         res.status(500).json({ message: 'Internal server error.' });
                     } else {
-                        // Update the user's data in the workson table
-                        const updateWorksonQuery = 'UPDATE workson SET Designation = ? WHERE user = ?';
-                        connection.query(updateWorksonQuery, [updatedUser.Designation, id], (err) => {
-                            if (err) {
-                                console.error('Error updating workson: ', err);
-                                res.status(500).json({ message: 'Internal server error.' });
-                            } else {
-                                res.status(200).json({ message: 'User updated successfully.' });
+                        // Fetch the projectId from Projects table
+                        const fetchProjectIdQuery = 'SELECT Id FROM aquasafe.projects WHERE Name = ?';
+                        connection.query(fetchProjectIdQuery, [updatedUser.Site], (err, result) => {
+                            if (err || result.length === 0) {
+                                console.error('Error fetching project id: ', err);
+                                return res.status(500).json({ message: 'Internal server error.' });
                             }
+                            const projectId = result[0].Id;
+
+                            // Update the user's data in the workson table
+                            const updateWorksonQuery = 'UPDATE WorksOn SET Designation = ?, project = ? WHERE user = ?';
+                            connection.query(updateWorksonQuery, [updatedUser.Designation, projectId, id], (err) => {
+                                if (err) {
+                                    console.error('Error updating workson: ', err);
+                                    res.status(500).json({ message: 'Internal server error.' });
+                                } else {
+                                    res.status(200).json({ message: 'User updated successfully.' });
+                                }
+                            });
                         });
                     }
                 });
@@ -379,56 +521,13 @@ app.delete('/api/users/:id', (req, res) => {
     });
 });
 
-
-app.get('/sensorsTable', (req, res) => {
-    connection.query('SELECT * FROM AquaSafe.SensorsCatalogue;', (err, rows) => {
-        if (err) throw err;
-
-        res.send(rows);
-    });
-});
-
-// Defining API endpoint for deleting a MySQL entry by ID
-app.delete('/sensors/:id', (req, res) => {
-    const id = req.params.id;
-
-    // Construct SQL query to delete entry by ID
-    const query = `DELETE FROM AquaSafe.SensorsCatalogue WHERE Id=${id};`;
-
-    // Execute SQL query
-    connection.query(query, (error) => {
-        if (error) {
-            console.log(error);
-            res.status(500).json({ error: 'Error deleting entry from MySQL' });
-        } else {
-            res.status(200).json({ message: 'Entry deleted successfully from MySQL' });
-        }
-    });
-});
-
-// Defining API endpoint for adding a MySQL entry by ID
-app.post('/sensors', (req, res) => {
-    const data = req.body;
-    const query = `INSERT into SensorsCatalogue(Parameter, Model, SensorMin, SensorMax) VALUES('${data.Parameter}', '${data.Model}', ${data.SensorMin}, ${data.SensorMax});`;
-
-    // Execute SQL query
-    connection.query(query, (error, results) => {
-        if (error) {
-            res.status(500).json({ error: 'Error adding data to MySQL' });
-        } else {
-            res.status(200).json({ message: 'Data added successfully to MySQL', id: results.insertId });
-        }
-    });
-});
-
 // Create route to retrieve parameters data from database
 app.get('/parameters', (req, res) => {
-    connection.query('SELECT wp.Name, wp.Description, pu.Unit, pu.Min, pu.Max FROM waterparameters wp JOIN parameterunits pu ON wp.Name = pu.ParameterName', (err, rows) => {
+    connection.query('SELECT wp.Name, wp.Description, pu.Unit, pu.Min, pu.Max FROM waterparameters wp JOIN ParameterUnits pu ON wp.Name = pu.ParameterName', (err, rows) => {
         if (err) throw err;
         res.send(rows);
     });
 });
-
 
 app.post('/parameters', (req, res) => {
     const data = req.body;
@@ -520,16 +619,18 @@ app.post('/api/deployeddevices', (req, res) => {
 
 // Create route to fetch readings from database
 app.get('/api/readings', (req, res) => {
+    const projectId = req.query.Id;
     const query = `
         SELECT r.Id, r.Time, r.Reading, dd.Name as DeviceName, r.Parameter, r.UnitId, wp.Description, pu.Unit, dd.Project, p.Name as ProjectName
         FROM AquaSafe.Readings r
         JOIN AquaSafe.DeployedDevices dd ON r.Device = dd.Id
         JOIN AquaSafe.Projects p ON dd.Project = p.Id
         JOIN AquaSafe.ParameterUnits pu ON r.UnitId = pu.Id
-        JOIN AquaSafe.WaterParameters wp ON pu.ParameterName = wp.Name;
+        JOIN AquaSafe.WaterParameters wp ON pu.ParameterName = wp.Name
+        WHERE p.Id = ?;
     `;
 
-    connection.query(query, (err, rows) => {
+    connection.query(query, [projectId], (err, rows) => {
         if (err) {
             console.error('Error fetching readings: ', err);
             res.status(500).json({ message: 'Internal server error.' });
@@ -591,7 +692,7 @@ app.post('/readings/upload', async (req, res) => {
                 const unit = unitWithBrackets.slice(0, -1); // Remove the closing parenthesis               
 
                 const promise = new Promise((resolve, reject) => {
-                    connection.query('SELECT Id FROM AquaSafe.parameterunits WHERE Unit = ? and ParameterName = ?', [unit, parameter], (unitErr, unitRows) => {
+                    connection.query('SELECT Id FROM AquaSafe.ParameterUnits WHERE Unit = ? and ParameterName = ?', [unit, parameter], (unitErr, unitRows) => {
                         if (unitErr) {
                             reject(unitErr);
                         } else if (unitRows.length === 0) {
@@ -631,7 +732,6 @@ app.post('/readings/upload', async (req, res) => {
         }
     });
 });
-
 
 // Start the server
 app.listen(8080, () => {

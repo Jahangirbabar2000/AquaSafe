@@ -10,6 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -31,19 +32,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   }
 }));
 
-function ReadingsTable() {
+function ReadingsTable(props) {
   const [ReadingsData, setReadingsData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    // FIRST API REQUEST - Data
-    axios.get(`http://localhost:8080/api/readings`)
+    axios.get(`http://localhost:8080/api/readings?Id=${props.Id}`)
       .then(response => {
         setReadingsData(response.data);
       })
       .catch(error => console.log(error));
-  }, []);
+  }, [props.Id]);
 
   const columns = [
     { id: 'DeviceName', label: 'Device Name', align: 'center' },

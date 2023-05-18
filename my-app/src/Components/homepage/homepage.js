@@ -37,28 +37,28 @@ const Root = styled('div')(({ theme }) => ({
 
 function Navbarhome() {
   return (
-    <Root>    
-    <Box sx={{ flexGrow: 1, marginBottom: 7 }}>
-      <AppBar position="fixed" sx={{ background: "white" }}>
-        <Toolbar>
+    <Root>
+      <Box sx={{ flexGrow: 1, marginBottom: 7 }}>
+        <AppBar position="fixed" sx={{ background: "white" }}>
+          <Toolbar>
             <Link to="/homepage" style={{ textDecoration: 'none' }}>
-            <img className="logo-img" src={aquasafeLogo} alt="logo" />
-          </Link>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <Link to="/dashboard" style={{ textDecoration: 'none' }}>
-              <Button variant="contained" sx={{ fontSize: 10 }}>
-                Take a look
-              </Button>
+              <img className="logo-img" src={aquasafeLogo} alt="logo" />
             </Link>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <Link to="/dashboard/1" style={{ textDecoration: 'none' }}>
+                <Button variant="contained" sx={{ fontSize: 10 }}>
+                  Take a look
+                </Button>
+              </Link>
               <Link to="/login" style={{ textDecoration: 'none' }}>
-              <Button variant="contained" sx={{ fontSize: 10, marginLeft: 2 }}>
-                Login
-              </Button>
-            </Link>
-          </Box>
-        </Toolbar>
-      </AppBar>
+                <Button variant="contained" sx={{ fontSize: 10, marginLeft: 2 }}>
+                  Login
+                </Button>
+              </Link>
+            </Box>
+          </Toolbar>
+        </AppBar>
       </Box>
     </Root>
   );

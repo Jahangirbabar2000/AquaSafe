@@ -7,31 +7,36 @@ import { Grid, useMediaQuery, useTheme } from '@mui/material';
 
 const ProjectApp = () => {
     const [projectList, setProjectList] = useState([]);
+    const [loading, setLoading] = useState(true);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(() => {
         // Make Axios request to fetch project details from the backend
-        axios.get('http://localhost:8080/projects')
-            .then(response => {
+        axios
+            .get('http://localhost:8080/projects')
+            .then((response) => {
                 setProjectList(response.data);
+                setLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error fetching projects:', error);
             });
     }, []);
-    console.log(projectList)
+
     return (
         <div style={{ backgroundColor: '#f2f2f2' }}>
             <Navbar />
             <Sidebar2 name="Projects" />
-            <Grid container spacing={2}
-                sx={{ marginTop: '1rem', marginLeft: isMobile ? '3.2rem' : '8rem' }}>
+            <Grid
+                container
+                spacing={2}
+                sx={{ marginTop: '1rem', marginLeft: isMobile ? '3.2rem' : '8rem' }}
+            >
                 <Grid item xs={12}>
-                    <Projects projects={projectList} />
+                    <Projects projects={projectList} loading={loading} />
                 </Grid>
             </Grid>
-
         </div>
     );
 };

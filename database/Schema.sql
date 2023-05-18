@@ -87,14 +87,14 @@ CREATE TABLE `Readings` (
 CREATE TABLE `Notifications` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Priority` Enum ('high', 'low', 'normal'),
-  `Location` VARCHAR (20),
-  `Description` VARCHAR (20),
+  `Location` VARCHAR (100),
+  `Description` VARCHAR (100),
   `Device` INT NOT NULL,
-  `Sensor` INT NOT NULL,
+  `Reading` INT NOT NULL,
   `Time` Date,
   `User` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  FOREIGN KEY (`Sensor`) REFERENCES `Readings`(`Id`),
+  FOREIGN KEY (`Reading`) REFERENCES `Readings`(`Id`),
   FOREIGN KEY (`Device`) REFERENCES `DeployedDevices`(`Id`),
   FOREIGN KEY (`User`) REFERENCES `Users`(`Id`)
 );
@@ -128,23 +128,12 @@ CREATE TABLE `Reports` (
   FOREIGN KEY (`Device`) REFERENCES `DeployedDevices`(`Id`)
 );
 
-DROP TABLE IF EXISTS stationCoordinates;
-CREATE TABLE `stationCoordinates` (
-  `Station` VARCHAR(10) PRIMARY KEY,
-  `Latitude` DOUBLE NOT NULL,
-  `Longitude` DOUBLE NOT NULL,
-  `Site` VARCHAR(255) DEFAULT 'Lam Tsuen River'
-);
-
-CREATE TABLE `parameterunits` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `ParameterName` varchar(50) NOT NULL,
-  `Unit` varchar(20) NOT NULL,
-  `Min` float DEFAULT NULL,
-  `Max` float DEFAULT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `ParameterName` (`ParameterName`),
-  CONSTRAINT `fk_parameterunits_waterparameters` FOREIGN KEY (`ParameterName`) REFERENCES `waterparameters` (`Name`)
+CREATE TABLE Subscriptions (
+    Id INT AUTO_INCREMENT,
+    UserId INT NOT NULL,
+    Subscription TEXT NOT NULL,
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    PRIMARY KEY (Id)
 );
 
 -- ----------------------------------------------

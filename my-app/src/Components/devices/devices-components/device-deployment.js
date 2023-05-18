@@ -226,7 +226,7 @@ const DeviceDeployment = () => {
         Name: formState.name,
         Longitude: markerPosition[1],
         Latitude: markerPosition[0],
-        Frequency: formState.frequency,
+        Frequency: formState.frequency + " " + timeUnit,
         Project: projectId,
         Locality: "Locality",
         CommTech: "LORAWAN",
@@ -235,7 +235,7 @@ const DeviceDeployment = () => {
       });
 
       if (response.status === 201) {
-        navigate('/dashboard');
+        navigate(`/dashboard/${projectId}`);
       } else {
         alert("Error adding device.");
       }

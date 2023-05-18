@@ -62,6 +62,7 @@ function UsersTable() {
   const getUsersData = async (req, res) => {
     res = await axios.get("http://localhost:8080/activeUsers");
     setUsersData(res.data);
+    console.log(res.data)
   };
 
   const handleDelete = async (id) => {

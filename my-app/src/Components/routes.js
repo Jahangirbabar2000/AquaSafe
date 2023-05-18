@@ -19,6 +19,8 @@ import ProjectApp from "./projects/ProjectApp";
 import Todos from "./Todos/Todos"
 import EditUser from './usersTable/editUser';
 import Error404 from './userAuth/errorPage';
+import ProjectManagement from './visualization/projectManagement';
+
 
 const ProtectedOutlet = ({ allowedDesignations }) => {
   const { user } = useContext(UserContext);
@@ -51,6 +53,7 @@ function routes() {
       <Route path="/addParameter" element={<AddParameter />} />
       <Route path="/readings" element={<ReadingsPage />} />
       <Route path="/todos" element={<Todos />} />
+      <Route path="/projectManagement/:projectId" element={<ProjectManagement />} />
       <Route path="/editUser/:id" element={<EditUser />} />
       <Route path="/error404" element={<Error404 />} />
       <Route path="*" element={<Error404 />} />

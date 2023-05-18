@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Sidebar2 from "../../sidebar/Sidebar2.js";
 import Navbar from "../../navbar/navbar.js";
 import Button from "@mui/material/Button";
-import data from "../NotificationBox/notification.json";
 import SensorNotification from "./SensorNotifications.js";
 import DeviceNotification from "./DeviceNotifications.js";
 
@@ -30,7 +29,7 @@ export default function NotificationTable() {
   const [showDevice, setShowDevice] = useState(false);
 
   React.useEffect(() => {
-    const DetailData = AddDetails(data);
+    const DetailData = AddDetails();
     setDetailData(DetailData);
   }, []);
 

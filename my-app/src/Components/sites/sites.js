@@ -4,11 +4,12 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import Sidebar2 from "../sidebar/Sidebar2";
 import Navbar from "../navbar/navbar.js";
 import { Link } from "react-router-dom";
-import ProjectMenu from "./projects-menu/projects";
+import ProjectMenu from "./projects-menu/projectsMenu";
 import Button from "@mui/material/Button";
 
 function Sites() {
   const [selectedCoordinates, setSelectedCoordinates] = useState([31.99, 77.13]);
+  const [selectedProjectId, setSelectedProjectId] = useState("1");
 
   useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -69,7 +70,7 @@ function Sites() {
               boxSizing: "border-box"
             }}
           >
-            <ProjectMenu setSelectedCoordinates={setSelectedCoordinates} />
+            <ProjectMenu setSelectedCoordinates={setSelectedCoordinates} setSelectedProjectId={setSelectedProjectId} />
           </div>
 
           <Grid container pl={35} pt={9} pb={6}>
@@ -78,7 +79,7 @@ function Sites() {
             </Grid>
           </Grid>
           <Grid container pl={75}>
-            <Link to="/dashboard" style={{ textDecoration: "none" }}>
+            <Link to={`/dashboard/${selectedProjectId}`} style={{ textDecoration: "none" }}>
               <Button style={{ fontSize: "16px" }} variant="contained">
                 View Devices
               </Button>

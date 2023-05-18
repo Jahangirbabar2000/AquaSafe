@@ -1,6 +1,6 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import moment from 'moment';
+import moment, { max, min } from 'moment';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Parameters from "./ParamCard";
 import LineGraph from "./graphs/LineChart";
@@ -32,55 +32,98 @@ function App(props) {
   ///// data = readings and stationCoordinates = modified deployedDevcies  //////////////
 
   const [project, setProject] = React.useState([]);
+  const [initialData, setInitialData] = React.useState([]);
   const [data, setData] = React.useState([]);
   const [units, setUnits] = React.useState([]);
-  const [selectedStation, setSelectedStation] = React.useState("IN3");
+  const [selectedStation, setSelectedStation] = React.useState("");
   const [selectedMarker, setSelectedMarker] = React.useState(null);
   const [stationCoordinates, setStationCoordinates] = React.useState([]); //Data of stations for the drop down menu
 
   //////////////////////////////////////////////////////////////
   const [loading, setLoading] = React.useState(true);
-  const [startDate, setStartDate] = React.useState(moment('2014-08-10T21:11:54'));
-  const [endDate, setEndDate] = React.useState(moment('2018-08-20T21:11:54'));
+  const [startDate, setStartDate] = React.useState(moment(''));
+  const [endDate, setEndDate] = React.useState(moment(''));
   const [menuAnchor, setMenuAnchor] = React.useState(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [minDate, setMinDate] = React.useState(moment(''));
+  const [maxDate, setMaxDate] = React.useState(moment(''));
 
   const handleMenuOpen = (event) => {
     setMenuAnchor(event.currentTarget);
     setMenuOpen(true);
   };
 
-
-
-  const getDataNew = () => {
-    axios.get(`http://localhost:8080/api/dashboard/${projectId}`)
-      .then(response => {
-
-        const { project, deployedDevices, readings, units } = response.data;
-        const dateOnlyReadings = readings.map(obj => {
-          const dateOnlyString = new Date(obj.Time).toISOString().slice(0, 10);
-          return { ...obj, Dates: dateOnlyString };
-        });
-        setData(dateOnlyReadings);
-        setLoading(false);
-        setUnits(units)
-        setProject(project)
-        // Extract latitude and longitude information from the deployedDevices array
-        const stationCoordinatess = deployedDevices.map(device => {
-          return {
+  const fetchData = (url) => {
+    return new Promise((resolve, reject) => {
+      axios.get(url)
+        .then(response => {
+          const { project, deployedDevices, readings, units } = response.data;
+          const dateOnlyReadings = readings.map(obj => {
+            const dateOnlyString = new Date(obj.Time).toISOString().slice(0, 10);
+            return { ...obj, Dates: dateOnlyString };
+          });
+          setInitialData(dateOnlyReadings);
+          setLoading(false);
+          setUnits(units);
+          setProject(project);
+          const stationCoordinates = deployedDevices.map(device => ({
             Id: device.Id,
             Station: device.Name,
             Latitude: device.Latitude,
             Longitude: device.Longitude
-          };
-        });
-        setStationCoordinates(stationCoordinatess);
-        setSelectedMarker(stationCoordinatess[0])
-        setSelectedStation(stationCoordinatess[0])
-      })
-      .catch(error => console.log(error));
-  }
+          }));
 
+          if (!selectedStation) {
+            setStationCoordinates(stationCoordinates);
+            setSelectedMarker(stationCoordinates[0]);
+            setSelectedStation(stationCoordinates[0]);
+          }
+
+          const timeValues = dateOnlyReadings.map(obj => new Date(obj.Time).getTime());
+          const startDateValue = new Date(Math.min(...timeValues));
+          const endDateValue = new Date(Math.max(...timeValues));
+
+          const startMoment = moment(startDateValue);
+          const endMoment = moment(endDateValue);
+
+          setStartDate(startMoment);
+          setEndDate(endMoment);
+
+          resolve({ startMoment, endMoment });
+        })
+        .catch(error => {
+          console.log(error);
+          reject(error);
+        });
+    });
+  };
+
+  const getDataInitial = async () => {
+    const url = `http://localhost:8080/api/dashboard/${projectId}`;
+    fetchData(url)
+      .then(({ startMoment, endMoment }) => {
+        setMinDate(startMoment);
+        setMaxDate(endMoment);
+        setData(initialData);
+      });
+  };
+
+  const getDataBasedOnDates = () => {
+    const sd = moment(startDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
+    const ed = moment(endDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
+
+    // Convert the dates to a Unix timestamp (number of milliseconds since 1970)
+    const sdTimestamp = new Date(sd).getTime();
+    const edTimestamp = new Date(ed).getTime();
+
+    // Filter initialData between start and end dates
+    const filteredData = initialData.filter(d => {
+      const dTimestamp = new Date(d.Time).getTime();
+      return dTimestamp >= sdTimestamp && dTimestamp <= edTimestamp;
+    });
+
+    setData(filteredData);
+  };
 
   const stationNames = [...new Set(stationCoordinates.map((item) => item.Station))]; // Get distinct station names from data
   const filteredData = data.filter((d) => d.Device === selectedMarker.Id);
@@ -117,25 +160,46 @@ function App(props) {
       shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
 
-    getDataNew();
+    getDataInitial();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
+
   const handleMenuItemClick = (station) => {
-    setSelectedStation(station); // Update selected station state
-    setMenuOpen(false); // Close the menu
+    const selectedStation = stationCoordinates.find((s) => s.Station === station);
+    setSelectedMarker(selectedStation);
+    setSelectedStation(selectedStation);
+    setMenuOpen(false);
   };
 
   function handleMarkerClick(marker) {
     setSelectedMarker(marker);
     setSelectedStation(marker.Station);
+    // Filter data for the selected station.
+    const dataForStation = data.filter(d => d.Device === marker.Id);
+    console.log('dataForStation: ', dataForStation)
+    console.log('marker: ', marker)
+    // Find the minimum and maximum dates.
+    const timeValues = dataForStation.map(obj => new Date(obj.Time).getTime());
+
+    const minDateValue = new Date(Math.min(...timeValues));
+    const maxDateValue = new Date(Math.max(...timeValues));
+    console.log('minDateValue: ', minDateValue)
+    console.log('maxDateValue: ', maxDateValue)
+    // Set the dates.
+    setStartDate(moment(minDateValue));
+    setEndDate(moment(maxDateValue));
+    // setMinDate(moment(minDateValue));
+    // setMaxDate(moment(maxDateValue));
   }
+
 
   const navigate = useNavigate();
   const handleDeviceSubmit = async (event) => {
     event.preventDefault();
-    navigate(`/deviceDeployment?latitude=${selectedMarker.Latitude}&longitude=${selectedMarker.Longitude}&project=${21}`);
+    navigate(`/deviceDeployment?latitude=${selectedMarker.Latitude}&longitude=${selectedMarker.Longitude}&project=${project[0].Id}`);
   };
 
   const customIcon = new Icon({
@@ -171,7 +235,7 @@ function App(props) {
 
   //////////////////////////////////////////////////////
 
-  console.log(units)
+  console.log(data)
 
   //////////////////////////////////////////////////////
 
@@ -196,12 +260,16 @@ function App(props) {
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, margin: 2 }}>
                 <Typography variant="h5">{project[0].Name + ', ' + project[0].Location + ', ' + project[0].Country}</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Typography variant="h5">Device: {selectedMarker.Station}</Typography>
+                  <Typography variant="h5">{selectedMarker.Station}</Typography>
                   <IconButton onClick={handleMenuOpen}>
                     <ExpandMoreIcon sx={{ fontSize: '2rem' }} />
                   </IconButton>
                   <Button onClick={handleDeviceSubmit} variant="contained" color="primary">Add Device</Button>
+                  <Link to={`/projectManagement/${project[0].Id}`}>
+                    <Button variant="contained" color="primary">Edit Project</Button>
+                  </Link>
                 </Box>
+
                 <Menu
                   anchorEl={menuAnchor}
                   open={menuOpen}
@@ -232,7 +300,7 @@ function App(props) {
               <Paper sx={{ p: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="h6" display="inline">
-                    TOP PARAMETERS
+                    Average Readings
                   </Typography>
                   <Link to="/WaterQualityPage" className="unstyled-link">
                     <IconButton aria-label="help" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -244,23 +312,31 @@ function App(props) {
                 {/**************************************/}
                 {/*            TOP PARAMETERS          */}
                 {/**************************************/}
-                <Grid container justifyContent="space-around">
-                  {averages.map(average => {
-                    const unit = units.find(unit => unit.ParameterName === average.ParameterName);
-                    let color = "#de4545";
-                    if (average.average !== null && average.average >= unit.Min && average.average <= unit.Max) {
-                      color = "#83b854";
-                    }
-                    return (
-                      <Parameters
-                        key={unit.ParameterName}
-                        color={color}
-                        parameterName={unit.ParameterName}
-                        value={`${average.average !== null ? average.average.toFixed(2) : 'N/A'} ${unit.Unit}`}
-                      />
-                    );
-                  })}
+
+                <Grid container spacing={2} wrap="nowrap" style={{ overflowX: 'auto', width: '100%', scrollbarWidth: 'thin' }}>
+                  {averages
+                    .filter(average => average.average !== null && !isNaN(average.average) && average.average !== 'NA')
+                    .map(average => {
+                      const unit = units.find(unit => unit.ParameterName === average.ParameterName);
+                      let color = "#de4545";
+                      if (average.average >= unit.Min && average.average <= unit.Max) {
+                        color = "#83b854";
+                      }
+                      return (
+                        <Grid item key={unit.Id} xs={6} sm={3} md={2} style={{ flexShrink: 0, marginBottom: '20px', marginRight: "3px" }}>
+                          <Parameters
+                            color={color}
+                            parameterName={unit.ParameterName}
+                            value={`${average.average.toFixed(2)} ${unit.Unit}`}
+                          />
+                        </Grid>
+                      );
+                    })}
                 </Grid>
+
+
+
+
 
               </Paper>
 
@@ -271,8 +347,8 @@ function App(props) {
                 <Grid item md={7}>
                   <Paper sx={{ p: 2, mt: 2, mb: 2, mr: 0 }}>
                     <Datepicker startDate={startDate} setStartDate={setStartDate}
-                      endDate={endDate} setEndDate={setEndDate} />
-                    <Button variant="contained" onClick={getDataNew} size="large"
+                      endDate={endDate} setEndDate={setEndDate} minDate={minDate} maxDate={maxDate} />
+                    <Button variant="contained" onClick={getDataBasedOnDates} size="large"
                       sx={{ ml: 4, mt: 1 }}>View </Button>
                   </Paper>
 
@@ -280,24 +356,52 @@ function App(props) {
                   {/**************************************/}
                   {/*               2 GRAPHS             */}
                   {/**************************************/}
-
                   <Grid item>
-                    <Paper sx={{ pl: 3, pr: 5 }}>
-                      <Typography sx={{ pt: 1 }} variant="h5" >pH</Typography>
-                      <Typography sx={{ pt: 1 }} variant="body1" >(Scale 0-14)</Typography>
-                      <ResponsiveContainer height={140}>
-                        <BarGraph data={filteredData} datakey={'pH'} min={'6.5'} max={'8.5'} />
-                      </ResponsiveContainer>
-                    </Paper>
-
-                    <Paper sx={{ pl: 3, pr: 5, pt: 2, mt: 2 }}>
-                      <Typography sx={{ pt: 1 }} variant="h5" >Dissolved Oxygen</Typography>
-                      <Typography sx={{ pt: 1 }} variant="body1" >(mg/L)</Typography>
-                      <ResponsiveContainer height={140}>
-                        <LineGraph data={filteredData} datakey={'Dissolved Oxygen (mg/L)'} min={'5'} max={'11'} />
-                      </ResponsiveContainer>
-                    </Paper>
+                    {filteredData.length > 0 ? (
+                      units
+                        .filter((unit) => {
+                          const unitData = filteredData
+                            .filter((d) => d.Parameter === unit.ParameterName && d.Reading !== null && !isNaN(d.Reading));
+                          return unitData.length > 0;
+                        })
+                        .slice(0, 2)
+                        .map((unit, index) => {
+                          const unitData = filteredData
+                            .filter((d) => d.Parameter === unit.ParameterName && d.Reading !== null && !isNaN(d.Reading));
+                          return (
+                            <Paper key={unit.Id} sx={{ pl: 3, pr: 5, pt: 2, mt: 2 }}>
+                              <Typography sx={{ pt: 1 }} variant="h5">{unit.ParameterName}</Typography>
+                              <Typography sx={{ pt: 1 }} variant="body1">({unit.Unit})</Typography>
+                              <ResponsiveContainer height={140}>
+                                {(index % 2 === 0) ? (
+                                  <BarGraph
+                                    data={unitData}
+                                    datakey={'Reading'}
+                                    min={unit.Min}
+                                    max={unit.Max}
+                                  />
+                                ) : (
+                                  <LineGraph
+                                    data={unitData}
+                                    datakey={'Reading'}
+                                    min={unit.Min}
+                                    max={unit.Max}
+                                  />
+                                )}
+                              </ResponsiveContainer>
+                            </Paper>
+                          );
+                        })
+                    ) : (
+                      <Paper elevation={2} sx={{ p: 4, mt: 2, textAlign: 'center' }}>
+                        <Typography variant="h4">No readings found!</Typography>
+                      </Paper>
+                    )}
                   </Grid>
+
+
+
+
 
                 </Grid>
 
@@ -308,7 +412,7 @@ function App(props) {
                 <Grid item sx={{ mt: 5 }} md={5} sm={5} alignItems="flex=end" justifyContent="flex=end">
                   <MapContainer
                     center={selectedMarker ? [selectedMarker.Latitude, selectedMarker.Longitude] : [22.449919, 114.163583]}
-                    zoom={15}
+                    zoom={14}
                     scrollWheelZoom={true}
                     style={{
                       marginLeft: '6vh',
@@ -343,36 +447,48 @@ function App(props) {
               {/**************************************/}
 
               <Grid item>
-                {units.map((unit, index) => (
-                  <Paper key={unit.ParameterName} sx={{ pl: 3, pr: 5, pt: 2, mt: 2 }}>
-                    <Typography sx={{ pt: 1 }} variant="h5">{unit.ParameterName}</Typography>
-                    <Typography sx={{ pt: 1 }} variant="body1">({unit.Unit})</Typography>
-                    <ResponsiveContainer height={140}>
-                      {(index % 2 === 0) ? (
-                        <BarGraph
-                          data={filteredData
-                            .filter((d) => d.Parameter === unit.ParameterName)
-                            .map((d) => ({ ...d }))
-                          }
-                          datakey={'Reading'}
-                          min={unit.Min}
-                          max={unit.Max}
-                        />
-                      ) : (
-                        <LineGraph
-                          data={filteredData
-                            .filter((d) => d.Parameter === unit.ParameterName)
-                            .map((d) => ({ ...d }))
-                          }
-                          datakey={'Reading'}
-                          min={unit.Min}
-                          max={unit.Max}
-                        />
-                      )}
-                    </ResponsiveContainer>
+                {units.length > 0 ? (
+                  units
+                    .filter((unit) => {
+                      const unitData = filteredData
+                        .filter((d) => d.Parameter === unit.ParameterName && d.Reading !== null && !isNaN(d.Reading));
+                      return unitData.length > 0;
+                    })
+                    .slice(2)
+                    .map((unit, index) => {
+                      const unitData = filteredData
+                        .filter((d) => d.Parameter === unit.ParameterName && d.Reading !== null && !isNaN(d.Reading));
+                      return (
+                        <Paper key={unit.Id} sx={{ pl: 3, pr: 5, pt: 2, mt: 2 }}>
+                          <Typography sx={{ pt: 1 }} variant="h5">{unit.ParameterName}</Typography>
+                          <Typography sx={{ pt: 1 }} variant="body1">({unit.Unit})</Typography>
+                          <ResponsiveContainer height={140}>
+                            {(index % 2 === 0) ? (
+                              <BarGraph
+                                data={unitData}
+                                datakey={'Reading'}
+                                min={unit.Min}
+                                max={unit.Max}
+                              />
+                            ) : (
+                              <LineGraph
+                                data={unitData}
+                                datakey={'Reading'}
+                                min={unit.Min}
+                                max={unit.Max}
+                              />
+                            )}
+                          </ResponsiveContainer>
+                        </Paper>
+                      );
+                    })
+                ) : (
+                  <Paper elevation={2} sx={{ p: 4, mt: 2, textAlign: 'center' }}>
+                    <Typography variant="h4">No readings found!</Typography>
                   </Paper>
-                ))}
+                )}
               </Grid>
+
 
 
 

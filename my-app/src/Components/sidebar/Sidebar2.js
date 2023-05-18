@@ -95,7 +95,7 @@ const Sidebar2 = (props) => {
             )}
             <Item
               title="Dashboard"
-              to="/dashboard"
+              to="/dashboard/1"
               icon={<TvRoundedIcon />}
               selected={selected}
               onClick={() => setSelected("Dashboard")}
