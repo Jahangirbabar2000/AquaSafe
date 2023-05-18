@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import Grid from "@mui/material/Grid";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";

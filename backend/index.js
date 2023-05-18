@@ -55,6 +55,9 @@ try {
 catch (err) { console.log(err); }
 
 app.post('/api/reading', (req, res) => {
+    console.log(req.body)
+    // for iot device
+    //const { deviceId, sensorData } = req.body.readings;
     const { deviceId, sensorData } = req.body;
 
     sensorData.forEach(data => {

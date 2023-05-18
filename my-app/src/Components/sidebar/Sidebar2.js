@@ -1,8 +1,9 @@
 import { useState, useContext } from "react";
-import { ProSidebar, Menu, MenuItem, SidebarHeader, SidebarFooter } from "react-pro-sidebar";
+import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
+import 'react-pro-sidebar/dist/css/styles.css';
+
 import { Box, Typography, IconButton, useMediaQuery } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import "react-pro-sidebar/dist/css/styles.css";
 import TvRoundedIcon from "@mui/icons-material/TvRounded";
 import ContentPasteRoundedIcon from "@mui/icons-material/ContentPasteRounded";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";

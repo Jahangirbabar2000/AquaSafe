@@ -62,34 +62,8 @@ function App(props) {
             const dateOnlyString = new Date(obj.Time).toISOString().slice(0, 10);
             return { ...obj, Dates: dateOnlyString };
           });
-          setInitialData(dateOnlyReadings);
-          setLoading(false);
-          setUnits(units);
-          setProject(project);
-          const stationCoordinates = deployedDevices.map(device => ({
-            Id: device.Id,
-            Station: device.Name,
-            Latitude: device.Latitude,
-            Longitude: device.Longitude
-          }));
 
-          if (!selectedStation) {
-            setStationCoordinates(stationCoordinates);
-            setSelectedMarker(stationCoordinates[0]);
-            setSelectedStation(stationCoordinates[0]);
-          }
-
-          const timeValues = dateOnlyReadings.map(obj => new Date(obj.Time).getTime());
-          const startDateValue = new Date(Math.min(...timeValues));
-          const endDateValue = new Date(Math.max(...timeValues));
-
-          const startMoment = moment(startDateValue);
-          const endMoment = moment(endDateValue);
-
-          setStartDate(startMoment);
-          setEndDate(endMoment);
-
-          resolve({ startMoment, endMoment });
+          resolve({ dateOnlyReadings, project, deployedDevices, units });
         })
         .catch(error => {
           console.log(error);
@@ -101,13 +75,38 @@ function App(props) {
   const getDataInitial = async () => {
     const url = `http://localhost:8080/api/dashboard/${projectId}`;
     fetchData(url)
-      .then(({ startMoment, endMoment }) => {
+      .then(({ dateOnlyReadings, project, deployedDevices, units }) => {
+        setInitialData(dateOnlyReadings);
+        setData(dateOnlyReadings); // Set data here after initial data is set.
+        setLoading(false);
+        setUnits(units);
+        setProject(project);
+        const stationCoordinates = deployedDevices.map(device => ({
+          Id: device.Id,
+          Station: device.Name,
+          Latitude: device.Latitude,
+          Longitude: device.Longitude
+        }));
+
+        if (!selectedStation) {
+          setStationCoordinates(stationCoordinates);
+          setSelectedMarker(stationCoordinates[0]);
+          setSelectedStation(stationCoordinates[0]);
+        }
+
+        const timeValues = dateOnlyReadings.map(obj => new Date(obj.Time).getTime());
+        const startDateValue = new Date(Math.min(...timeValues));
+        const endDateValue = new Date(Math.max(...timeValues));
+
+        const startMoment = moment(startDateValue);
+        const endMoment = moment(endDateValue);
+
+        setStartDate(startMoment);
+        setEndDate(endMoment);
         setMinDate(startMoment);
         setMaxDate(endMoment);
-        setData(initialData);
       });
   };
-
   const getDataBasedOnDates = () => {
     const sd = moment(startDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
     const ed = moment(endDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
@@ -160,11 +159,15 @@ function App(props) {
       shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
 
-    getDataInitial();
+    getDataInitial(); // Make sure this function is awaited.
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  React.useEffect(() => {
+    getDataBasedOnDates()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMarker]);
 
 
   const handleMenuItemClick = (station) => {
@@ -177,20 +180,13 @@ function App(props) {
   function handleMarkerClick(marker) {
     setSelectedMarker(marker);
     setSelectedStation(marker.Station);
-    // Filter data for the selected station.
-    const dataForStation = data.filter(d => d.Device === marker.Id);
-    console.log('dataForStation: ', dataForStation)
-    console.log('marker: ', marker)
-    // Find the minimum and maximum dates.
+    const dataForStation = initialData.filter(d => d.Device === marker.Id);
     const timeValues = dataForStation.map(obj => new Date(obj.Time).getTime());
-
     const minDateValue = new Date(Math.min(...timeValues));
     const maxDateValue = new Date(Math.max(...timeValues));
-    console.log('minDateValue: ', minDateValue)
-    console.log('maxDateValue: ', maxDateValue)
-    // Set the dates.
     setStartDate(moment(minDateValue));
     setEndDate(moment(maxDateValue));
+    getDataBasedOnDates()
     // setMinDate(moment(minDateValue));
     // setMaxDate(moment(maxDateValue));
   }
@@ -235,7 +231,7 @@ function App(props) {
 
   //////////////////////////////////////////////////////
 
-  console.log(data)
+  // console.log(data)
 
   //////////////////////////////////////////////////////
 
@@ -333,11 +329,6 @@ function App(props) {
                       );
                     })}
                 </Grid>
-
-
-
-
-
               </Paper>
 
               <Grid container>
@@ -398,11 +389,6 @@ function App(props) {
                       </Paper>
                     )}
                   </Grid>
-
-
-
-
-
                 </Grid>
 
                 {/**************************************/}
@@ -488,10 +474,6 @@ function App(props) {
                   </Paper>
                 )}
               </Grid>
-
-
-
-
             </Grid>
           </Grid>
         </div>

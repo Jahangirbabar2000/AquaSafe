@@ -195,6 +195,21 @@ INSERT INTO `parameterunits` (`ParameterName`, `Unit`, `Min`, `Max`) VALUES
 ('Water Temperature', '°C', 5, 25),
 ('Water Temperature', '°F', 41, 77);
 
+INSERT INTO `WaterParameters`(`Name`, `Description`)
+VALUES ('Oxidation-reduction potential (ORP)', 'A measure of the cleanliness of the water & its ability to break down contaminants. It has implications for the disinfection potential of the water.'),
+       ('Salinity', 'The total amount of dissolved salts in water. High salinity can affect the taste of the water and may have health implications if too high.');
+
+INSERT INTO `ParameterUnits`(`ParameterName`, `Unit`, `Min`, `Max`)
+VALUES ('Oxidation-reduction potential (ORP)', 'mV', 200, 600),
+       ('Salinity', 'mg/L', 0, 1000);
+
+INSERT INTO `ParameterUnits`(`ParameterName`, `Unit`, `Min`, `Max`)
+VALUES ('Oxidation-reduction potential (ORP)', 'V', 0.2, 0.6),
+       ('Salinity', 'g/L', 0, 1),
+       ('Salinity', 'ppt', 0, 1),
+       ('Salinity', 'PSU', 0, 1);
+
+
 -- Dummy data for Date = '2023-01-01'
 INSERT INTO readings (`Time`, `Reading`, `Device`, `Parameter`, `UnitId`)
 VALUES
