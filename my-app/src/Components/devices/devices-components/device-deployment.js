@@ -67,7 +67,7 @@ const DeviceDeployment = () => {
     const Id = query.get("project");
     setProjectId(Id)
 
-    axios.get(`/api/projects/${Id}`)
+    axios.get(`http://localhost:8080/api/projects/${Id}`)
       .then(response => {
         const projectName = response.data.Name;
         setProjectName(projectName);
@@ -82,7 +82,7 @@ const DeviceDeployment = () => {
     const deviceId = query.get("deviceId");
     if (deviceId) {
       // Retrieve the device details using the deviceId and update the form state for editing
-      axios.get(`/api/deployeddevices/${deviceId}`)
+      axios.get(`http://localhost:8080/api/deployeddevices/${deviceId}`)
         .then(response => {
           const { Name, Longitude, Latitude, Frequency } = response.data;
           const initialFormState = {
@@ -144,7 +144,7 @@ const DeviceDeployment = () => {
 
   const fetchSensors = async () => {
     try {
-      const response = await axios.get("/parameters");
+      const response = await axios.get("http://localhost:8080/parameters");
       const uniqueSensors = Array.from(
         new Set(response.data.map((sensor) => sensor.Name))
       ).map((name) => {
@@ -252,7 +252,7 @@ const DeviceDeployment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const endpoint = isEditMode ? `/api/deployeddevices/${selectedDeviceId}` : "/api/deployeddevices";
+      const endpoint = isEditMode ? `http://localhost:8080/api/deployeddevices/${selectedDeviceId}` : "http://localhost:8080/api/deployeddevices";
       const method = isEditMode ? "PUT" : "POST";
 
       const response = await axios({

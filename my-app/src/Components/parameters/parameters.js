@@ -11,7 +11,7 @@ const WaterQualityPage = () => {
   useEffect(() => {
     // Fetch data from the backend API
     axios
-      .get("/parameters")
+      .get("http://localhost:8080/parameters")
       .then((response) => setParameters(response.data))
       .catch((error) => console.log(error));
   }, []);

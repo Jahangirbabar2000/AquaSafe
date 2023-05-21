@@ -19,7 +19,7 @@ function EditUser() {
 
     const getUser = useCallback(async () => {
         try {
-            const response = await axios.get(`/api/users/${id}`);
+            const response = await axios.get(`http://localhost:8080/api/users/${id}`);
             setUser(response.data);
         } catch (err) {
             console.error(err);
@@ -32,7 +32,7 @@ function EditUser() {
 
     useEffect(() => {
         // Make Axios request to fetch project details from the backend
-        axios.get('/projects')
+        axios.get('http://localhost:8080/projects')
             .then(response => {
                 setProjectList(response.data);
                 const filteredSites = response.data
@@ -71,7 +71,7 @@ function EditUser() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.put(`/api/users/${id}`, user);
+            await axios.put(`http://localhost:8080/api/users/${id}`, user);
             navigate('/userstable');
         } catch (err) {
             console.error(err);

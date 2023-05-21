@@ -41,7 +41,7 @@ const Root = styled('div')(({ theme }) => ({
 function Navbarhome() {
   const [projectId, setProjectId] = useState('');
   useEffect(() => {
-    axios.get('/projects')
+    axios.get('http://localhost:8080/projects')
       .then(response => {
         // Update state with fetched notifications
         setProjectId(response.data[0].Id);

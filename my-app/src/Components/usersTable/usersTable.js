@@ -60,7 +60,7 @@ function UsersTable() {
 
   const getUsersData = async (req, res) => {
     try {
-      res = await axios.get("/activeUsers");
+      res = await axios.get("http://localhost:8080/activeUsers");
       setUsersData(res.data);
       setLoading(false);
     } catch (error) {
@@ -70,7 +70,7 @@ function UsersTable() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/users/${id}`);
+      await axios.delete(`http://localhost:8080/api/users/${id}`);
       setUsersData(usersData.filter((user) => user.Id !== id));
       closeDeleteDialog();
       setSnackbarOpen(true);

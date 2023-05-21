@@ -31,7 +31,7 @@ function App(props) {
 
 
   React.useEffect(() => {
-    const eventSource = new EventSource('/api/sse');
+    const eventSource = new EventSource('http://localhost:8080/api/sse');
 
     eventSource.onmessage = (event) => {
       const newData = JSON.parse(event.data);
@@ -94,7 +94,7 @@ function App(props) {
   };
 
   const getDataInitial = async () => {
-    const url = `/api/dashboard/${projectId}`;
+    const url = `http://localhost:8080/api/dashboard/${projectId}`;
     fetchData(url)
       .then(({ dateOnlyReadings, project, deployedDevices, units }) => {
         setInitialData(dateOnlyReadings);

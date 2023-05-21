@@ -271,7 +271,7 @@ const NewProject = () => {
     const { name, location, country, longitude, latitude, description } = formObject;
 
     try {
-      const response = await axios.post('/projects/', {
+      const response = await axios.post('http://localhost:8080/projects/', {
         Name: name,
         Location: location,
         Country: country,

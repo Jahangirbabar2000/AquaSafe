@@ -40,7 +40,7 @@ function ReadingsTable(props) {
 
   useEffect(() => {
     axios
-      .get(`/api/readings?Id=${props.Id}`)
+      .get(`http://localhost:8080/api/readings?Id=${props.Id}`)
       .then(response => {
         setReadingsData(response.data);
         setLoading(false);
