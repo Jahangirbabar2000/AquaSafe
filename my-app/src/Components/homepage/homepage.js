@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./homepage.css";
 import First from "./first.js";
 import Second from "./second";
@@ -12,6 +12,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import aquasafeLogo from "../../AquaSafe.png";
 import { styled } from '@mui/system';
+import axios from 'axios';
 
 function Home() {
   return (
@@ -35,7 +36,21 @@ const Root = styled('div')(({ theme }) => ({
   }
 }));
 
+
+
 function Navbarhome() {
+  const [projectId, setProjectId] = useState('');
+  useEffect(() => {
+    axios.get('http://localhost:8080/projects')
+      .then(response => {
+        // Update state with fetched notifications
+        setProjectId(response.data[0].Id);
+      })
+      .catch(error => {
+        console.error('There was an error fetching notifications!', error);
+      });
+  }, []);
+
   return (
     <Root>
       <Box sx={{ flexGrow: 1, marginBottom: 7 }}>
@@ -46,7 +61,7 @@ function Navbarhome() {
             </Link>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <Link to="/dashboard/1" style={{ textDecoration: 'none' }}>
+              <Link to={`/dashboard/${projectId}`} style={{ textDecoration: 'none' }}>
                 <Button variant="contained" sx={{ fontSize: 10 }}>
                   Take a look
                 </Button>

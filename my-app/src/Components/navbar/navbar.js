@@ -31,13 +31,12 @@ export default function Navbar() {
     const [isNotification, setNotification] = useState(false);
     const [notifications, setNotifications] = useState([]);
 
-    let unviewedNotifications = notifications.filter(notification => !notification.isViewed);
+    let unviewedNotifications = notifications.filter(notification => !notification.IsViewed);
     let notificationCount = unviewedNotifications.length;
 
     useEffect(() => {
         fetchNotifications();
         const handleNotification = event => {
-            console.log('Received a message from the service worker:', event.data);
             fetchNotifications();
         };
 
@@ -47,18 +46,31 @@ export default function Navbar() {
         return () => {
             navigator.serviceWorker.removeEventListener('message', handleNotification);
         };
-    }, []);
+        // Adding user as a dependency
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
+
 
     const fetchNotifications = () => {
-        axios.get('http://localhost:8080/api/notifications')
-            .then(response => {
-                // Update state with fetched notifications
-                setNotifications(response.data);
-            })
-            .catch(error => {
-                console.error('There was an error fetching notifications!', error);
-            });
-    }
+        // Only perform the API request if the user object exists
+        if (user) {
+            axios
+                .get('http://localhost:8080/api/notifications')
+                .then(response => {
+                    // Filter notifications based on user ID
+                    const filteredNotifications = response.data.filter(
+                        notification => notification.user === user.id
+                    );
+                    // Update state with filtered notifications
+                    setNotifications(filteredNotifications);
+                })
+                .catch(error => {
+                    console.error('There was an error fetching notifications!', error);
+                });
+        }
+    };
+
+
     // Display user's full name if available
     const userFullName = user && user.firstName && user.lastName
         ? `${user.firstName} ${user.lastName}`
@@ -76,10 +88,10 @@ export default function Navbar() {
             axios.put('http://localhost:8080/api/notifications/view', { notificationIds: unviewedNotificationIds })
                 .then(response => {
                     console.log('Notifications updated successfully');
-                    // Set isViewed to true for all unviewed notifications in state
+                    // Set IsViewed to true for all unviewed notifications in state
                     const updatedNotifications = notifications.map(notification =>
                         unviewedNotificationIds.includes(notification.id)
-                            ? { ...notification, isViewed: true }
+                            ? { ...notification, IsViewed: true }
                             : notification
                     );
                     setNotifications(updatedNotifications);

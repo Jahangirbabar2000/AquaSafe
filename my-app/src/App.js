@@ -28,10 +28,10 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-    <div className="main">
-      <UserContext.Provider value={{ user, setUser }}>
-        <Routes />
-      </UserContext.Provider>
+      <div className="main">
+        <UserContext.Provider value={{ user, setUser }}>
+          <Routes />
+        </UserContext.Provider>
       </div>
     </ThemeProvider>
   );

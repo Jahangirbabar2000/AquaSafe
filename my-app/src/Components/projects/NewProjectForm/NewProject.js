@@ -1,11 +1,11 @@
 import { React, useState } from "react";
-import Sidebar2 from "../sidebar/Sidebar2.js";
-import Navbar from "../navbar/navbar.js";
+import Sidebar2 from "../../sidebar/Sidebar2.js";
+import Navbar from "../../navbar/navbar.js";
 import "./NewProject.css";
 import { TextField, InputLabel, Select, Button, MenuItem, FormControl, Typography } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { Box } from '@mui/system';
 const countryList = [
   "Afghanistan",
   "Albania",
@@ -124,8 +124,8 @@ const countryList = [
   "Kazakhstan",
   "Kenya",
   "Kiribati",
-  "Korea (the Democratic People's Republic of)",
-  "Korea (the Republic of)",
+  "North Korea",
+  "South Korea",
   "Kuwait",
   "Kyrgyzstan",
   "Lao People's Democratic Republic (the)",
@@ -271,7 +271,7 @@ const NewProject = () => {
     const { name, location, country, longitude, latitude, description } = formObject;
 
     try {
-      await axios.post('http://localhost:8080/projects/', {
+      const response = await axios.post('http://localhost:8080/projects/', {
         Name: name,
         Location: location,
         Country: country,
@@ -280,11 +280,14 @@ const NewProject = () => {
         Description: description,
       });
 
-      navigate(`/deviceDeployment?latitude=${latitude}&longitude=${longitude}`);
+      const { Id } = response.data; // Retrieve the ID from the response data
+
+      navigate(`/deviceDeployment?project=${Id}`);
     } catch (err) {
       console.error(err);
     }
   };
+
 
 
 
@@ -295,7 +298,7 @@ const NewProject = () => {
   };
 
   return (
-    <div>
+    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
       <Navbar />
       <div style={{ display: "grid", gridTemplateColumns: "28vh auto" }}>
         <div>
@@ -406,7 +409,7 @@ const NewProject = () => {
           </div>
         </div>
       </div>
-    </div>
+      </Box>
   );
 };
 

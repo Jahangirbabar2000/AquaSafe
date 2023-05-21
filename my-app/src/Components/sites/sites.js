@@ -6,7 +6,7 @@ import Navbar from "../navbar/navbar.js";
 import { Link } from "react-router-dom";
 import ProjectMenu from "./projects-menu/projectsMenu";
 import Button from "@mui/material/Button";
-
+import { Box } from '@mui/system';
 function Sites() {
   const [selectedCoordinates, setSelectedCoordinates] = useState([31.99, 77.13]);
   const [selectedProjectId, setSelectedProjectId] = useState("1");
@@ -51,7 +51,7 @@ function Sites() {
   }
 
   return (
-    <div>
+    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
       <Navbar />
       <div
         style={{
@@ -87,7 +87,7 @@ function Sites() {
           </Grid>
         </div>
       </div>
-    </div>
+    </Box>
   );
 }
 

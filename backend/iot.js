@@ -30,32 +30,49 @@ function runCode() {
     device.on('data', data => {
         const temp = data.dps['8'] / 10;
         const orp = data.dps['131'];
-        const salt = data.dps['126'] / 1000;
-        const ph = data.dps['106'] / 100
+        const proportion = data.dps['126'] / 1000;
+        const ph = data.dps['106'] / 100;
+        const tds = data.dps['111'];
+        const ec = data.dps['116'];
+        const salt = data.dps['121']
+
 
         readings = {
-            "deviceId": 19,
+            "deviceId": 2,
             "sensorData": [
                 {
                     "reading": ph,
                     "parameter": "pH",
-                    "unitId": 25
+                    "unitId": 22
                 },
                 {
                     "reading": orp,
                     "parameter": "Oxidation-reduction potential (ORP)",
-                    "unitId": 46
+                    "unitId": 43
                 },
                 {
                     "reading": temp,
                     "parameter": "Water Temperature",
-                    "unitId": 44
+                    "unitId": 41
                 },
                 {
+                    "reading": proportion,
+                    "parameter": "Proportion",
+                    "unitId": 30
+                },
+                {
+                    "reading": tds,
+                    "parameter": "Total-dissolved-solids",
+                    "unitId": 31 //ppm
+                }, {
+                    "reading": ec,
+                    "parameter": "Conductivity",
+                    "unitId": 10
+                }, {
                     "reading": salt,
                     "parameter": "Salinity",
-                    "unitId": 50
-                }
+                    "unitId": 47
+                },
             ]
         }
     });

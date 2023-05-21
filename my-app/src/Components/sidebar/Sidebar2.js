@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 
@@ -18,6 +18,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import UserContext from '../userAuth/UserContext';
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from 'axios';
 
 const Item = ({ title, to, icon, selected, onClick }) => {
   return (
@@ -39,6 +40,8 @@ const Sidebar2 = (props) => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+  const [projectId, setProjectId] = useState('');
+
 
   const renderMenuItem = (designation, item) => {
     if (user && user.designation === designation) {
@@ -57,6 +60,17 @@ const Sidebar2 = (props) => {
     color: 'rgba(255, 255, 255, 1)',
     transition: 'background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
   };
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/projects')
+      .then(response => {
+        // Update state with fetched notifications
+        setProjectId(response.data[0].Id);
+      })
+      .catch(error => {
+        console.error('There was an error fetching notifications!', error);
+      });
+  }, []);
 
   return (
     <Box
@@ -96,7 +110,7 @@ const Sidebar2 = (props) => {
             )}
             <Item
               title="Dashboard"
-              to="/dashboard/1"
+              to={`/dashboard/${projectId}`}
               icon={<TvRoundedIcon />}
               selected={selected}
               onClick={() => setSelected("Dashboard")}
@@ -108,13 +122,15 @@ const Sidebar2 = (props) => {
               selected={selected}
               onClick={() => setSelected("Sites")}
             />
-            <Item
-              title="Create New Project"
-              to="/newProject"
-              icon={<ContentPasteRoundedIcon />}
-              selected={selected}
-              onClick={() => setSelected("Create New Project")}
-            />
+            {renderMenuItem('Local Admin', (
+              <Item
+                title="Create New Project"
+                to="/newProject"
+                icon={<ContentPasteRoundedIcon />}
+                selected={selected}
+                onClick={() => setSelected("Create New Project")}
+              />
+            ))}
             <Item
               title="Readings"
               to="/readings"
@@ -142,7 +158,7 @@ const Sidebar2 = (props) => {
             />
             <Item
               title="Parameters"
-              to="/parameters"
+              to="/WaterQualityPage"
               icon={<ScienceRoundedIcon />}
               selected={selected}
               onClick={() => setSelected("Parameters")}
@@ -166,13 +182,13 @@ const Sidebar2 = (props) => {
               onClick={() => setSelected("Notifications")}
             />
 
-            <Item
+            {/* <Item
               title="Tasks"
               to="/todos"
               icon={<EngineeringIcon />}
               selected={selected}
               onClick={() => setSelected("Tasks")}
-            />
+            /> */}
 
             {!isMobile && renderMenuItem('Local Admin', (
               <Typography

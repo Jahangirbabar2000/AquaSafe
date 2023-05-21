@@ -15,12 +15,12 @@ const Parameter = (props) => {
     return (
         <Grid item xs={12} sm={6} md={4}>
             <Paper
-                elevation={isHovered ? 7 : 3}
+                elevation={isHovered ? 15 : 3}
                 sx={{
                     p: 2,
                     m: 1,
                     height: "100%",
-                    backgroundColor: isHovered ? "rgba(0, 0, 0, 0.03)" : "inherit",
+                    backgroundColor: "#ffffff",
                 }}
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}

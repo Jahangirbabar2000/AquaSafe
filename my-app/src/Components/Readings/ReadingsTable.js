@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
-import { Grid, TablePagination } from "@mui/material";
+import { Grid, TablePagination, Skeleton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -36,11 +36,14 @@ function ReadingsTable(props) {
   const [ReadingsData, setReadingsData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/readings?Id=${props.Id}`)
+    axios
+      .get(`http://localhost:8080/api/readings?Id=${props.Id}`)
       .then(response => {
         setReadingsData(response.data);
+        setLoading(false);
       })
       .catch(error => console.log(error));
   }, [props.Id]);
@@ -94,49 +97,90 @@ function ReadingsTable(props) {
             {tableData[0] && <h1 style={{ flex: 1, textAlign: 'right' }}>{tableData[0].ProjectName}</h1>}
           </div>
           <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <StyledTableCell key={column.id} align="center">
-                      {column.label}
-                    </StyledTableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tableData
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => (
-                    <StyledTableRow key={index}>
-                      {columns.map((column) => (
-                        <StyledTableCell key={column.id} align="center">
-                          {row[column.id] || "-"}
+            {loading ? (
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">Device Name</StyledTableCell>
+                      <StyledTableCell align="center">Date</StyledTableCell>
+                      <StyledTableCell align="center">Parameter 1</StyledTableCell>
+                      <StyledTableCell align="center">Parameter 2</StyledTableCell>
+                      <StyledTableCell align="center">Parameter 3</StyledTableCell>
+                      <StyledTableCell align="center">Parameter 4</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {[1, 2, 3, 4, 5, 6].map((index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell>
+                          <Skeleton variant="text" />
                         </StyledTableCell>
-                      ))}
-                    </StyledTableRow>
-                  ))}
-              </TableBody>
-            </Table>
-            <TablePagination
-              sx={{ overflow: "unset" }} // <-- Added to remove scroll
-              rowsPerPageOptions={[5, 10, 25, 50, 100]}
-              component="div"
-              count={tableData.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              style={{
-                // <-- Added to move TablePagination to the right bottom end
-                display: "flex",
-                alignContent: "flex-end",
-                padding: "12px",
-              }}
-            />
+                        <StyledTableCell>
+                          <Skeleton variant="text" />
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Skeleton variant="text" />
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Skeleton variant="text" />
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Skeleton variant="text" />
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Skeleton variant="text" />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map((column) => (
+                      <StyledTableCell key={column.id} align="center">
+                        {column.label}
+                      </StyledTableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {tableData
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => (
+                      <StyledTableRow key={index}>
+                        {columns.map((column) => (
+                          <StyledTableCell key={column.id} align="center">
+                            {row[column.id] || "-"}
+                          </StyledTableCell>
+                        ))}
+                      </StyledTableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            )}
+            {!loading && (
+              <TablePagination
+                sx={{ overflow: "unset" }} // <-- Added to remove scroll
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                component="div"
+                count={tableData.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                style={{
+                  // <-- Added to move TablePagination to the right bottom end
+                  display: "flex",
+                  alignContent: "flex-end",
+                  padding: "12px",
+                }}
+              />
+            )}
           </TableContainer>
-
-
         </Grid>
       </Grid>
     </div>
@@ -144,4 +188,3 @@ function ReadingsTable(props) {
 }
 
 export default ReadingsTable;
-

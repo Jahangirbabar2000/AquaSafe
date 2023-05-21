@@ -10,16 +10,17 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-
+import { Box } from '@mui/system';
 export default function ReadingsPage() {
   const [projectList, setProjectList] = useState([]);
-  const [selectedProjectId, setSelectedProjectId] = useState("1");
+  const [selectedProjectId, setSelectedProjectId] = useState("");
 
   useEffect(() => {
     axios
       .get("http://localhost:8080/projects")
       .then((response) => {
         setProjectList(response.data);
+        setSelectedProjectId(response.data[0].Id)
       })
       .catch((error) => {
         console.error("Error fetching projects:", error);
@@ -31,7 +32,7 @@ export default function ReadingsPage() {
   };
 
   return (
-    <div>
+    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
       <Navbar />
       <div style={{ display: "grid", gridTemplateColumns: "28vh auto" }}>
         <div>
@@ -42,11 +43,10 @@ export default function ReadingsPage() {
             <CsvDownloadButton />
             <CsvUploadButton />
 
-            <div style={{ marginLeft: 550, marginTop: 30 }}>
+            <div style={{ marginLeft: 550, marginTop: 20 }}>
               <FormControl
                 variant="outlined"
                 size="small"
-                style={{ minWidth: 120, marginBottom: "16px", marginLeft: "10px" }}
               >
                 <InputLabel htmlFor="project-select">Project</InputLabel>
                 <Select
@@ -67,6 +67,6 @@ export default function ReadingsPage() {
           {<ReadingsTable Id={selectedProjectId} />}
         </div>
       </div>
-    </div>
+    </Box>
   );
 }

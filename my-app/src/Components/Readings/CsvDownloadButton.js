@@ -42,7 +42,6 @@ const CsvDownloadButton = () => {
       console.error("Error fetching devices", error);
     }
   };
-
   // Add a function to handle project selection
   const handleProjectChange = (event) => {
     setSelectedProject(event.target.value);

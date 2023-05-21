@@ -5,6 +5,10 @@ import { useNavigate } from 'react-router-dom';
 const Error404 = () => {
     const navigate = useNavigate();
 
+    const goBack = () => {
+        navigate(-1); // Navigates one page back
+    };
+
     return (
         <Box
             sx={{
@@ -26,10 +30,10 @@ const Error404 = () => {
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => navigate('/')}
+                onClick={goBack}
                 sx={{ width: '200px', px: 3, py: 1 }}
             >
-                Go to Home
+                Go Back
             </Button>
         </Box>
     );

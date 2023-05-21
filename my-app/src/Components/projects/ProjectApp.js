@@ -4,6 +4,10 @@ import Projects from './Projects';
 import Sidebar2 from '../sidebar/Sidebar2';
 import Navbar from '../navbar/navbar';
 import { Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Box } from '@mui/system';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const mdTheme = createTheme();
 
 const ProjectApp = () => {
     const [projectList, setProjectList] = useState([]);
@@ -16,8 +20,10 @@ const ProjectApp = () => {
         axios
             .get('http://localhost:8080/projects')
             .then((response) => {
-                setProjectList(response.data);
-                setLoading(false);
+                setProjectList(response.data);    
+                if (response.data.length > 0) {
+                    setLoading(false);
+                }
             })
             .catch((error) => {
                 console.error('Error fetching projects:', error);
@@ -25,19 +31,21 @@ const ProjectApp = () => {
     }, []);
 
     return (
-        <div style={{ backgroundColor: '#f2f2f2' }}>
-            <Navbar />
-            <Sidebar2 name="Projects" />
-            <Grid
-                container
-                spacing={2}
-                sx={{ marginTop: '1rem', marginLeft: isMobile ? '3.2rem' : '8rem' }}
-            >
-                <Grid item xs={12}>
-                    <Projects projects={projectList} loading={loading} />
+        <ThemeProvider theme={mdTheme}>
+            <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
+                <Navbar />
+                <Sidebar2 name="Projects" />
+                <Grid
+                    container
+                    spacing={2}
+                    sx={{ marginTop: '1rem', marginLeft: isMobile ? '3.2rem' : '8rem' }}
+                >
+                    <Grid item xs={12}>
+                        <Projects projects={projectList} loading={loading} />
+                    </Grid>
                 </Grid>
-            </Grid>
-        </div>
+            </Box>
+        </ThemeProvider>
     );
 };
 

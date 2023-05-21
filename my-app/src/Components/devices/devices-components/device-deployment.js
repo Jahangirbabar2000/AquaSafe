@@ -7,9 +7,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Check from '@mui/icons-material/Check';
 import Sidebar2 from "../../sidebar/Sidebar2";
 import Navbar from "../../navbar/navbar";
-
+import { Box } from '@mui/system';
 
 const INITIAL_FORM_STATE = {
+  name: "",
   latitude: "",
   longitude: "",
   frequency: "",
@@ -26,7 +27,12 @@ const DeviceDeployment = () => {
   const [projectName, setProjectName] = useState('');
   const [projectId, setProjectId] = useState('');
 
+  const query = useQuery();
+  const deviceId = query.get("deviceId");
+  const isEditMode = !!deviceId;
+  const selectedDeviceId = isEditMode ? deviceId : undefined;
   const navigate = useNavigate();
+
   const handleMapClick = useCallback((e) => {
     const { lat, lng } = e.latlng;
     const newLat = parseFloat(lat.toFixed(6));
@@ -39,7 +45,7 @@ const DeviceDeployment = () => {
       MuiTableCell: {
         styleOverrides: {
           head: {
-            backgroundColor: 'whitesmoke',
+            backgroundColor: '#ffffff',
           },
           root: {
             paddingTop: 8,
@@ -54,23 +60,48 @@ const DeviceDeployment = () => {
     return new URLSearchParams(useLocation().search);
   }
 
-  const query = useQuery();
+
 
   useEffect(() => {
-    const latitude = query.get("latitude");
-    const longitude = query.get("longitude");
+    fetchSensors();
     const Id = query.get("project");
     setProjectId(Id)
-    setMarkerPosition([latitude, longitude])
 
     axios.get(`http://localhost:8080/api/projects/${Id}`)
       .then(response => {
-        const projectName = response.data.name;
+        const projectName = response.data.Name;
         setProjectName(projectName);
+        if (!isEditMode) {
+          setMarkerPosition([response.data.Latitude, response.data.Longitude])
+        }
       })
       .catch(error => {
         console.error(error);
       });
+
+    const deviceId = query.get("deviceId");
+    if (deviceId) {
+      // Retrieve the device details using the deviceId and update the form state for editing
+      axios.get(`http://localhost:8080/api/deployeddevices/${deviceId}`)
+        .then(response => {
+          const { Name, Longitude, Latitude, Frequency } = response.data;
+          const initialFormState = {
+            name: Name,
+            latitude: Latitude,
+            longitude: Longitude,
+            frequency: Frequency.split(" ")[0],
+            timeUnit: Frequency.split(" ")[1],
+            sensors: [],
+          };
+          console.log(initialFormState)
+          setMarkerPosition([Latitude, Longitude])
+          setFormState(initialFormState);
+
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -111,43 +142,40 @@ const DeviceDeployment = () => {
     return null;
   }
 
-  useEffect(() => {
-    const fetchSensors = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/parameters");
-        const uniqueSensors = Array.from(
-          new Set(response.data.map((sensor) => sensor.Name))
-        ).map((name) => {
-          return response.data.find((sensor) => sensor.Name === name);
-        });
-        setSensors(uniqueSensors);
+  const fetchSensors = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/parameters");
+      const uniqueSensors = Array.from(
+        new Set(response.data.map((sensor) => sensor.Name))
+      ).map((name) => {
+        return response.data.find((sensor) => sensor.Name === name);
+      });
+      setSensors(uniqueSensors);
 
-        const fetchedParameterUnits = response.data.reduce((acc, item) => {
-          if (!acc[item.Name]) {
-            acc[item.Name] = [];
-          }
-          acc[item.Name].push(item.Unit);
+      const fetchedParameterUnits = response.data.reduce((acc, item) => {
+        if (!acc[item.Name]) {
+          acc[item.Name] = [];
+        }
+        acc[item.Name].push(item.Unit);
+        return acc;
+      }, {});
+      setParameterUnits(fetchedParameterUnits);
+
+      const initialFormState = {
+        ...formState, // Keep the existing form state
+        timeUnit: "Minute",
+        sensors: [],
+        ...Object.keys(fetchedParameterUnits).reduce((acc, paramName) => {
+          acc[`${paramName}_unit`] = fetchedParameterUnits[paramName][0];
           return acc;
-        }, {});
-        setParameterUnits(fetchedParameterUnits);
+        }, {}),
+      };
+      setFormState(initialFormState);
 
-        const initialFormState = {
-          ...INITIAL_FORM_STATE,
-          timeUnit: "Minute",
-          sensors: [],
-          ...Object.keys(fetchedParameterUnits).reduce((acc, paramName) => {
-            acc[`${paramName}_unit`] = fetchedParameterUnits[paramName][0];
-            return acc;
-          }, {}),
-        };
-        setFormState(initialFormState);
-      } catch (error) {
-        console.error("Error fetching sensors: ", error);
-      }
-    };
-
-    fetchSensors();
-  }, []);
+    } catch (error) {
+      console.error("Error fetching sensors: ", error);
+    }
+  };
 
   useEffect(() => {
     // CODE FOR FIXING MARKER PROBLEM ON MAP
@@ -164,7 +192,7 @@ const DeviceDeployment = () => {
 
   const sensorList = useMemo(() => (
     sensors.map((sensor) => (
-      <TableRow key={sensor.Name} style={{ backgroundColor: "whitesmoke" }}>
+      <TableRow key={sensor.Name} style={{ backgroundColor: "#ffffff" }}>
         <TableCell padding="checkbox">
           <FormControlLabel
             control={
@@ -219,35 +247,43 @@ const DeviceDeployment = () => {
     ))
   ), [sensors, formState, parameterUnits]);
 
+
+
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Add this line to prevent the default form submission behavior
+    e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/deployeddevices", {
-        Name: formState.name,
-        Longitude: markerPosition[1],
-        Latitude: markerPosition[0],
-        Frequency: formState.frequency + " " + timeUnit,
-        Project: projectId,
-        Locality: "Locality",
-        CommTech: "LORAWAN",
-        StatusCode: 200,
-        Sensors: JSON.stringify(formState.sensors),
+      const endpoint = isEditMode ? `http://localhost:8080/api/deployeddevices/${selectedDeviceId}` : "http://localhost:8080/api/deployeddevices";
+      const method = isEditMode ? "PUT" : "POST";
+
+      const response = await axios({
+        method: method,
+        url: endpoint,
+        data: {
+          Name: formState.name,
+          Longitude: markerPosition[1],
+          Latitude: markerPosition[0],
+          Frequency: formState.frequency + " " + timeUnit,
+          Project: projectId,
+          Locality: "Locality",
+          CommTech: "LORAWAN",
+          StatusCode: 200,
+          Sensors: JSON.stringify(formState.sensors),
+        },
       });
 
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         navigate(`/dashboard/${projectId}`);
       } else {
-        alert("Error adding device.");
+        alert("Error adding/editing device.");
       }
     } catch (error) {
-      console.error("Error posting data: ", error);
-      alert("Error adding device.");
+      console.error("Error posting/editing data: ", error);
+      alert("Error adding/editing device.");
     }
   };
 
-
   return (
-    <div style={{ backgroundColor: "#f2f2f2" }}>
+    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
       <Navbar />
       <Grid container>
         <div style={{ display: "grid", gridTemplateColumns: "27vh auto", backgroundColor: "#f2f2f2" }}>
@@ -258,7 +294,7 @@ const DeviceDeployment = () => {
             <div style={{ display: "flex", flexDirection: "row", height: "100vh" }}>
               <div style={{ display: "flex", flexDirection: "row", height: "100vh" }}>
                 <div style={{ marginTop: "1vh", marginLeft: "18vh" }}>
-                  <div style={{ minWidth: "450px", paddingTop: "2%", paddingBottom: "3%", background: "whitesmoke", borderRadius: "5%", marginTop: "15px", padding: "7%", boxShadow: "0px 0px 10px #888888", marginLeft: "1rem" }}>
+                  <div style={{ minWidth: "450px", paddingTop: "2%", paddingBottom: "3%", backgroundColor: "#ffffff", borderRadius: "5%", marginTop: "25px", padding: "7%", boxShadow: "0px 0px 10px #888888", marginLeft: "1rem" }}>
                     <Typography variant="h5" gutterBottom>General Device Details</Typography>
                     <form onSubmit={handleSubmit}>
                       <div style={{ display: "flex", marginBottom: 5 }}>
@@ -267,26 +303,27 @@ const DeviceDeployment = () => {
                           label="Name"
                           fullWidth
                           variant="standard"
-                          value={formState.name}
+                          value={formState.name || ""}
                           onChange={(e) => {
                             const name = e.target.value;
                             setFormState(prevState => ({ ...prevState, name }));
                           }}
                           style={{ marginRight: "10px" }}
                         />
+
                         <TextField
                           disabled
-                          name="project"
                           label="Project"
                           fullWidth
                           variant="standard"
                           value={projectName}
                           onChange={(e) => {
                             const name = e.target.value;
-                            setFormState(prevState => ({ ...prevState, name }));
+                            setProjectName(name);
                           }}
                           style={{ marginLeft: "10px" }}
                         />
+
                       </div>
                       <div style={{ display: "flex", marginBottom: 5 }}>
                         <TextField
@@ -369,7 +406,7 @@ const DeviceDeployment = () => {
                       </div>
                       <div style={{ height: 25 }}></div>
                       <Button variant="contained" color="primary" fullWidth type="submit">
-                        Add Device
+                        {isEditMode ? "Edit Device" : "Add Device"}
                       </Button>
                     </form>
                   </div>
@@ -383,9 +420,8 @@ const DeviceDeployment = () => {
           </Grid>
         </div>
       </Grid>
-    </div >
+    </Box >
   );
 };
 
 export default DeviceDeployment;
-

@@ -4,7 +4,7 @@ import Parameter from "./parameter";
 import Navbar from "../navbar/navbar";
 import Sidebar2 from "../sidebar/Sidebar2";
 import axios from "axios";
-
+import { Box } from '@mui/system';
 const WaterQualityPage = () => {
   const [parameters, setParameters] = useState([]);
 
@@ -44,19 +44,19 @@ const WaterQualityPage = () => {
     return [...new Set(units)];
   };
 
-  return (
-    <div>
-      <Navbar />
-      <Sidebar2 name="Dashboard" />
-      <Container sx={{ ml: "43vh", mt: "25px", pb: "50px" }}>
-        <Typography variant="h4" sx={{ mb: 3 }} align="center">
-          Water Quality Parameters
-        </Typography>
-        <Grid container spacing={6} rowSpacing={10}>
-          {renderParameters()}
-        </Grid>
-      </Container>
-    </div>
+  return (  
+      <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
+        <Navbar />
+        <Sidebar2 name="Parameters" />
+        <Container sx={{ ml: "43vh", mt: "25px", pb: "50px" }}>
+          <Typography variant="h4" sx={{ mb: 3 }} align="center">
+            Water Quality Parameters
+          </Typography>
+          <Grid container spacing={6} rowSpacing={10}>
+            {renderParameters()}
+          </Grid>
+        </Container>
+      </Box>    
   );
 };
 
