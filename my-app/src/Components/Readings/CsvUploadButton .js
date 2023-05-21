@@ -50,7 +50,7 @@ const CsvUploadButton = () => {
         console.log(readings);
         setUploading(true);
         try {
-            await axios.post("http://localhost:8080/readings/upload", readings);
+            await axios.post("/readings/upload", readings);
             setSnackbar({
                 open: true,
                 message: "Data uploaded successfully!",

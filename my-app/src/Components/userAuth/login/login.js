@@ -67,7 +67,7 @@ export default function Login() {
                     })
                         .then(function (subscription) {
                             // Send subscription to server
-                            fetch('http://localhost:8080/api/subscribe', {
+                            fetch('/api/subscribe', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -86,7 +86,7 @@ export default function Login() {
             }
         }
         try {
-            const response = await axios.post('http://localhost:8080/api/login', data, config);
+            const response = await axios.post('/api/login', data, config);
             if (response.status === 200) {
                 const { token, user } = response.data;
                 localStorage.setItem('jwt', token);

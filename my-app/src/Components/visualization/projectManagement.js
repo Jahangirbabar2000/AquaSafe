@@ -74,11 +74,11 @@ function ProjectManagement() {
     const getProjectDetails = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8080/api/projects/${projectId}`
+                `/api/projects/${projectId}`
             );
             setProject(response.data);
             const devicesResponse = await axios.get(
-                `http://localhost:8080/api/deployeddevices/byproject/${response.data.Name}`
+                `/api/deployeddevices/byproject/${response.data.Name}`
             );
             setDevices(devicesResponse.data);
             setLoading(false);
@@ -89,7 +89,7 @@ function ProjectManagement() {
 
     const handleDeleteDevice = async (deviceId) => {
         try {
-            await axios.delete(`http://localhost:8080/api/deployeddevices/${deviceId}`);
+            await axios.delete(`/api/deployeddevices/${deviceId}`);
             setDevices(devices.filter((device) => device.Id !== deviceId));
             setOpen(true);
             setMessage("Device deleted successfully");
@@ -100,7 +100,7 @@ function ProjectManagement() {
 
     const handleDeleteProject = async () => {
         try {
-            await axios.delete(`http://localhost:8080/api/project/${projectId}`);
+            await axios.delete(`/api/project/${projectId}`);
             // Perform any additional actions after deleting the project            
             setOpen(true);
             setMessage("Project deleted successfully");
@@ -119,7 +119,7 @@ function ProjectManagement() {
 
     const handleSaveProject = async () => {
         try {
-            await axios.put(`http://localhost:8080/api/projects/${projectId}`, editedProject);
+            await axios.put(`/api/projects/${projectId}`, editedProject);
             setProject(editedProject);
             setEditBackdropOpen(false);
         } catch (error) {

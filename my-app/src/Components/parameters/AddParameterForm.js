@@ -31,7 +31,7 @@ const AddParameter = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        await axios.post(`http://localhost:8080/parameters/`, {
+        await axios.post(`/parameters/`, {
           ParameterName: values.ParameterName,
           ParameterMin: values.ParameterMin,
           ParameterMax: values.ParameterMax,

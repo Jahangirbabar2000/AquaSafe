@@ -27,7 +27,7 @@ const CsvDownloadButton = () => {
   // Create a function to fetch the list of projects
   const getProjects = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/projects");
+      const res = await axios.get("/projects");
       setProjects(res.data);
     } catch (error) {
       console.error("Error fetching projects", error);
@@ -36,7 +36,7 @@ const CsvDownloadButton = () => {
 
   const getDevices = async (projectName) => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/deployeddevices/byproject/${projectName}`);
+      const res = await axios.get(`/api/deployeddevices/byproject/${projectName}`);
       setDevices(res.data);
     } catch (error) {
       console.error("Error fetching devices", error);
@@ -58,7 +58,7 @@ const CsvDownloadButton = () => {
   // Function to retrieve parameter names
   const getParameterNames = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/parameters");
+      const res = await axios.get("/parameters");
       setParameterNames(res.data);
     } catch (error) {
       console.error("Error fetching parameter names", error);

@@ -40,7 +40,7 @@ export default function SignUp() {
 
     useEffect(() => {
         // Make Axios request to fetch project details from the backend
-        axios.get('http://localhost:8080/projects')
+        axios.get('/projects')
             .then(response => {
                 setProjectList(response.data);
                 const filteredSites = projectList
@@ -94,7 +94,7 @@ export default function SignUp() {
     const navigate = useNavigate();
     const postData = async (data) => {
         try {
-            await axios.post('http://localhost:8080/api/register', data, config);
+            await axios.post('/api/register', data, config);
             // Navigation after successful form submission
             navigate('/projects'); // Replace '/success' with the desired route to navigate
         } catch (error) {

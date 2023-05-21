@@ -62,7 +62,7 @@ const Sidebar2 = (props) => {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:8080/projects')
+    axios.get('/projects')
       .then(response => {
         // Update state with fetched notifications
         setProjectId(response.data[0].Id);

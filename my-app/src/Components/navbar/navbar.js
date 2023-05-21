@@ -55,7 +55,7 @@ export default function Navbar() {
         // Only perform the API request if the user object exists
         if (user) {
             axios
-                .get('http://localhost:8080/api/notifications')
+                .get('/api/notifications')
                 .then(response => {
                     // Filter notifications based on user ID
                     const filteredNotifications = response.data.filter(
@@ -85,7 +85,7 @@ export default function Navbar() {
         setNotification(!isNotification);
         if (!isNotification && unviewedNotifications.length > 0) {
             const unviewedNotificationIds = unviewedNotifications.map(notification => notification.id);
-            axios.put('http://localhost:8080/api/notifications/view', { notificationIds: unviewedNotificationIds })
+            axios.put('/api/notifications/view', { notificationIds: unviewedNotificationIds })
                 .then(response => {
                     console.log('Notifications updated successfully');
                     // Set IsViewed to true for all unviewed notifications in state

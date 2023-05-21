@@ -17,7 +17,7 @@ export default function ReadingsPage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/projects")
+      .get("/projects")
       .then((response) => {
         setProjectList(response.data);
         setSelectedProjectId(response.data[0].Id)

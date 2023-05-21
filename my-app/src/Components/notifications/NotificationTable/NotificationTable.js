@@ -20,7 +20,7 @@ export default function NotificationTable() {
 
   const fetchNotifications = () => {
     axios
-      .get('http://localhost:8080/api/notifications')
+      .get('/api/notifications')
       .then(response => {
         // Filter notifications based on user ID
         const filteredNotifications = response.data.filter(

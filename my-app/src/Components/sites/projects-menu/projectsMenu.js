@@ -15,7 +15,7 @@ function ProjectMenu(props) {
   useEffect(() => {
     // Make Axios request to fetch project details from the backend
     axios
-      .get('http://localhost:8080/projects')
+      .get('/projects')
       .then((response) => {
         setProjectList(response.data);
       })

@@ -46,14 +46,14 @@ function ParameterTable() {
   const [message, setMessage] = useState("");
 
   const getParametersData = async (req, res) => {
-    res = await axios.get("http://localhost:8080/parameters");
+    res = await axios.get("/parameters");
     console.log(res.data);
     setParametersData(res.data);
   };
 
   const handleDelete = async name => {
     try {
-      await axios.delete(`http://localhost:8080/parameters/${name}`);
+      await axios.delete(`/parameters/${name}`);
       setParametersData(parametersData.filter((parameter) => parameter.Name !== name));
       setOpen(true);
       setMessage("Parameter deleted successfully");
