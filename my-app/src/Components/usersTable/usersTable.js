@@ -27,7 +27,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-
+import Skeleton from "@mui/material/Skeleton";
+import { Box } from '@mui/system';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -50,18 +51,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-
-
 function UsersTable() {
   const [usersData, setUsersData] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-
+  const [loading, setLoading] = useState(true);
 
   const getUsersData = async (req, res) => {
-    res = await axios.get("http://localhost:8080/activeUsers");
-    setUsersData(res.data);
+    try {
+      res = await axios.get("http://localhost:8080/activeUsers");
+      setUsersData(res.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching users data:", error);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -69,13 +73,11 @@ function UsersTable() {
       await axios.delete(`http://localhost:8080/api/users/${id}`);
       setUsersData(usersData.filter((user) => user.Id !== id));
       closeDeleteDialog();
-      setSnackbarOpen(true); // Show Snackbar on successful deletion
+      setSnackbarOpen(true);
     } catch (err) {
       console.error(err);
     }
   };
-
-
 
   const openDeleteDialog = (id) => {
     setOpenDialog(true);
@@ -96,8 +98,9 @@ function UsersTable() {
   useEffect(() => {
     getUsersData();
   }, []);
+
   return (
-    <div>
+    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
       <Navbar />
       <Grid spacing={40} container>
         <Grid item xs={4} sm={5} md={2}>
@@ -105,51 +108,111 @@ function UsersTable() {
         </Grid>
         <Grid item xs={8} sm={7} md={9}>
           <br />
-          <h1>Active Users</h1>
+
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <h1 style={{ flex: 1 }}>Active Users</h1>
+            <Link to="/signup" style={{ textDecoration: 'none' }}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+              >
+                Register New User
+              </Button>
+            </Link>
+          </div>
           <br />
           <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>First Name</StyledTableCell>
-                  <StyledTableCell>Last Name</StyledTableCell>
-                  <StyledTableCell align="right">Email</StyledTableCell>
-                  <StyledTableCell align="right">Designation</StyledTableCell>
-                  <StyledTableCell align="right">Country</StyledTableCell>
-                  <StyledTableCell align="right">Site</StyledTableCell>
-                  <StyledTableCell align="right">Edit</StyledTableCell>
-                  <StyledTableCell align="right">Delete</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {usersData.map(row => (
-                  <StyledTableRow key={row.Id}>
-                    <StyledTableCell component="th" scope="row">
-                      {row.FirstName}
-                    </StyledTableCell>
-                    <StyledTableCell>{row.LastName}</StyledTableCell>
-                    <StyledTableCell align="right">{row.Email}</StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.Designation}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.Country}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">{row.Site}</StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="right">
-                      <Link to={`/editUser/${row.Id}`}>
-                        <EditIcon />
-                      </Link>
-                    </StyledTableCell>
-                    <StyledTableCell className="smallColumn" align="right">
-                      <IconButton onClick={() => openDeleteDialog(row.Id)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
+            {loading ? (
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>First Name</StyledTableCell>
+                    <StyledTableCell>Last Name</StyledTableCell>
+                    <StyledTableCell align="right">Email</StyledTableCell>
+                    <StyledTableCell align="right">Designation</StyledTableCell>
+                    <StyledTableCell align="right">Country</StyledTableCell>
+                    <StyledTableCell align="right">Site</StyledTableCell>
+                    <StyledTableCell align="right">Edit</StyledTableCell>
+                    <StyledTableCell align="right">Delete</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {[1, 2, 3, 4].map((index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell>
+                        <Skeleton variant="text" />
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Skeleton variant="text" />
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <Skeleton variant="text" />
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <Skeleton variant="text" />
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <Skeleton variant="text" />
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <Skeleton variant="text" />
+                      </StyledTableCell>
+                      <StyledTableCell className="smallColumn" align="right">
+                        <Skeleton variant="rectangular" width={24} height={24} />
+                      </StyledTableCell>
+                      <StyledTableCell className="smallColumn" align="right">
+                        <Skeleton variant="rectangular" width={24} height={24} />
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>First Name</StyledTableCell>
+                    <StyledTableCell>Last Name</StyledTableCell>
+                    <StyledTableCell align="right">Email</StyledTableCell>
+                    <StyledTableCell align="right">Designation</StyledTableCell>
+                    <StyledTableCell align="right">Country</StyledTableCell>
+                    <StyledTableCell align="right">Site</StyledTableCell>
+                    <StyledTableCell align="right">Edit</StyledTableCell>
+                    <StyledTableCell align="right">Delete</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {usersData.map(row => (
+                    <StyledTableRow key={row.Id}>
+                      <StyledTableCell component="th" scope="row">
+                        {row.FirstName}
+                      </StyledTableCell>
+                      <StyledTableCell>{row.LastName}</StyledTableCell>
+                      <StyledTableCell align="right">{row.Email}</StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.Designation}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.Country}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">{row.Site}</StyledTableCell>
+                      <StyledTableCell className="smallColumn" align="right">
+                        <Link to={`/editUser/${row.Id}`}>
+                          <EditIcon />
+                        </Link>
+                      </StyledTableCell>
+                      <StyledTableCell className="smallColumn" align="right">
+                        <IconButton onClick={() => openDeleteDialog(row.Id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </TableContainer>
         </Grid>
       </Grid>
@@ -196,8 +259,7 @@ function UsersTable() {
           User deletion successful
         </Alert>
       </Snackbar>
-
-    </div>
+    </Box>
   );
 }
 

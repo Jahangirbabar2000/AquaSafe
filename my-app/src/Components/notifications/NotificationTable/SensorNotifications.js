@@ -8,94 +8,35 @@ const SensorNotification = props => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
-    // { field: "id", headerName: "ID", cellClassName: "name-column--cell" },
     {
-      field: "project",
-      headerName: "Project",
-      flex: 2,
+      field: "date",
+      headerName: "Date",
+      flex: 1,
       cellClassName: "name-column--cell"
     },
     {
-      field: "country",
-      headerName: "Country",
-      cellClassName: "name-column--cell"
-      // type: "number",
-      // flex: 1
-      // headerAlign: "left",
-      // align: "left",
-    },
-    {
-      field: "city",
-      headerName: "City",
-      cellClassName: "name-column--cell",
-      // type: "number",
-      flex: 1
-      // headerAlign: "left",
-      // align: "left",
-    },
-    {
-      field: "device",
-      headerName: "Device",
-      cellClassName: "name-column--cell"
-      // flex: 1
-    },
-    {
-      field: "sensor",
-      headerName: "Sensor",
-      cellClassName: "name-column--cell"
-      // flex: 1
-    },
-    {
-      field: "min",
-      headerName: "Minimum",
-      // flex: 1,
-      type: "number",
-      headerAlign: "left",
-      align: "left",
+      field: "code",
+      headerName: "Code",
+      flex: 0.4,
       cellClassName: "name-column--cell"
     },
     {
-      field: "max",
-      headerName: "Maximum",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
+      field: "location",
+      headerName: "Location",
+      flex: 1.8,
       cellClassName: "name-column--cell"
-      // flex: 1
     },
     {
-      field: "reading",
-      headerName: "Reading",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
+      field: "description",
+      headerName: "Description",
+      flex: 6,
       cellClassName: "name-column--cell"
-      // flex: 1
     },
     {
       field: "status",
       headerName: "Status",
+      flex: 0.7,
       cellClassName: "name-column--cell"
-      // type: "number",
-      // headerAlign: "left",
-      // align: "left"
-      // flex: 1
-    },
-    {
-      field: "details",
-      headerName: "Details",
-      // type: "number",
-      // headerAlign: "left",
-      // align: "left"
-      flex: 5,
-      cellClassName: "name-column--cell"
-    },
-    {
-      field: "date",
-      headerName: "Date",
-      cellClassName: "name-column--cell"
-
-      // flex: 1
     }
   ];
 
@@ -104,9 +45,10 @@ const SensorNotification = props => {
       <Box m="10px">
         <Box
           className="sensor-notfication-box"
-          m="25px 0 0 3%"
+          m="0 0 0 3%"
           height="75vh"
           sx={{
+
             width: "95%",
             "& .MuiDataGrid-root": {
               // border: "none",
@@ -141,7 +83,8 @@ const SensorNotification = props => {
             },
             "& .MuiSvgIcon-root": {
               color: "white"
-            }
+            },
+            backgroundColor: '#ffffff'
           }}
         >
           <DataGrid checkboxSelection rows={data} columns={columns} />

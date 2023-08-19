@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import "../homepage/homepage.css";
-import { Link } from "react-router-dom";
+import axios from 'axios';
+import { Link, useNavigate } from "react-router-dom";
 import aquasafeLogo from "../../AquaSafe.png";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,11 +11,11 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import data from "../notifications/NotificationBox/notification.json";
 import RenderNotifications from "../notifications/NotificationBox/notification.js";
 import { styled } from '@mui/system';
 import UserContext from "../userAuth/UserContext";
-import { Typography } from "@mui/material";
+import { Typography, Menu, MenuItem } from "@mui/material";
+
 
 import nustlogo from "../../nust.png";
 import asiaconnectLogo from "../../asiaconenct-logo.png";
@@ -39,7 +39,51 @@ const CenteredLogos = styled(Box)({
   
 
 export default function Navbar() {
-    const { user } = useContext(UserContext);  // Access the user property from UserContext
+    const navigate = useNavigate();
+    const { user, setUser } = useContext(UserContext);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [isNotification, setNotification] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+
+    let unviewedNotifications = notifications.filter(notification => !notification.IsViewed);
+    let notificationCount = unviewedNotifications.length;
+
+    useEffect(() => {
+        fetchNotifications();
+        const handleNotification = event => {
+            fetchNotifications();
+        };
+
+        navigator.serviceWorker.addEventListener('message', handleNotification);
+
+        // Don't forget to remove the event listener when the component is unmounted
+        return () => {
+            navigator.serviceWorker.removeEventListener('message', handleNotification);
+        };
+        // Adding user as a dependency
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
+
+
+    const fetchNotifications = () => {
+        // Only perform the API request if the user object exists
+        if (user) {
+            axios
+                .get('http://localhost:8080/api/notifications')
+                .then(response => {
+                    // Filter notifications based on user ID
+                    const filteredNotifications = response.data.filter(
+                        notification => notification.user === user.id
+                    );
+                    // Update state with filtered notifications
+                    setNotifications(filteredNotifications);
+                })
+                .catch(error => {
+                    console.error('There was an error fetching notifications!', error);
+                });
+        }
+    };
+
 
     // Display user's full name if available
     const userFullName = user && user.firstName && user.lastName
@@ -51,10 +95,42 @@ export default function Navbar() {
         ? `(${user.designation})`
         : "";
 
-    let [isNotification, setNotification] = useState(false);
-    const notificationCount = Object.keys(data).length;
     const handleNotificationClick = () => {
         setNotification(!isNotification);
+        if (!isNotification && unviewedNotifications.length > 0) {
+            const unviewedNotificationIds = unviewedNotifications.map(notification => notification.id);
+            axios.put('http://localhost:8080/api/notifications/view', { notificationIds: unviewedNotificationIds })
+                .then(response => {
+                    console.log('Notifications updated successfully');
+                    // Set IsViewed to true for all unviewed notifications in state
+                    const updatedNotifications = notifications.map(notification =>
+                        unviewedNotificationIds.includes(notification.id)
+                            ? { ...notification, IsViewed: true }
+                            : notification
+                    );
+                    setNotifications(updatedNotifications);
+                })
+                .catch(error => {
+                    console.error('There was an error updating notifications!', error);
+                });
+        }
+    };
+
+
+    const handleAccountMenuOpen = (event) => {
+        if (isNotification) {
+            setNotification(!isNotification);
+        }
+        setAnchorEl(event.currentTarget);
+    };
+    const handleAccountMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('jwt'); // Remove JWT token from local storage
+        setUser(null); // Update userContext to null
+        navigate('/'); // Navigate to homepage
     };
 
     return (
@@ -80,10 +156,10 @@ export default function Navbar() {
                         <Box sx={{ marginRight: 2 }}>
                             <Typography variant="h6" sx={{ color: "#00356B" }}>
                                 {userFullName}
-                                {/* <span> </span>
+                                <span> </span>
                                 <Typography component="span" variant="subtitle1" sx={{ color: "#777" }}>
                                     {userDesignation}
-                                </Typography> */}
+                                </Typography>
                             </Typography>
                         </Box>
 
@@ -112,15 +188,23 @@ export default function Navbar() {
                             </IconButton>
                             {isNotification && (
                                 <div className="notification-card">
-                                    <RenderNotifications data={data} />
+                                    <RenderNotifications data={notifications} />
                                 </div>
                             )}
+                            <Menu
+                                id="account-menu"
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={handleAccountMenuClose}
+                            >
+                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                            </Menu>
                             <IconButton
                                 size="large"
                                 edge="end"
                                 aria-label="account of current user"
                                 aria-haspopup="true"
-                                // onClick={handleProfileMenuOpen}
+                                onClick={handleAccountMenuOpen}
                                 color="inherit"
                             >
                                 <AccountCircle sx={{ color: "#00356B", fontSize: 30 }} />
@@ -140,8 +224,6 @@ export default function Navbar() {
                         </Box>
                     </Toolbar>
                 </AppBar>
-                {/* {renderMobileMenu} /}
-{/ {renderMenu} */}
             </Box>
         </Root>
     );

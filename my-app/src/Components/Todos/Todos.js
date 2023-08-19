@@ -15,7 +15,7 @@ const projects1 = ["Tarbela Dam", "Rawal Lake", "Nust Lake"];
 
 function SingleTodoCard(props) {
   const todo = props.todo;
-  
+
   function onCheckBoxClick(id) {
     const updatedTodos = props.todo.map((todo) => {
       if (todo.id === id) {
@@ -56,7 +56,7 @@ function SingleTodoCard(props) {
         justifyContent: "space-between",
         boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
         overflow: "auto"
-        
+
       }}
     >
       <Grid container spacing={1}>
@@ -168,7 +168,7 @@ function BigTodoBox(props) {
           onClick={() => setCurrentPage("All")}
           variant="contained"
           style={{ width: "100%", borderRadius: 0, backgroundColor: currentPage === "All" ? "green" : "" }}
-          
+
         >
           All
         </Button>
@@ -211,12 +211,12 @@ function Todos() {
         </div>
         <div style={{ marginLeft: 85 }}>
           {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-            <Typography variant="h3" sx={{ marginTop: 2, marginBottom: 3, marginLeft:"42%"}} align="left">
-              <span style={{ fontWeight: "bold" }}>Tasks</span>
-            </Typography>
+          <Typography variant="h3" sx={{ marginTop: 2, marginBottom: 3, marginLeft: "42%" }} align="left">
+            <span style={{ fontWeight: "bold" }}>Tasks</span>
+          </Typography>
           {/* </div> */}
-          <Box sx={{marginLeft: 3}}>
-          <CreateTodo tasks={allTodo} setAllTodo={setAllTodo} />
+          <Box sx={{ marginLeft: 3 }}>
+            <CreateTodo tasks={allTodo} setAllTodo={setAllTodo} />
           </Box>
           <BigTodoBox todos={allTodo} setAllTodo={setAllTodo} />
         </div>

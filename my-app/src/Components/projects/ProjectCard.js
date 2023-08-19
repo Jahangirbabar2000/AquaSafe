@@ -5,7 +5,7 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 const ProjectCard = ({ project, onCardClick }) => {
     const { Name, Location, Country, Longitude, Latitude, Description } = project;
     return (
-        <Card style={{ width: '300px', margin: '10px' }}>
+        <Card sx={{ maxWidth: '100%', margin: '0.5rem' }}>
             <CardActionArea onClick={() => onCardClick(project)}>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">

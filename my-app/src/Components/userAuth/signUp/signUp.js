@@ -14,15 +14,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Sidebar2 from "../../sidebar/Sidebar2.js";
 import { useNavigate } from 'react-router-dom';
 
-function Copyright(props) {
-    return (
-        <Typography variant="h6" color="text.secondary" align="center" {...props}>
-            {'Copyright © AsiaConnect '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+// function Copyright(props) {
+//     return (
+//         <Typography variant="h6" color="text.secondary" align="center" {...props}>
+//             {'Copyright © AsiaConnect '}
+//             {new Date().getFullYear()}
+//             {'.'}
+//         </Typography>
+//     );
+// }
 
 const theme = createTheme();
 
@@ -54,7 +54,7 @@ export default function SignUp() {
     }, [country, projectList]);
 
     const uniqueCountries = [...new Set(projectList.map((option) => option.Country))];
-    
+
     const designations = [
         {
             value: 'IoT Engineer',
@@ -122,11 +122,22 @@ export default function SignUp() {
     return (
         <div>
             <Navbar />
-            <Sidebar2 />
+            <Sidebar2 name="Users" />
             <ThemeProvider theme={theme}>
-                <Container component="main" maxWidth="sm">
-                    {/* <CssBaseline /> */}
-                    <Box sx={{ marginLeft: 15, marginTop: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Container component="main" maxWidth="md">
+                    <Box sx={{
+                        marginLeft: 25,
+                        marginTop: 4,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        border: '1px solid #ccc',
+                        borderRadius: '7px',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.4)',
+                        paddingLeft: '5vh',
+                        paddingRight: '5vh',
+                        paddingBottom: 1
+                    }}>
                         <Avatar sx={{ m: 2, bgcolor: 'primary.main', width: 55, height: 55 }}>
                             <LockOutlinedIcon fontSize="large" />
                         </Avatar>
@@ -212,7 +223,7 @@ export default function SignUp() {
                                         fullWidth
                                         select
                                         name="country"
-                                        label="country"
+                                        label="Country"
                                         type="country"
                                         onChange={(event) => setCountry(event.target.value)}
                                     >
@@ -233,7 +244,7 @@ export default function SignUp() {
                                         type="site"
                                         value={site}
                                         onChange={(event) => setSite(event.target.value)}
-                                        disabled={!country} // Disable the dropdown if no country is selected
+                                        disabled={!country}
                                     >
                                         {uniqueSites.map((option) => (
                                             <MenuItem key={option} value={option}>
@@ -242,7 +253,6 @@ export default function SignUp() {
                                         ))}
                                     </TextField>
                                 </Grid>
-
                             </Grid>
                             <Button
                                 type="submit"
@@ -253,12 +263,19 @@ export default function SignUp() {
                                 Register User
                             </Button>
                         </Box>
+                        {/* <Box>
+                            <Typography variant="h6" color="text.secondary" align="center">
+                                {'Copyright © AsiaConnect '}
+                                {new Date().getFullYear()}
+                                {'.'}
+                            </Typography>
+                        </Box> */}
                     </Box>
-                    <Copyright justif sx={{ mt: 0, ml: 15 }} />
 
                 </Container>
             </ThemeProvider>
-        </div>
 
+        </div>
     );
+
 }

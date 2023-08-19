@@ -1,43 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Sidebar2 from "../../sidebar/Sidebar2.js";
 import Navbar from "../../navbar/navbar.js";
 import Button from "@mui/material/Button";
-import data from "../NotificationBox/notification.json";
 import SensorNotification from "./SensorNotifications.js";
 import DeviceNotification from "./DeviceNotifications.js";
-
-// this function adds details attribute to the json file depending on the error code.
-function AddDetails(data) {
-  const DetailsData = data.map((entry) => {
-    if (entry.code === 10) {
-      entry.details = entry.sensor + " is at dangerous level.";
-    } else if (entry.code === 11) {
-      entry.details = entry.sensor + " is close to dangerous level.";
-    } else if (entry.code === 12) {
-      entry.details = entry.sensor + " is at optimal level.";
-    } else if (entry.code === 20) {
-      entry.details = entry.device + " has crashed.";
-    } else if (entry.code === 21) {
-      entry.details = entry.device + " has moved";
-    }
-    return entry;
-  });
-  return DetailsData;
-}
+import axios from 'axios';
+import UserContext from "../../userAuth/UserContext.js";
+import { Box } from '@mui/system';
 
 export default function NotificationTable() {
-  const [isDetailData, setDetailData] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [showDevice, setShowDevice] = useState(false);
+  const { user, setUser } = useContext(UserContext);
 
-  React.useEffect(() => {
-    const DetailData = AddDetails(data);
-    setDetailData(DetailData);
+
+  useEffect(() => {
+    fetchNotifications();
   }, []);
 
-  const SensorNotifications = isDetailData.filter(
+  const fetchNotifications = () => {
+    axios
+      .get('http://localhost:8080/api/notifications')
+      .then(response => {
+        // Filter notifications based on user ID
+        const filteredNotifications = response.data.filter(
+          notification => notification.user === user.id
+        );
+        // Update state with filtered notifications
+        setNotifications(filteredNotifications);
+      })
+      .catch(error => {
+        console.error('There was an error fetching notifications!', error);
+      });
+  };
+
+  const SensorNotifications = notifications.filter(
     (item) => item.type !== "device"
   );
-  const DeviceNotifications = isDetailData.filter(
+  const DeviceNotifications = notifications.filter(
     (item) => item.type !== "sensor"
   );
 
@@ -50,7 +50,7 @@ export default function NotificationTable() {
   };
 
   return (
-    <div>
+    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[0], minHeight: '100vh' }}>
       <Navbar />
       <div
         style={{
@@ -95,7 +95,7 @@ export default function NotificationTable() {
           )}
         </div>
       </div>
-    </div>
+    </Box>
   );
 }
 

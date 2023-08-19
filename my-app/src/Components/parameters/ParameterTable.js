@@ -69,12 +69,11 @@ function ParameterTable() {
   return (
     <div>
       <Navbar />
-      <Grid spacing={40} container>
+      <Grid mb={5} spacing={40} container>
         <Grid item xs={4} sm={5} md={2}>
           <Sidebar2 name="Parameters" />
         </Grid>
         <Grid item xs={8} sm={7} md={9}>
-          <br />
           <br />
           <div style={{ display: "flex", alignItems: "center" }}>
             <h1 style={{ flex: 1 }}>Existing Parameters</h1>
@@ -91,8 +90,6 @@ function ParameterTable() {
             </Link>
           </div>
           <br />
-          <br />
-
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>

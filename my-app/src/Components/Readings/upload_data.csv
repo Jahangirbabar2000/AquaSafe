@@ -1,8 +1,0 @@
-id,Location,Station,Date,Temperature,pH,DissolvedOxygen,Conductivity,NitriteNitrogen,BOD5,TotalPhosphorus,AmmoniaNitrogen
-1,Rawal Lake,fsd4,4/6/2023,25,2,24,24,24,24,24,24
-2,Rawal Lake,fsd5,4/7/2023,25,2,24,24,24,24,24,24
-3,Rawal Lake,fsd6,4/8/2023,25,2,24,24,24,24,24,24
-4,Rawal Lake,fsd7,4/9/2023,25,2,24,24,24,24,24,24
-5,Rawal Lake,fsd8,4/10/2023,25,2,24,24,24,24,24,24
-6,Rawal Lake,fsd9,4/11/2023,25,2,24,24,24,24,24,24
-7,Rawal Lake,fsd10,4/12/2023,25,2,24,24,24,24,24,24

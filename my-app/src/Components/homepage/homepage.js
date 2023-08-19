@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./homepage.css";
 import First from "./first.js";
 import Second from "./second";
@@ -15,6 +15,7 @@ import nustlogo from "../../nust.png";
 import asiaconnectLogo from "../../asiaconenct-logo.png";
 import teinLogo from "../../tein-logo.png";
 import { styled } from '@mui/system';
+import axios from 'axios';
 
 function Home() {
   return (
@@ -48,6 +49,18 @@ const CenteredLogos = styled(Box)({
 });
 
 function Navbarhome() {
+  const [projectId, setProjectId] = useState('');
+  useEffect(() => {
+    axios.get('http://localhost:8080/projects')
+      .then(response => {
+        // Update state with fetched notifications
+        setProjectId(response.data[0].Id);
+      })
+      .catch(error => {
+        console.error('There was an error fetching notifications!', error);
+      });
+  }, []);
+
   return (
     <Root>    
       <Box sx={{ flexGrow: 1, marginBottom: 7 }}>

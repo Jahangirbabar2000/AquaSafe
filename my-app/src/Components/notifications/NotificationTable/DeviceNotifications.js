@@ -71,7 +71,7 @@ const DeviceNotification = (props) => {
         <Box m="10px">
             <Box
                 className="sensor-notfication-box"
-                m="25px 0 0 3%"
+                m="0 0 0 3%"
                 height="75vh"
                 sx={{
                     width: "95%",

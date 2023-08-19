@@ -29,7 +29,7 @@ const theme = createTheme({
     },
 });
 
-export default function Datepicker({ startDate, setStartDate, endDate, setEndDate }) {
+export default function Datepicker({ startDate, setStartDate, endDate, setEndDate, minDate, maxDate }) {
 
     const handleChange1 = (newValue) => {
         setStartDate(newValue);
@@ -37,7 +37,6 @@ export default function Datepicker({ startDate, setStartDate, endDate, setEndDat
     const handleChange2 = (newValue) => {
         setEndDate(newValue);
     };
-
     return (
         <ThemeProvider theme={theme}>
             <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -48,11 +47,11 @@ export default function Datepicker({ startDate, setStartDate, endDate, setEndDat
                         </Typography>
                     }
                     inputFormat="DD/MM/YYYY"
-                    value={moment(startDate)}
+                    value={startDate}
                     onChange={handleChange1}
-                    minDate={moment('2013-01-03 00:00:00')}
-                    maxDate={moment('2018-12-17 00:00:00')}
-                    renderInput={(params) => <TextField {...params} />}
+                    minDate={minDate}
+                    maxDate={endDate}
+                    TextFieldComponent={TextField}
                 />
                 <span> ___ </span>
                 <DesktopDatePicker
@@ -62,11 +61,11 @@ export default function Datepicker({ startDate, setStartDate, endDate, setEndDat
                         </Typography>
                     }
                     inputFormat="DD/MM/YYYY"
-                    value={moment(endDate)}
+                    value={endDate}
                     onChange={handleChange2}
-                    minDate={moment(startDate)}
-                    maxDate={moment('2018-12-17 00:00:00')}
-                    renderInput={(params) => <TextField {...params} />}
+                    minDate={startDate}
+                    maxDate={maxDate}
+                    TextFieldComponent={TextField}
                 />
             </LocalizationProvider>
         </ThemeProvider>
