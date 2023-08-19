@@ -16,6 +16,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import myImage from './water.jpg';
 import UserContext from '../UserContext'
 
+import nustlogo from "../../../nust.png";
+import asiaconnectLogo from "../../../asiaconenct-logo.png";
+import teinLogo from "../../../tein-logo.png";
+
 function Copyright(props) {
     return (
         <Typography variant="h6" color="text.secondary" align="center" {...props}>
@@ -128,6 +132,8 @@ export default function Login() {
                         <Typography component="h1" variant="h4">
                             Sign in
                         </Typography>
+
+
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
                             {errorMessage && (
                                 <Alert severity="error" sx={{ mb: 2 }}>
@@ -183,7 +189,12 @@ export default function Login() {
                                     </Link>
                                 </Grid>
                             </Grid>
-                            <Copyright sx={{ mt: 5 }} />
+                            <Box style={{display: "flex", marginLeft:"1%", marginTop:40}}>
+                            <img style={{height: 60 ,marginLeft: 0, marginTop:10}} src={asiaconnectLogo} alt="asiaconnect logo" />
+                            <img style={{height: 60 ,marginLeft: 25}} src={teinLogo} alt="tein logo" />
+                            <img style={{height: 70 ,marginLeft: 25,  marginTop:6}}src={nustlogo} alt="NUST logo" />
+                        </Box>
+                            <Copyright sx={{ mt: 1 }} />
                         </Box>
                     </Box>
                 </Grid>

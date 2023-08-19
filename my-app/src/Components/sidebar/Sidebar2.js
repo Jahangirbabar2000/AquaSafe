@@ -182,7 +182,7 @@ const Sidebar2 = (props) => {
               icon={<LogoutRoundedIcon />}
               selected={selected}
               onClick={handleLogout}
-            />
+            /> */}
           </Box>
         </Menu>
       </ProSidebar>

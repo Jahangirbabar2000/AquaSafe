@@ -17,12 +17,26 @@ import { styled } from '@mui/system';
 import UserContext from "../userAuth/UserContext";
 import { Typography } from "@mui/material";
 
+import nustlogo from "../../nust.png";
+import asiaconnectLogo from "../../asiaconenct-logo.png";
+import teinLogo from "../../tein-logo.png";
+
 const Root = styled("div")(({ theme }) => ({
     "& .MuiPaper-root": {
         color: "black",
-        height: 55
+        height: 65
     }
 }));
+
+const CenteredLogos = styled(Box)({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexGrow: 1,
+    height: 70,
+    marginLeft:400
+  });
+  
 
 export default function Navbar() {
     const { user } = useContext(UserContext);  // Access the user property from UserContext
@@ -48,9 +62,19 @@ export default function Navbar() {
             <Box sx={{ flexGrow: 1, paddingBottom: 7 }}>
                 <AppBar position="fixed" sx={{ background: "white" }}>
                     <Toolbar>
-                        <Link to="/homepage">
-                            <img className="logo-img" src={aquasafeLogo} alt="logo" />
+                         <Link to="/homepage">
+                            <img className="logo-img" style={{height: 40}} src={aquasafeLogo} alt="logo" />
                         </Link>
+                        {/* <img style={{height: "75%" ,marginLeft: 10}} src={asiaconnectLogo} alt="asiaconnect logo" />
+          <img style={{height: "80%" ,marginLeft: 10}}src={nustlogo} alt="NUST logo" />  */}
+                      <CenteredLogos>
+            {/* <Link to="/homepage" style={{ textDecoration: 'none' }}>
+            <img style={{ height: 45, marginBottom: 0 }} src={aquasafeLogo} alt="aquasafe logo" />
+            </Link> */}
+              <img style={{ height: 50, marginBottom: 0, marginLeft: 25 }} src={asiaconnectLogo} alt="asiaconnect logo" />
+              <img style={{ height: 45, marginLeft: 25, marginRight: 0, marginBottom:12 }} src={teinLogo} alt="tein logo" />
+              <img style={{ height: 70, marginLeft: 25 }} src={nustlogo} alt="NUST logo" />
+            </CenteredLogos>
 
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ marginRight: 2 }}>
