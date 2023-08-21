@@ -16,12 +16,18 @@ dotenv.config();
 // console.log(process.env.VAPID_PUBLIC_KEY);
 
 // Set VAPID keys
+// webpush.setVapidDetails(
+//     'mailto:example@yourdomain.org',
+//     process.env.VAPID_PUBLIC_KEY,
+//     process.env.VAPID_PRIVATE_KEY
+// );
+
+
 webpush.setVapidDetails(
     'mailto:example@yourdomain.org',
-    process.env.VAPID_PUBLIC_KEY,
-    process.env.VAPID_PRIVATE_KEY
+    "BBoeN7SWEoq_etnQjgkueducGTT3Iyz1G2fcqA7Hk6Uj_cqtHdnCMOWWgthuItS4r9cQTFYOZAo0l6CiYBqqQto",
+"J-hwGRTPCVZWgYH_ELWDKH58u5PIi1lzeQO_kT9d65o"
 );
-
 
 // Initialize express app
 const app = express();
@@ -47,11 +53,18 @@ app.use(session({
     cookie: { secure: true }
 }));
 
+// const connection = mysql.createConnection({
+//     host: process.env.DB_HOST,
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASSWORD,
+//     database: process.env.DB_NAME
+// });
+
 const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    host: "database-1.coouedpy5myu.us-east-1.rds.amazonaws.com",
+    user: "admin",
+    password: "jb123456",
+    database: "AquaSafe"
 });
 
 try {
@@ -324,7 +337,8 @@ app.post('/api/login', (req, res) => {
 
             // If the password is valid, generate a JSON Web Token (JWT) and send it as a response
             const jwtPayload = { id: user.Id, firstName: user.FirstName, lastName: user.LastName, email: user.Email, designation: user.Designation };
-            const jwtSecret = process.env.JWT_SECRET;
+            const jwtSecret = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY5MjQzMzY0NCwiaWF0IjoxNjkyNDMzNjQ0fQ.fYxd5JAxBUtBNnAdeo1-rprTmflSXDYTuCEApVCoXpc";
+            // const jwtSecret = process.env.JWT_SECRET;
             const jwtOptions = { expiresIn: '1h' };
 
             jwt.sign(jwtPayload, jwtSecret, jwtOptions, (err, token) => {

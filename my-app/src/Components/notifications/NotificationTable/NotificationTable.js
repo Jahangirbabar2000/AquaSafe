@@ -50,7 +50,7 @@ export default function NotificationTable() {
   };
 
   return (
-    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[0], minHeight: '100vh' }}>
+    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[0], minHeight: '100vh'}}>
       <Navbar />
       <div
         style={{
@@ -62,7 +62,7 @@ export default function NotificationTable() {
         <div>
           <Sidebar2 name="Notifications" />
         </div>
-        <div style={{ marginLeft: 60 }}>
+        <div style={{ marginLeft: 60,  marginTop: 10  }}>
           <Button
             variant="contained"
             style={{
