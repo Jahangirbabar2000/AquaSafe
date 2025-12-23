@@ -39,14 +39,17 @@ const Root = styled('div')(({ theme }) => ({
   }
 }));
 
-const CenteredLogos = styled(Box)({
+const CenteredLogos = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   flexGrow: 1,
   height: 70,
-  marginLeft:390
-});
+  gap: theme.spacing(2),
+  [theme.breakpoints.down('md')]: {
+    display: 'none'
+  }
+}));
 
 function Navbarhome() {
   const [projectId, setProjectId] = useState('');
@@ -70,22 +73,19 @@ function Navbarhome() {
                 <img className="logo-img" style={{height: 40}} src={aquasafeLogo} alt="aquasafe logo" />
               </Link>
             <CenteredLogos>
-            {/* <Link to="/homepage" style={{ textDecoration: 'none' }}>
-            <img style={{ height: 45, marginBottom: 0 }} src={aquasafeLogo} alt="aquasafe logo" />
-            </Link> */}
-              <img style={{ height: 50, marginBottom: 0, marginLeft: 30 }} src={asiaconnectLogo} alt="asiaconnect logo" />
-              <img style={{ height: 45, marginLeft: 30, marginRight: 0, marginBottom:12 }} src={teinLogo} alt="tein logo" />
-              <img style={{ height: 70, marginLeft: 30 }} src={nustlogo} alt="NUST logo" />
+              <img style={{ height: '50px', maxHeight: '50px', objectFit: 'contain' }} src={asiaconnectLogo} alt="asiaconnect logo" />
+              <img style={{ height: '45px', maxHeight: '45px', objectFit: 'contain' }} src={teinLogo} alt="tein logo" />
+              <img style={{ height: '70px', maxHeight: '70px', objectFit: 'contain' }} src={nustlogo} alt="NUST logo" />
             </CenteredLogos>
             <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
               <Link to="/dashboard" style={{ textDecoration: 'none' }}>
-                <Button variant="contained" sx={{ fontSize: 10 }}>
+                <Button variant="contained" sx={{ fontSize: { md: 12, lg: 14 }, whiteSpace: 'nowrap' }}>
                   Take a look
                 </Button>
               </Link>
               <Link to="/login" style={{ textDecoration: 'none' }}>
-                <Button variant="contained" sx={{ fontSize: 10, marginLeft: 2 }}>
+                <Button variant="contained" sx={{ fontSize: { md: 12, lg: 14 }, whiteSpace: 'nowrap' }}>
                   Login
                 </Button>
               </Link>

@@ -1,13 +1,12 @@
 import React from "react";
-import Sidebar2 from "../sidebar/Sidebar2.js";
-import Navbar from "../navbar/navbar.js";
+import MainLayout from "../Layout/MainLayout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "./addParameter.css";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { TextField, Typography } from "@mui/material";
+import { TextField, Typography, Box } from "@mui/material";
+import { parametersAPI } from "../../services/api";
 
 const validationSchema = Yup.object().shape({
   ParameterName: Yup.string().required(),
@@ -31,32 +30,33 @@ const AddParameter = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        await axios.post(`http://localhost:8080/parameters/`, {
+        await parametersAPI.create({
           ParameterName: values.ParameterName,
-          ParameterMin: values.ParameterMin,
-          ParameterMax: values.ParameterMax,
+          ParameterMin: parseFloat(values.ParameterMin),
+          ParameterMax: parseFloat(values.ParameterMax),
           ParameterUnit: values.ParameterUnit,
-          ParameterDescription: values.ParameterDescription
+          ParameterDescription: values.ParameterDescription,
         });
         navigate("/parameters");
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error("Error creating parameter:", error);
+        alert(error.response?.data?.message || "Error creating parameter. Please try again.");
       }
     }
   });
 
   return (
-    <div>
-      <Navbar />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "28vh auto"
+    <MainLayout sidebarName="Parameters">
+      <Box
+        sx={{
+          maxWidth: { xs: "100%", md: "600px" },
+          mx: "auto",
+          backgroundColor: "white",
+          borderRadius: 2,
+          boxShadow: 2,
+          p: { xs: 2, sm: 4 },
         }}
       >
-        <div>
-          <Sidebar2 name="Parameters" />
-        </div>
         <div className="box">
           <div className="containerr">
             <Typography
@@ -151,8 +151,8 @@ const AddParameter = () => {
             </form>
           </div>
         </div>
-      </div>
-    </div>
+      </Box>
+    </MainLayout>
   );
 };
 

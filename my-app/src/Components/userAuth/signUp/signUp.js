@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { projectsAPI, authAPI } from '../../../services/api';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -39,18 +39,22 @@ export default function SignUp() {
     const [country, setCountry] = useState('');
 
     useEffect(() => {
-        // Make Axios request to fetch project details from the backend
-        axios.get('http://localhost:8080/projects')
-            .then(response => {
+        const fetchProjects = async () => {
+            try {
+                const response = await projectsAPI.getAll();
                 setProjectList(response.data);
-                const filteredSites = projectList
-                    .filter((project) => project.Country === country)
-                    .map((project) => project.Name);
-                setUniqueSites(filteredSites);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching projects:', error);
-            });
+            }
+        };
+        fetchProjects();
+    }, []);
+
+    useEffect(() => {
+        const filteredSites = projectList
+            .filter((project) => project.Country === country)
+            .map((project) => project.Name);
+        setUniqueSites(filteredSites);
     }, [country, projectList]);
 
     const uniqueCountries = [...new Set(projectList.map((option) => option.Country))];
@@ -85,21 +89,16 @@ export default function SignUp() {
         }
     };
 
-    const config = {
-        "headers": {
-            "Content-Type": "application/json"
-        }
-    }
-
     const navigate = useNavigate();
     const postData = async (data) => {
         try {
-            await axios.post('http://localhost:8080/api/register', data, config);
-            // Navigation after successful form submission
-            navigate('/projects'); // Replace '/success' with the desired route to navigate
+            await authAPI.register(JSON.parse(data));
+            alert('User registered successfully! You can now log in.');
+            navigate('/login');
         } catch (error) {
             console.error('Error submitting form:', error);
-            // Handle error cases
+            const message = error.response?.data?.message || 'Error registering user. Please try again.';
+            alert(message);
         }
     };
     const handleSubmit = (event) => {
@@ -126,17 +125,19 @@ export default function SignUp() {
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md">
                     <Box sx={{
-                        marginLeft: 25,
-                        marginTop: 4,
+                        marginLeft: { xs: 0, sm: '80px', md: '250px' },
+                        marginTop: { xs: 2, sm: 4 },
+                        marginRight: { xs: 1, sm: 2 },
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         border: '1px solid #ccc',
                         borderRadius: '7px',
                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.4)',
-                        paddingLeft: '5vh',
-                        paddingRight: '5vh',
-                        paddingBottom: 1
+                        padding: { xs: 2, sm: '5vh' },
+                        paddingBottom: { xs: 2, sm: 1 },
+                        width: { xs: '100%', sm: 'auto' },
+                        maxWidth: '100%'
                     }}>
                         <Avatar sx={{ m: 2, bgcolor: 'primary.main', width: 55, height: 55 }}>
                             <LockOutlinedIcon fontSize="large" />
@@ -206,7 +207,7 @@ export default function SignUp() {
                                         fullWidth
                                         select
                                         name="designation"
-                                        label="Designation"
+                                        label="Designation (Optional)"
                                         type="designation"
                                         onChange={(event) => setDesignation(event.target.value)}
                                     >
@@ -223,7 +224,7 @@ export default function SignUp() {
                                         fullWidth
                                         select
                                         name="country"
-                                        label="Country"
+                                        label="Country (Optional)"
                                         type="country"
                                         onChange={(event) => setCountry(event.target.value)}
                                     >
@@ -240,7 +241,7 @@ export default function SignUp() {
                                         fullWidth
                                         select
                                         name="site"
-                                        label="Site"
+                                        label="Site/Project (Optional)"
                                         type="site"
                                         value={site}
                                         onChange={(event) => setSite(event.target.value)}

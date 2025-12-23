@@ -1,10 +1,9 @@
-import { React, useState } from "react";
-import Sidebar2 from "../../sidebar/Sidebar2.js";
-import Navbar from "../../navbar/navbar.js";
+import React, { useState } from "react";
+import MainLayout from "../../Layout/MainLayout";
 import "./NewProject.css";
 import { TextField, InputLabel, Select, Button, MenuItem, FormControl, Typography } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { projectsAPI } from "../../../services/api";
 import { Box } from '@mui/system';
 const countryList = [
   "Afghanistan",
@@ -258,10 +257,12 @@ const countryList = [
   "Åland Islands"
 ];
 
+/**
+ * NewProject - Form for creating a new project
+ */
 const NewProject = () => {
-
-
   const navigate = useNavigate();
+  const [country, setCountry] = useState("Pakistan");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -271,39 +272,39 @@ const NewProject = () => {
     const { name, location, country, longitude, latitude, description } = formObject;
 
     try {
-      const response = await axios.post('http://localhost:8080/projects/', {
+      const response = await projectsAPI.create({
         Name: name,
         Location: location,
         Country: country,
-        Longitude: longitude,
-        Latitude: latitude,
+        Longitude: parseFloat(longitude),
+        Latitude: parseFloat(latitude),
         Description: description,
       });
 
-      const { Id } = response.data; // Retrieve the ID from the response data
-
+      const { Id } = response.data;
       navigate(`/deviceDeployment?project=${Id}`);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("Error creating project:", error);
+      alert(error.response?.data?.message || "Error creating project. Please try again.");
     }
   };
-
-
-
-
-  const [country, setCountry] = useState("Pakistan");
 
   const handleCountryChange = (event) => {
     setCountry(event.target.value);
   };
 
   return (
-    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
-      <Navbar />
-      <div style={{ display: "grid", gridTemplateColumns: "28vh auto" }}>
-        <div>
-          <Sidebar2 name="Create New Project" />
-        </div>
+    <MainLayout sidebarName="Create New Project">
+      <Box
+        sx={{
+          maxWidth: { xs: "100%", md: "800px" },
+          mx: "auto",
+          backgroundColor: "white",
+          borderRadius: 2,
+          boxShadow: 2,
+          p: { xs: 2, sm: 4 },
+        }}
+      >
         <div className="box">
           <div className="container">
             <Typography variant="h5" align="center" gutterBottom>
@@ -408,8 +409,8 @@ const NewProject = () => {
             </form>
           </div>
         </div>
-      </div>
       </Box>
+    </MainLayout>
   );
 };
 

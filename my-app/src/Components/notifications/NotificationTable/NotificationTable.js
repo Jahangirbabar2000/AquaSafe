@@ -1,101 +1,81 @@
-import React, { useEffect, useState, useContext } from "react";
-import Sidebar2 from "../../sidebar/Sidebar2.js";
-import Navbar from "../../navbar/navbar.js";
-import Button from "@mui/material/Button";
-import SensorNotification from "./SensorNotifications.js";
-import DeviceNotification from "./DeviceNotifications.js";
-import axios from 'axios';
-import UserContext from "../../userAuth/UserContext.js";
-import { Box } from '@mui/system';
+import React, { useEffect, useState, useContext, useMemo } from "react";
+import { Button, Box } from "@mui/material";
+import MainLayout from "../../Layout/MainLayout";
+import SensorNotification from "./SensorNotifications";
+import DeviceNotification from "./DeviceNotifications";
+import { notificationsAPI } from "../../../services/api";
+import UserContext from "../../userAuth/UserContext";
 
-export default function NotificationTable() {
+/**
+ * NotificationTable - Displays user notifications with filter options for sensor/device types
+ */
+const NotificationTable = () => {
   const [notifications, setNotifications] = useState([]);
   const [showDevice, setShowDevice] = useState(false);
-  const { user, setUser } = useContext(UserContext);
-
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    fetchNotifications();
-  }, []);
+    if (user?.id) {
+      fetchNotifications();
+    }
+  }, [user]);
 
-  const fetchNotifications = () => {
-    axios
-      .get('http://localhost:8080/api/notifications')
-      .then(response => {
-        // Filter notifications based on user ID
-        const filteredNotifications = response.data.filter(
-          notification => notification.user === user.id
-        );
-        // Update state with filtered notifications
-        setNotifications(filteredNotifications);
-      })
-      .catch(error => {
-        console.error('There was an error fetching notifications!', error);
-      });
+  const fetchNotifications = async () => {
+    try {
+      const response = await notificationsAPI.getAll();
+      // Filter notifications based on user ID
+      const filteredNotifications = response.data.filter(
+        (notification) => notification.user === user.id
+      );
+      setNotifications(filteredNotifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
   };
 
-  const SensorNotifications = notifications.filter(
-    (item) => item.type !== "device"
-  );
-  const DeviceNotifications = notifications.filter(
-    (item) => item.type !== "sensor"
+  const sensorNotifications = useMemo(
+    () => notifications.filter((item) => item.type !== "device"),
+    [notifications]
   );
 
-  const handleClick = () => {
-    setShowDevice(true);
-  };
+  const deviceNotifications = useMemo(
+    () => notifications.filter((item) => item.type !== "sensor"),
+    [notifications]
+  );
 
-  const handleClick2 = () => {
-    setShowDevice(false);
+  const handleToggleView = (showDeviceView) => {
+    setShowDevice(showDeviceView);
   };
 
   return (
-    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[0], minHeight: '100vh'}}>
-      <Navbar />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "28vh auto",
-          // gridGap: "2px",
-        }}
-      >
-        <div>
-          <Sidebar2 name="Notifications" />
-        </div>
-        <div style={{ marginLeft: 60,  marginTop: 10  }}>
-          <Button
-            variant="contained"
-            style={{
-              marginLeft: "4%",
-              padding: "0.5%",
-              marginTop: "10px",
-            }}
-            onClick={handleClick2}
-            color={`${showDevice === false ? "success" : "primary"}`}
-          >
-            Sensor
-          </Button>
-          <Button
-            style={{
-              marginLeft: "1%",
-              padding: "0.5%",
-              marginTop: "10px",
-            }}
-            variant="contained"
-            onClick={handleClick}
-            color={`${showDevice === true ? "success" : "primary"}`}
-          >
-            Device
-          </Button>
+    <MainLayout sidebarName="Notifications">
+      <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
+        <Button
+          variant="contained"
+          onClick={() => handleToggleView(false)}
+          color={!showDevice ? "success" : "primary"}
+          sx={{ minWidth: 120 }}
+        >
+          Sensor
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleToggleView(true)}
+          color={showDevice ? "success" : "primary"}
+          sx={{ minWidth: 120 }}
+        >
+          Device
+        </Button>
+      </Box>
 
-          {showDevice ? (
-            <DeviceNotification data={DeviceNotifications} /> // this will show device notifications
-          ) : (
-            <SensorNotification data={SensorNotifications} /> //this will show sensor notifications
-          )}
-        </div>
-      </div>
-    </Box>
+      {showDevice ? (
+        <DeviceNotification data={deviceNotifications} />
+      ) : (
+        <SensorNotification data={sensorNotifications} />
+      )}
+    </MainLayout>
   );
-}
+};
+
+export default NotificationTable;
 

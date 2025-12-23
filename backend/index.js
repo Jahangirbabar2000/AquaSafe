@@ -53,19 +53,21 @@ app.use(session({
     cookie: { secure: true }
 }));
 
-// const connection = mysql.createConnection({
-//     host: process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASSWORD,
-//     database: process.env.DB_NAME
-// });
-
+// Use local MySQL database for development
 const connection = mysql.createConnection({
-    host: "database-1.coouedpy5myu.us-east-1.rds.amazonaws.com",
-    user: "admin",
-    password: "jb123456",
+    host: "localhost",
+    user: "root",
+    password: "", // No password for local development
     database: "AquaSafe"
 });
+
+// Alternative: Use environment variables for database connection
+// const connection = mysql.createConnection({
+//     host: process.env.DB_HOST || "localhost",
+//     user: process.env.DB_USER || "root",
+//     password: process.env.DB_PASSWORD || "",
+//     database: process.env.DB_NAME || "AquaSafe"
+// });
 
 try {
     connection.connect();
@@ -231,8 +233,8 @@ app.post('/api/notify', (req, res) => {
 app.post('/api/register', (req, res) => {
     const { firstName, lastName, email, password, designation, country, site } = req.body;
     // Validate user input (you can add more validation as per your requirements)
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Please provide all required fields.' });
+    if (!email || !password || !firstName || !lastName) {
+        return res.status(400).json({ message: 'Please provide all required fields (firstName, lastName, email, password).' });
     }
 
     // Check if email already exists in the database
@@ -244,7 +246,7 @@ app.post('/api/register', (req, res) => {
         }
 
         if (results.length > 0) {
-            return res.status(409).json({ message: 'email already exists.' });
+            return res.status(409).json({ message: 'Email already exists.' });
         }
 
         // Hash the password using bcrypt
@@ -262,36 +264,39 @@ app.post('/api/register', (req, res) => {
                     return res.status(500).json({ message: 'Internal server error.' });
                 }
 
-                // Fetch the user ID and the project ID based on the project name
-                const fetchIdsQuery = `
-          SELECT Users.Id AS userId, Projects.Id AS projectId
-          FROM AquaSafe.Users, AquaSafe.Projects
-          WHERE Users.Id = ? AND Projects.Name = ?
-        `;
-                connection.query(fetchIdsQuery, [userInsertResult.insertId, site], (err, fetchIdsResult) => {
-                    if (err) {
-                        console.error('Error fetching user and project IDs: ', err);
-                        return res.status(500).json({ message: 'Internal server error.' });
-                    }
+                const userId = userInsertResult.insertId;
 
-                    if (fetchIdsResult.length === 0) {
-                        return res.status(404).json({ message: 'User or project not found.' });
-                    }
-
-                    const userId = fetchIdsResult[0].userId;
-                    const projectId = fetchIdsResult[0].projectId;
-
-                    // Insert the entry into the workson table
-                    const insertWorksonQuery = 'INSERT INTO AquaSafe.WorksOn (user, project, Designation) VALUES (?, ?, ?)';
-                    connection.query(insertWorksonQuery, [userId, projectId, designation], (err) => {
+                // If site/project is provided, link user to project
+                if (site && designation) {
+                    // Fetch the project ID based on the project name
+                    const fetchProjectQuery = `SELECT Id FROM AquaSafe.Projects WHERE Name = ?`;
+                    connection.query(fetchProjectQuery, [site], (err, projectResults) => {
                         if (err) {
-                            console.error('Error inserting workson entry: ', err);
-                            return res.status(500).json({ message: 'Internal server error.' });
+                            console.error('Error fetching project: ', err);
+                            // Continue without project link - user is still created
+                            return res.status(201).json({ message: 'User registered successfully. Note: Could not link to project.' });
                         }
 
-                        return res.status(201).json({ message: 'User registered successfully.' });
+                        if (projectResults.length > 0) {
+                            const projectId = projectResults[0].Id;
+                            // Insert the entry into the workson table
+                            const insertWorksonQuery = 'INSERT INTO AquaSafe.WorksOn (user, project, Designation) VALUES (?, ?, ?)';
+                            connection.query(insertWorksonQuery, [userId, projectId, designation], (err) => {
+                                if (err) {
+                                    console.error('Error inserting workson entry: ', err);
+                                    // User is still created, just couldn't link to project
+                                }
+                                return res.status(201).json({ message: 'User registered successfully.' });
+                            });
+                        } else {
+                            // Project not found, but user is created
+                            return res.status(201).json({ message: 'User registered successfully. Note: Project not found.' });
+                        }
                     });
-                });
+                } else {
+                    // No project provided, just create the user
+                    return res.status(201).json({ message: 'User registered successfully.' });
+                }
             });
         });
     });
@@ -348,6 +353,48 @@ app.post('/api/login', (req, res) => {
                 }
 
                 return res.status(200).json({ message: 'Login successful.', token: token, user: { id: user.Id, firstName: user.FirstName, lastName: user.LastName, email: user.Email, designation: user.Designation } });
+            });
+        });
+    });
+});
+
+// Password reset endpoint
+app.post('/api/reset-password', (req, res) => {
+    const { email, newPassword } = req.body;
+
+    // Validate user input
+    if (!email || !newPassword) {
+        return res.status(400).json({ message: 'Please provide email and new password.' });
+    }
+
+    // Check if user exists
+    const checkUserQuery = `SELECT * FROM AquaSafe.Users WHERE email = ?`;
+    connection.query(checkUserQuery, [email], (err, results) => {
+        if (err) {
+            console.error('Error checking for user: ', err);
+            return res.status(500).json({ message: 'Internal server error.' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        // Hash the new password using bcrypt
+        bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
+            if (err) {
+                console.error('Error hashing password: ', err);
+                return res.status(500).json({ message: 'Internal server error.' });
+            }
+
+            // Update the password in the database
+            const updatePasswordQuery = 'UPDATE AquaSafe.Users SET Password = ? WHERE Email = ?';
+            connection.query(updatePasswordQuery, [hashedPassword, email], (err) => {
+                if (err) {
+                    console.error('Error updating password: ', err);
+                    return res.status(500).json({ message: 'Internal server error.' });
+                }
+
+                return res.status(200).json({ message: 'Password reset successfully.' });
             });
         });
     });

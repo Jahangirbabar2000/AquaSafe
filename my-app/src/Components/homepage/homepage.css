@@ -1,10 +1,19 @@
 .title {
   background-color: white;
   margin-top: 2%;
-  height: 43vh;
+  min-height: 43vh;
   display: flex;
-  padding-bottom: 1%;
-  /* border: 3px solid black; */
+  flex-direction: column;
+  padding: 2% 4%;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .title {
+    flex-direction: row;
+    height: 43vh;
+    padding-bottom: 1%;
+  }
 }
 
 .orange {
@@ -17,43 +26,50 @@
 
 .title-child {
   flex: 1;
-  /* border: 2px solid yellow */
-  /* border: 3px solid black; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .title-child:first-child {
-  padding-left: 1cm;
-  padding-top: 3%;
-  min-width: 63%;
+  padding-left: 0;
+  padding-top: 0;
+  min-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .title-child:first-child {
+    padding-left: 1cm;
+    padding-top: 3%;
+    min-width: 63%;
+  }
 }
 
 #app-name {
-  font-size: 4rem;
+  font-size: clamp(2rem, 5vw, 4rem);
   text-align: inherit;
   padding-bottom: 0%;
   margin: 0px;
+  line-height: 1.2;
 }
 
 #title {
-  /* margin-top:3%; */
-  font-size: 2rem;
+  font-size: clamp(1.25rem, 3vw, 2rem);
   text-align: inherit;
   padding-top: 2%;
   margin-left: 0%;
 }
 
 #title-sub {
-  /* margin-top: 2%; */
-  font-size: 2vh;
-
+  font-size: clamp(0.875rem, 2vw, 1rem);
 }
 
 #title-sub2 {
-  font-size: 2vh;
+  font-size: clamp(0.875rem, 2vw, 1rem);
 }
 
 #title-sub3 {
-  font-size: 2.5vh;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 
@@ -71,21 +87,57 @@
 .andmore {
   border-top: 2px solid whitesmoke;
   border-bottom: 2px solid whitesmoke;
-  height: 65vh;
+  min-height: 65vh;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .andmore {
+    flex-direction: row;
+    height: 65vh;
+    padding: 0;
+    gap: 0;
+  }
 }
 
 #third-title {
-  margin: 8vh;
-  width: 50%;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  #third-title {
+    margin: 8vh;
+    width: 50%;
+    text-align: left;
+    padding: 0;
+  }
 }
 
 .pic-div {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin-top: 10vh;
-  margin-right: 5vh;
-  width: 70%;
-  height: 50vh;
+  margin-top: 0;
+  margin-right: 0;
+  width: 100%;
+  max-width: 600px;
+  height: 40vh;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .pic-div {
+    margin-top: 10vh;
+    margin-right: 5vh;
+    width: 70%;
+    height: 50vh;
+  }
 }
 
 .imgClass {
@@ -125,30 +177,51 @@
 }
 
 .Info-container {
-  /* margin-top:3%; */
   margin: 2vh;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
   height: auto;
-  /* justify-content: space-between; */
+}
+
+@media (min-width: 768px) {
+  .Info-container {
+    justify-content: space-between;
+  }
 }
 
 .Info:hover {
   box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.2),
     6px 6px 6px 0 rgba(0, 0, 0, 0.19);
+  transform: translateY(-4px);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .Info {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  /* margin-top: 1cm; */
   margin-left: auto;
   margin-right: auto;
-  height: 29vh;
+  min-height: 29vh;
   max-width: 47vh;
-  width: 35vh;
+  width: 100%;
   background-color: white;
   text-align: center;
-  padding-top: 1cm;
-  /* display: block; */
+  padding: 1.5rem 1rem;
+  border-radius: 8px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+@media (min-width: 600px) {
+  .Info {
+    width: calc(50% - 0.75rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .Info {
+    width: 35vh;
+  }
 }
 
 /* THIS CSS IS FOR HOMEPAGE NAVBAR */

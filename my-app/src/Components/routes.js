@@ -19,6 +19,7 @@ import EditUser from './usersTable/editUser';
 import Error404 from './userAuth/errorPage';
 import ProjectManagement from './visualization/projectManagement';
 import NewProject from './projects/NewProjectForm/NewProject';
+import DashboardRedirect from './DashboardRedirect';
 
 const ProtectedOutlet = ({ allowedDesignations }) => {
   const { user } = useContext(UserContext);
@@ -41,6 +42,7 @@ function routes() {
         <Route index element={<NewProject />} />
       </Route>
       <Route path="/notifications" element={<NotificationTable />} />
+      <Route path="/dashboard" element={<DashboardRedirect />} />
       <Route path="/dashboard/:projectId" element={<Visualization />} />
       <Route path="/sites" element={<Sites />} />
       <Route path="/homepage" element={<Homepage />} />

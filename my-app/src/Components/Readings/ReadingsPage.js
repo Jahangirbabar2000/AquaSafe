@@ -1,30 +1,32 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Sidebar2 from "../sidebar/Sidebar2.js";
-import Navbar from "../navbar/navbar.js";
-import ReadingsTable from "./ReadingsTable.js";
-import "./Readings.css";
-import CsvDownloadButton from "./CsvDownloadButton.js";
+import MainLayout from "../Layout/MainLayout";
+import ReadingsTable from "./ReadingsTable";
+import CsvDownloadButton from "./CsvDownloadButton";
 import CsvUploadButton from "./CsvUploadButton .js";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import { Box } from '@mui/system';
-export default function ReadingsPage() {
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { projectsAPI } from "../../services/api";
+
+/**
+ * ReadingsPage - Displays sensor readings with CSV import/export functionality
+ */
+const ReadingsPage = () => {
   const [projectList, setProjectList] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/projects")
-      .then((response) => {
+    const fetchProjects = async () => {
+      try {
+        const response = await projectsAPI.getAll();
         setProjectList(response.data);
-        setSelectedProjectId(response.data[0].Id)
-      })
-      .catch((error) => {
+        if (response.data.length > 0) {
+          setSelectedProjectId(response.data[0].Id);
+        }
+      } catch (error) {
         console.error("Error fetching projects:", error);
-      });
+      }
+    };
+
+    fetchProjects();
   }, []);
 
   const handleProjectChange = (event) => {
@@ -32,41 +34,40 @@ export default function ReadingsPage() {
   };
 
   return (
-    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
-      <Navbar />
-      <div style={{ display: "grid", gridTemplateColumns: "28vh auto" }}>
-        <div>
-          <Sidebar2 name="Readings" />
-        </div>
-        <div style={{ marginLeft: 150, marginTop: 10 }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CsvDownloadButton />
-            <CsvUploadButton />
-
-            <div style={{ marginLeft: 550, marginTop: 20 }}>
-              <FormControl
-                variant="outlined"
-                size="small"
-              >
-                <InputLabel htmlFor="project-select">Project</InputLabel>
-                <Select
-                  id="project-select"
-                  label="Project"
-                  value={selectedProjectId}
-                  onChange={handleProjectChange}
-                >
-                  {projectList.map((project) => (
-                    <MenuItem key={project.Id} value={project.Id}>
-                      {project.Name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
-          </div>
-          {<ReadingsTable Id={selectedProjectId} />}
-        </div>
-      </div>
-    </Box>
+    <MainLayout sidebarName="Readings">
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 2,
+          mb: 3,
+        }}
+      >
+        <CsvDownloadButton />
+        <CsvUploadButton />
+        <Box sx={{ ml: { xs: 0, md: "auto" } }}>
+          <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
+            <InputLabel id="project-select-label">Project</InputLabel>
+            <Select
+              id="project-select"
+              labelId="project-select-label"
+              label="Project"
+              value={selectedProjectId}
+              onChange={handleProjectChange}
+            >
+              {projectList.map((project) => (
+                <MenuItem key={project.Id} value={project.Id}>
+                  {project.Name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+      </Box>
+      {selectedProjectId && <ReadingsTable Id={selectedProjectId} />}
+    </MainLayout>
   );
-}
+};
+
+export default ReadingsPage;

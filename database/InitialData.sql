@@ -132,3 +132,31 @@ VALUES ('Oxidation-reduction potential (ORP)', 'V', 0.2, 0.6),
        ('Salinity', 'g/L', 0, 1),
        ('Salinity', 'ppt', 0, 1),
        ('Salinity', 'PSU', 0, 1);
+
+-- ------------------------------------------------------------------
+-- DEMO PROJECTS AND DEVICES FOR FIRST RUN
+-- ------------------------------------------------------------------
+
+-- Example projects
+INSERT INTO Projects (Name, Location, Country, Longitude, Latitude, Description) VALUES
+('Victoria Harbour', 'Victoria Harbour', 'Hong Kong', 114.1655, 22.2864, 'Urban coastal water quality monitoring site in Hong Kong.'),
+('Rawal Lake', 'Rawal Lake', 'Pakistan', 73.128089, 33.703055, 'Freshwater reservoir monitoring for drinking and irrigation supply.'),
+('NUST Lake', 'NUST Campus Lake', 'Pakistan', 72.99435, 33.6425, 'Campus demonstration site for AquaSafe sensors.');
+
+-- Example deployed devices
+-- These assume a fresh database where the three projects above receive Ids 1, 2 and 3 respectively.
+INSERT INTO DeployedDevices (Name, Longitude, Latitude, Frequency, Project, Locality, CommTech, StatusCode, Sensors) VALUES
+('HK-Station-1', 114.1655, 22.2864, '15 Minute', 1, 'Central Ferry Pier 9', 'LORAWAN', 200,
+ '[{\"sensor\":\"pH\",\"unit\":\"pH units\"},{\"sensor\":\"Dissolved Oxygen\",\"unit\":\"mg/L\"},{\"sensor\":\"Water Temperature\",\"unit\":\"°C\"}]'),
+('HK-Station-2', 114.1731, 22.2988, '30 Minute', 1, 'Tsim Sha Tsui Promenade', 'LORAWAN', 200,
+ '[{\"sensor\":\"Conductivity\",\"unit\":\"µS/cm\"},{\"sensor\":\"Salinity\",\"unit\":\"ppt\"}]'),
+('Rawal-Station-1', 73.128089, 33.703055, '1 Hour', 2, 'Dam Spillway', 'GSM', 200,
+ '[{\"sensor\":\"pH\",\"unit\":\"pH units\"},{\"sensor\":\"Turbidity\",\"unit\":\"NTU\"},{\"sensor\":\"Total Dissolved Solids (TDS)\",\"unit\":\"mg/L\"}]'),
+('Rawal-Station-2', 73.1335, 33.7065, '1 Hour', 2, 'Boat Club', 'GSM', 200,
+ '[{\"sensor\":\"Dissolved Oxygen\",\"unit\":\"mg/L\"},{\"sensor\":\"Water Temperature\",\"unit\":\"°C\"}]'),
+('NUST-Station-1', 72.99435, 33.6425, '10 Minute', 3, 'Campus Lake Pier', 'LORAWAN', 200,
+ '[{\"sensor\":\"pH\",\"unit\":\"pH units\"},{\"sensor\":\"Conductivity\",\"unit\":\"µS/cm\"},{\"sensor\":\"Salinity\",\"unit\":\"PSU\"}]');
+
+-- Note: demo readings and notifications are intentionally omitted here because they
+-- depend on auto-generated ParameterUnits and device IDs. Once the app is running,
+-- devices created above can be used to ingest or simulate real readings.

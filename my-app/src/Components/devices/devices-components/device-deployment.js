@@ -2,12 +2,10 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import axios from "axios";
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, FormControlLabel, Typography, MenuItem, Paper, TextField, Button, Grid } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, FormControlLabel, Typography, MenuItem, Paper, TextField, Button, Grid, useTheme, useMediaQuery } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Check from '@mui/icons-material/Check';
-import Sidebar2 from "../../sidebar/Sidebar2";
-import Navbar from "../../navbar/navbar";
-import { Box } from '@mui/system';
+import MainLayout from "../../Layout/MainLayout";
 
 const INITIAL_FORM_STATE = {
   name: "",
@@ -283,15 +281,8 @@ const DeviceDeployment = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
-      <Navbar />
-      <Grid container>
-        <div style={{ display: "grid", gridTemplateColumns: "27vh auto", backgroundColor: "#f2f2f2" }}>
-          <Grid item xs={3}>
-            <Sidebar2 name="Devices" />
-          </Grid>
-          <Grid item xs={9}>
-            <div style={{ display: "flex", flexDirection: "row", height: "100vh" }}>
+    <MainLayout sidebarName="Devices">
+        <div style={{ display: "flex", flexDirection: "row", minHeight: "calc(100vh - 100px)" }}>
               <div style={{ display: "flex", flexDirection: "row", height: "100vh" }}>
                 <div style={{ marginTop: "1vh", marginLeft: "18vh" }}>
                   <div style={{ minWidth: "450px", paddingTop: "2%", paddingBottom: "3%", backgroundColor: "#ffffff", borderRadius: "5%", marginTop: "25px", padding: "7%", boxShadow: "0px 0px 10px #888888", marginLeft: "1rem" }}>
@@ -417,10 +408,7 @@ const DeviceDeployment = () => {
                 </div>
               </div>
             </div>
-          </Grid>
-        </div>
-      </Grid>
-    </Box >
+    </MainLayout>
   );
 };
 

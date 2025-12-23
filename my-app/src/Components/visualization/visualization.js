@@ -1,7 +1,7 @@
-import * as React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Grid from "@mui/material/Grid";
-import moment, { max, min } from 'moment';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import moment from "moment";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Parameters from "./ParamCard";
 import LineGraph from "./graphs/LineChart";
 import BarGraph from "./graphs/BarGraph";
@@ -9,20 +9,17 @@ import Box from "@mui/material/Box";
 import { ResponsiveContainer } from "recharts";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import axios from "axios";
 import "./visualization.css";
-import { Link } from 'react-router-dom';
-import Navbar from "../navbar/navbar.js";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { HelpOutline } from '@mui/icons-material';
-import Sidebar2 from "../sidebar/Sidebar2";
-import { Paper, Typography, Menu, MenuItem, IconButton } from "@mui/material";
+import { Link } from "react-router-dom";
+import MainLayout from "../Layout/MainLayout";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { HelpOutline } from "@mui/icons-material";
+import { Paper, Typography, Menu, MenuItem, IconButton, Button, CircularProgress } from "@mui/material";
 import Datepicker from "./datepicker";
-import Button from '@mui/material/Button';
+import { useParams, useNavigate } from "react-router-dom";
+import { dashboardAPI } from "../../services/api";
 import { Icon } from "leaflet";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import CircularProgress from '@mui/material/CircularProgress';
-import { useParams, useNavigate } from "react-router-dom";
 
 const mdTheme = createTheme();
 
@@ -74,69 +71,68 @@ function App(props) {
 
 
 
-  const fetchData = (url) => {
-    return new Promise((resolve, reject) => {
-      axios.get(url)
-        .then(response => {
-          const { project, deployedDevices, readings, units } = response.data;
-          const dateOnlyReadings = readings.map(obj => {
-            const dateOnlyString = new Date(obj.Time).toISOString().slice(0, 10);
-            return { ...obj, Dates: dateOnlyString };
-          });
+  const getDataInitial = async () => {
+    try {
+      const response = await dashboardAPI.getDashboardData(projectId);
+      const { project, deployedDevices, readings, units } = response.data;
+      const dateOnlyReadings = readings.map((obj) => {
+        const dateOnlyString = new Date(obj.Time).toISOString().slice(0, 10);
+        return { ...obj, Dates: dateOnlyString };
+      });
 
-          resolve({ dateOnlyReadings, project, deployedDevices, units });
-        })
-        .catch(error => {
-          console.log(error);
-          reject(error);
-        });
-    });
+      return { dateOnlyReadings, project, deployedDevices, units };
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+      throw error;
+    }
   };
 
-  const getDataInitial = async () => {
-    const url = `http://localhost:8080/api/dashboard/${projectId}`;
-    fetchData(url)
-      .then(({ dateOnlyReadings, project, deployedDevices, units }) => {
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { dateOnlyReadings, project, deployedDevices, units } = await getDataInitial();
         setInitialData(dateOnlyReadings);
-        setData(dateOnlyReadings); // Set data here after initial data is set.
+        setData(dateOnlyReadings);
         setLoading(false);
         setUnits(units);
         setProject(project);
 
         if (deployedDevices && deployedDevices.length > 0) {
-          const stationCoordinates = deployedDevices.map(device => ({
+          const stationCoordinates = deployedDevices.map((device) => ({
             Id: device.Id,
             Station: device.Name,
             Latitude: device.Latitude,
-            Longitude: device.Longitude
+            Longitude: device.Longitude,
           }));
 
           if (stationCoordinates && stationCoordinates.length > 0) {
             setStationCoordinates(stationCoordinates);
             setSelectedMarker(stationCoordinates[0]);
             setSelectedStation(stationCoordinates[0]);
-          } else {
-            // Handle no stationCoordinates case
-            console.log("No deployed devices found for this project.11");
           }
-        } else {
-          // Handle no deployed devices case
-          console.log("No deployed devices found for this project.22");
         }
 
-        const timeValues = dateOnlyReadings.map(obj => new Date(obj.Time).getTime());
-        const startDateValue = new Date(Math.min(...timeValues));
-        const endDateValue = new Date(Math.max(...timeValues));
+        if (dateOnlyReadings.length > 0) {
+          const timeValues = dateOnlyReadings.map((obj) => new Date(obj.Time).getTime());
+          const startDateValue = new Date(Math.min(...timeValues));
+          const endDateValue = new Date(Math.max(...timeValues));
 
-        const startMoment = moment(startDateValue);
-        const endMoment = moment(endDateValue);
+          const startMoment = moment(startDateValue);
+          const endMoment = moment(endDateValue);
 
-        setStartDate(startMoment);
-        setEndDate(endMoment);
-        setMinDate(startMoment);
-        setMaxDate(endMoment);
-      });
-  };
+          setStartDate(startMoment);
+          setEndDate(endMoment);
+          setMinDate(startMoment);
+          setMaxDate(endMoment);
+        }
+      } catch (error) {
+        console.error("Error loading dashboard data:", error);
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [projectId]);
 
   const getDataBasedOnDates = () => {
     const sd = moment(startDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ').format('YYYY-MM-DD HH:mm:ss');
@@ -181,23 +177,21 @@ function App(props) {
     average: avg.count > 0 ? avg.sum / avg.count : null
   }));
 
-  React.useEffect(() => {
-    // CODE FOR FIXING MARKER PROBLEM ON MAP
+  useEffect(() => {
+    // Fix Leaflet marker icon issue
     const L = require("leaflet");
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
       iconUrl: require("leaflet/dist/images/marker-icon.png"),
-      shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+      shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
     });
-
-    getDataInitial(); // Make sure this function is awaited.
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  React.useEffect(() => {
-    getDataBasedOnDates()
+  useEffect(() => {
+    if (startDate && endDate) {
+      getDataBasedOnDates();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMarker]);
 
@@ -276,228 +270,140 @@ function App(props) {
   if (loading) {
     return (
       <ThemeProvider theme={mdTheme}>
-        <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}>
-          <Navbar />
-          <Sidebar2 name="Dashboard" />
-          <Grid container justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
-            <Grid item xs={9} sx={{ ml: 110 }}>
-              <CircularProgress />
-            </Grid>
-          </Grid>
-        </Box>
+        <MainLayout sidebarName="Dashboard">
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
+            <CircularProgress />
+          </Box>
+        </MainLayout>
       </ThemeProvider>
     );
   }
 
-  //////////////////////////////////////////////////////
-
-  console.log(stationCoordinates)
-
-  //////////////////////////////////////////////////////
-
+  if (!project || project.length === 0) {
+    return (
+      <ThemeProvider theme={mdTheme}>
+        <MainLayout sidebarName="Dashboard">
+          <Typography variant="h6" color="textSecondary" align="center">
+            Project not found
+          </Typography>
+        </MainLayout>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
-        <Navbar />
-        <div style={{ display: "grid", gridTemplateColumns: "28vh auto" }}>
-          <div><Sidebar2 name="Dashboard" /></div>
-          <div style={{ marginLeft: 80 }}>
-            <Grid container spacing={0} p={8} pt={2}>
-              <Grid item xs={11} ml={5}>
+      <MainLayout sidebarName="Dashboard">
+        <Grid container spacing={{ xs: 2, md: 3 }}>
+          <Grid item xs={12}>
 
-                {/**************************************/}
-                {/*           Right big section        */}
-                {/**************************************/}
+            {/**************************************/}
+            {/*           Right big section        */}
+            {/**************************************/}
 
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, margin: 2 }}>
-                  <Typography variant="h5">{project[0].Name + ', ' + project[0].Location + ', ' + project[0].Country}</Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Typography variant="h5">{selectedMarker ? selectedMarker.Station : 'No Devices Yet!'}</Typography>
-                    <IconButton onClick={handleMenuOpen} sx={{ px: '0' }}>
-                      <ExpandMoreIcon sx={{ fontSize: '2rem', padding: '0' }} />
-                    </IconButton>
-                    <Button onClick={handleDeviceSubmit} size='normal' variant="contained" color="primary">Add Device</Button>
-                    <Link to={`/projectManagement/${project[0].Id}`}>
-                      <Button variant="contained" size='normal' color="primary">Edit Project</Button>
-                    </Link>
-                  </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, margin: 2 }}>
+              <Typography variant="h5">{project[0].Name + ', ' + project[0].Location + ', ' + project[0].Country}</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Typography variant="h5">{selectedMarker ? selectedMarker.Station : 'No Devices Yet!'}</Typography>
+                <IconButton onClick={handleMenuOpen} sx={{ px: '0' }}>
+                  <ExpandMoreIcon sx={{ fontSize: '2rem', padding: '0' }} />
+                </IconButton>
+                <Button onClick={handleDeviceSubmit} size='normal' variant="contained" color="primary">Add Device</Button>
+                <Link to={`/projectManagement/${project[0].Id}`}>
+                  <Button variant="contained" size='normal' color="primary">Edit Project</Button>
+                </Link>
+              </Box>
 
-                  <Menu
-                    anchorEl={menuAnchor}
-                    open={menuOpen}
-                    onClose={() => setMenuOpen(false)}
-                    PaperProps={{
-                      sx: {
-                        '& .MuiMenuItem-root': { fontSize: '1.2rem', padding: '10px 20px' },
-                        '& .Mui-selected': { backgroundColor: '#f0f0f0' },
-                        '& .MuiMenu-list': { minWidth: '170px', maxHeight: '400px', overflow: 'auto' },
-                      },
+              <Menu
+                anchorEl={menuAnchor}
+                open={menuOpen}
+                onClose={() => setMenuOpen(false)}
+                PaperProps={{
+                  sx: {
+                    '& .MuiMenuItem-root': { fontSize: '1.2rem', padding: '10px 20px' },
+                    '& .Mui-selected': { backgroundColor: '#f0f0f0' },
+                    '& .MuiMenu-list': { minWidth: '170px', maxHeight: '400px', overflow: 'auto' },
+                  },
+                }}
+              >
+                {stationNames.map((name) => (
+                  <MenuItem
+                    key={name}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      handleMenuItemClick(name);
                     }}
+                    selected={selectedStation === name}
                   >
-                    {stationNames.map((name) => (
-                      <MenuItem
-                        key={name}
-                        onClick={() => {
-                          setMenuOpen(false);
-                          handleMenuItemClick(name);
-                        }}
-                        selected={selectedStation === name}
-                      >
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </Box>
+                    {name}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
 
-                <Paper sx={{ p: 2 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h6" display="inline">
-                      Average Readings
-                    </Typography>
-                    <Link to="/WaterQualityPage" className="unstyled-link">
-                      <IconButton aria-label="help" sx={{ display: 'flex', alignItems: 'center' }}>
-                        <HelpOutline />
-                      </IconButton>
-                    </Link>
-                  </Box>
+            <Paper sx={{ p: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="h6" display="inline">
+                  Average Readings
+                </Typography>
+                <Link to="/WaterQualityPage" className="unstyled-link">
+                  <IconButton aria-label="help" sx={{ display: 'flex', alignItems: 'center' }}>
+                    <HelpOutline />
+                  </IconButton>
+                </Link>
+              </Box>
 
-                  {/**************************************/}
-                  {/*            TOP PARAMETERS          */}
-                  {/**************************************/}
+              {/**************************************/}
+              {/*            TOP PARAMETERS          */}
+              {/**************************************/}
 
-                  <Grid container spacing={2} wrap="nowrap" style={{ overflowX: 'auto', width: '100%', scrollbarWidth: 'thin' }}>
-                    {averages
-                      .filter(average => average.average !== null && !isNaN(average.average) && average.average !== 'NA')
-                      .map(average => {
-                        const unit = units.find(unit => unit.ParameterName === average.ParameterName);
-                        let color = "#de4545";
-                        if (average.average >= unit.Min && average.average <= unit.Max) {
-                          color = "#83b854";
-                        }
-                        return (
-                          <Grid item key={unit.Id} xs={6} sm={3} md={2} style={{ flexShrink: 0, marginBottom: '20px', marginRight: "3px" }}>
-                            <Parameters
-                              color={color}
-                              parameterName={unit.ParameterName}
-                              value={`${average.average.toFixed(2)} ${unit.Unit}`}
-                            />
-                          </Grid>
-                        );
-                      })}
-                  </Grid>
+              <Grid container spacing={2} wrap="nowrap" style={{ overflowX: 'auto', width: '100%', scrollbarWidth: 'thin' }}>
+                {averages
+                  .filter(average => average.average !== null && !isNaN(average.average) && average.average !== 'NA')
+                  .map(average => {
+                    const unit = units.find(unit => unit.ParameterName === average.ParameterName);
+                    let color = "#de4545";
+                    if (average.average >= unit.Min && average.average <= unit.Max) {
+                      color = "#83b854";
+                    }
+                    return (
+                      <Grid item key={unit.Id} xs={6} sm={3} md={2} style={{ flexShrink: 0, marginBottom: '20px', marginRight: "3px" }}>
+                        <Parameters
+                          color={color}
+                          parameterName={unit.ParameterName}
+                          value={`${average.average.toFixed(2)} ${unit.Unit}`}
+                        />
+                      </Grid>
+                    );
+                  })}
+              </Grid>
+            </Paper>
+
+            <Grid container>
+              {/**************************************/}
+              {/*             DatePicker             */}
+              {/**************************************/}
+              <Grid item md={7}>
+                <Paper sx={{ p: 2, mt: 2, mb: 2, mr: 0 }}>
+                  <Datepicker startDate={startDate} setStartDate={setStartDate}
+                    endDate={endDate} setEndDate={setEndDate} minDate={minDate} maxDate={maxDate} />
+                  <Button variant="contained" onClick={getDataBasedOnDates} size="large"
+                    sx={{ ml: 4, mt: 1 }}>View </Button>
                 </Paper>
 
-                <Grid container>
-                  {/**************************************/}
-                  {/*             DatePicker             */}
-                  {/**************************************/}
-                  <Grid item md={7}>
-                    <Paper sx={{ p: 2, mt: 2, mb: 2, mr: 0 }}>
-                      <Datepicker startDate={startDate} setStartDate={setStartDate}
-                        endDate={endDate} setEndDate={setEndDate} minDate={minDate} maxDate={maxDate} />
-                      <Button variant="contained" onClick={getDataBasedOnDates} size="large"
-                        sx={{ ml: 4, mt: 1 }}>View </Button>
-                    </Paper>
-
-
-                    {/**************************************/}
-                    {/*               2 GRAPHS             */}
-                    {/**************************************/}
-                    <Grid item>
-                      {filteredData.length > 0 ? (
-                        units
-                          .filter((unit) => {
-                            const unitData = filteredData
-                              .filter((d) => d.Parameter === unit.ParameterName && d.UnitId === unit.Id && d.Reading !== null && !isNaN(d.Reading));
-                            return unitData.length > 0;
-                          })
-                          .slice(0, 2)
-                          .map((unit, index) => {
-                            const unitData = filteredData
-                              .filter((d) => d.Parameter === unit.ParameterName && d.UnitId === unit.Id && d.Reading !== null && !isNaN(d.Reading));
-                            return (
-                              <Paper key={unit.Id} sx={{ pl: 3, pr: 5, pt: 2, mt: 2 }}>
-                                <Typography sx={{ pt: 1 }} variant="h5">{unit.ParameterName}</Typography>
-                                <Typography sx={{ pt: 1 }} variant="body1">({unit.Unit})</Typography>
-                                <ResponsiveContainer height={140}>
-                                  {(index % 2 === 0) ? (
-                                    <BarGraph
-                                      data={unitData}
-                                      datakey={'Reading'}
-                                      min={unit.Min}
-                                      max={unit.Max}
-                                    />
-                                  ) : (
-                                    <LineGraph
-                                      data={unitData}
-                                      datakey={'Reading'}
-                                      min={unit.Min}
-                                      max={unit.Max}
-                                    />
-                                  )}
-                                </ResponsiveContainer>
-                              </Paper>
-                            );
-                          })
-                      ) : (
-                        <Paper elevation={2} sx={{ p: 4, mt: 2, textAlign: 'center' }}>
-                          <Typography variant="h4">No readings found!</Typography>
-                        </Paper>
-                      )}
-                    </Grid>
-                  </Grid>
-
-                  {/**************************************/}
-                  {/*                MAP                 */}
-                  {/**************************************/}
-
-                  <Grid item sx={{ mt: 5 }} md={5} sm={5} alignItems="flex=end" justifyContent="flex=end">
-                    <MapContainer
-                      center={selectedMarker ? [selectedMarker.Latitude, selectedMarker.Longitude] : [22.449919, 114.163583]}
-                      zoom={14}
-                      scrollWheelZoom={true}
-                      style={{
-                        marginLeft: '6vh',
-                        width: '53vh',
-                        height: '65vh',
-                      }}
-                    >
-                      <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
-                      {stationCoordinates.map((marker) => (
-                        <Marker
-                          key={marker.Station}
-                          position={[marker.Latitude, marker.Longitude]}
-                          icon={selectedMarker === marker ? selectedIcon : customIcon}
-                          eventHandlers={{
-                            click: () => {
-                              handleMarkerClick(marker);
-                            },
-                          }}
-                        >
-                          <Popup className="popup-text">{marker.Station}</Popup>
-                        </Marker>
-                      ))}
-                    </MapContainer>
-                  </Grid>
-                </Grid>
-
 
                 {/**************************************/}
-                {/*           Rest of charts           */}
+                {/*               2 GRAPHS             */}
                 {/**************************************/}
-
                 <Grid item>
-                  {
+                  {filteredData.length > 0 ? (
                     units
                       .filter((unit) => {
                         const unitData = filteredData
                           .filter((d) => d.Parameter === unit.ParameterName && d.UnitId === unit.Id && d.Reading !== null && !isNaN(d.Reading));
                         return unitData.length > 0;
                       })
-                      .slice(2)
+                      .slice(0, 2)
                       .map((unit, index) => {
                         const unitData = filteredData
                           .filter((d) => d.Parameter === unit.ParameterName && d.UnitId === unit.Id && d.Reading !== null && !isNaN(d.Reading));
@@ -525,14 +431,97 @@ function App(props) {
                           </Paper>
                         );
                       })
-                  }
+                  ) : (
+                    <Paper elevation={2} sx={{ p: 4, mt: 2, textAlign: 'center' }}>
+                      <Typography variant="h4">No readings found!</Typography>
+                    </Paper>
+                  )}
                 </Grid>
               </Grid>
+
+              {/**************************************/}
+              {/*                MAP                 */}
+              {/**************************************/}
+
+              <Grid item sx={{ mt: 5 }} md={5} sm={5} alignItems="flex=end" justifyContent="flex=end">
+                <MapContainer
+                  center={selectedMarker ? [selectedMarker.Latitude, selectedMarker.Longitude] : [22.449919, 114.163583]}
+                  zoom={14}
+                  scrollWheelZoom={true}
+                  style={{
+                    marginLeft: '6vh',
+                    width: '53vh',
+                    height: '65vh',
+                  }}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  {stationCoordinates.map((marker) => (
+                    <Marker
+                      key={marker.Station}
+                      position={[marker.Latitude, marker.Longitude]}
+                      icon={selectedMarker === marker ? selectedIcon : customIcon}
+                      eventHandlers={{
+                        click: () => {
+                          handleMarkerClick(marker);
+                        },
+                      }}
+                    >
+                      <Popup className="popup-text">{marker.Station}</Popup>
+                    </Marker>
+                  ))}
+                </MapContainer>
+              </Grid>
             </Grid>
-          </div>
-        </div>
-      </Box>
-    </ThemeProvider >
+
+
+            {/**************************************/}
+            {/*           Rest of charts           */}
+            {/**************************************/}
+
+            <Grid item>
+              {
+                units
+                  .filter((unit) => {
+                    const unitData = filteredData
+                      .filter((d) => d.Parameter === unit.ParameterName && d.UnitId === unit.Id && d.Reading !== null && !isNaN(d.Reading));
+                    return unitData.length > 0;
+                  })
+                  .slice(2)
+                  .map((unit, index) => {
+                    const unitData = filteredData
+                      .filter((d) => d.Parameter === unit.ParameterName && d.UnitId === unit.Id && d.Reading !== null && !isNaN(d.Reading));
+                    return (
+                      <Paper key={unit.Id} sx={{ pl: 3, pr: 5, pt: 2, mt: 2 }}>
+                        <Typography sx={{ pt: 1 }} variant="h5">{unit.ParameterName}</Typography>
+                        <Typography sx={{ pt: 1 }} variant="body1">({unit.Unit})</Typography>
+                        <ResponsiveContainer height={140}>
+                          {(index % 2 === 0) ? (
+                            <BarGraph
+                              data={unitData}
+                              datakey={'Reading'}
+                              min={unit.Min}
+                              max={unit.Max}
+                            />
+                          ) : (
+                            <LineGraph
+                              data={unitData}
+                              datakey={'Reading'}
+                              min={unit.Min}
+                              max={unit.Max}
+                            />
+                          )}
+                        </ResponsiveContainer>
+                      </Paper>
+                    );
+                  })
+              }
+            </Grid>
+          </Grid>
+        </Grid>
+      </MainLayout>
+    </ThemeProvider>
   );
 }
 

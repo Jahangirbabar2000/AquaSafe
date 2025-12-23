@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Sidebar2 from "../sidebar/Sidebar2.js";
-import Navbar from "../navbar/navbar.js";
+import MainLayout from "../Layout/MainLayout";
 import Button from "@mui/material/Button";
 import data from "./todos.json";
 import CreateTodo from "./createTodo";
@@ -197,19 +196,7 @@ function Todos() {
   const [allTodo, setAllTodo] = useState(data);
 
   return (
-    <div>
-      <Navbar />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "28vh auto"
-          // gridGap: "2px",
-        }}
-      >
-        <div>
-          <Sidebar2 name="Tasks" />
-        </div>
-        <div style={{ marginLeft: 85 }}>
+    <MainLayout sidebarName="Tasks">
           {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
           <Typography variant="h3" sx={{ marginTop: 2, marginBottom: 3, marginLeft: "42%" }} align="left">
             <span style={{ fontWeight: "bold" }}>Tasks</span>
@@ -219,9 +206,7 @@ function Todos() {
             <CreateTodo tasks={allTodo} setAllTodo={setAllTodo} />
           </Box>
           <BigTodoBox todos={allTodo} setAllTodo={setAllTodo} />
-        </div>
-      </div>
-    </div>
+    </MainLayout>
   );
 }
 

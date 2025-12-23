@@ -75,15 +75,38 @@ const Sidebar2 = (props) => {
   return (
     <Box
       sx={{
-        "& .pro-sidebar-inner": { background: "#2A3247" },
+        "& .pro-sidebar-inner": { 
+          background: "#2A3247",
+          minHeight: "100vh"
+        },
         "& .pro-icon-wrapper": { backgroundColor: "transparent !important" },
-        "& .pro-inner-item": { padding: "5px 35px 5px 20px !important" },
-        "& .pro-inner-item:hover": { color: "#EF7E18 !important" },
-        "& .pro-menu-item.active": { color: "#EF7E18 !important" },
+        "& .pro-inner-item": { 
+          padding: "8px 20px 8px 20px !important",
+          margin: "4px 0",
+          borderRadius: "4px",
+          transition: "all 0.2s ease-in-out"
+        },
+        "& .pro-inner-item:hover": { 
+          color: "#EF7E18 !important",
+          backgroundColor: "rgba(239, 126, 24, 0.1) !important"
+        },
+        "& .pro-menu-item.active": { 
+          color: "#EF7E18 !important",
+          backgroundColor: "rgba(239, 126, 24, 0.15) !important"
+        },
         "& .pro-sidebar": {
           position: "fixed",
-          height: "100vh",
-          fontSize: "50px"
+          height: "calc(100vh - 64px)",
+          fontSize: { xs: "14px", sm: "16px" },
+          zIndex: 1100,
+          top: 64,
+          left: 0,
+          overflowY: "auto",
+          overflowX: "hidden",
+          width: "250px !important"
+        },
+        "& .pro-sidebar.collapsed": {
+          width: "80px !important"
         }
       }}
     >
@@ -99,11 +122,13 @@ const Sidebar2 = (props) => {
           </SidebarHeader>
         )}
         <Menu iconShape="square">
-          <Box paddingLeft={isCollapsed ? undefined : "5%"}>
-            {!isMobile && (
+          <Box paddingLeft={isCollapsed ? undefined : { xs: "3%", sm: "5%" }}>
+            {!isMobile && !isCollapsed && (
               <Typography variant="h6" sx={{
-                margin: "15px 0 0 20px",
+                margin: "15px 0 10px 20px",
                 color: "rgba(255, 255, 255, 1)",
+                fontSize: { xs: "0.875rem", sm: "1rem" },
+                fontWeight: 600
               }}>
                 Projects
               </Typography>
@@ -138,12 +163,14 @@ const Sidebar2 = (props) => {
               selected={selected}
               onClick={() => setSelected("Readings")}
             />
-            {!isMobile && (
+            {!isMobile && !isCollapsed && (
               <Typography
                 variant="h6"
                 sx={{
-                  margin: "15px 0 0 20px",
+                  margin: "15px 0 10px 20px",
                   color: "rgba(255, 255, 255, 1)",
+                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                  fontWeight: 600
                 }}
               >
                 IoT
@@ -163,12 +190,14 @@ const Sidebar2 = (props) => {
               selected={selected}
               onClick={() => setSelected("Parameters")}
             />
-            {!isMobile && (
+            {!isMobile && !isCollapsed && (
               <Typography
                 variant="h6"
                 sx={{
-                  margin: "15px 0 0 20px",
+                  margin: "15px 0 10px 20px",
                   color: "rgba(255, 255, 255, 1)",
+                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                  fontWeight: 600
                 }}
               >
                 Notifications
@@ -190,12 +219,14 @@ const Sidebar2 = (props) => {
               onClick={() => setSelected("Tasks")}
             /> */}
 
-            {!isMobile && renderMenuItem('Local Admin', (
+            {!isMobile && !isCollapsed && renderMenuItem('Local Admin', (
               <Typography
                 variant="h6"
                 sx={{
-                  margin: "15px 0 0 20px",
+                  margin: "15px 0 10px 20px",
                   color: "rgba(255, 255, 255, 1)",
+                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                  fontWeight: 600
                 }}
               >
                 User Management

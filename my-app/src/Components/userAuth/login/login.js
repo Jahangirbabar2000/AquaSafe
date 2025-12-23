@@ -1,6 +1,6 @@
-import * as React from 'react';
-import axios from 'axios';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authAPI } from '../../../services/api';
 import Avatar from '@mui/material/Avatar';
 import { Alert, AlertTitle } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -19,6 +19,7 @@ import Snackbar from '@mui/material/Snackbar';
 import SnackbarContent from '@mui/material/SnackbarContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import PasswordResetDialog from './PasswordResetDialog';
 
 import nustlogo from "../../../nust.png";
 import asiaconnectLogo from "../../../asiaconenct-logo.png";
@@ -36,13 +37,14 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function Login() {
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [errorMessage, setErrorMessage] = React.useState('Kindly enter something in both fields before submitting.');
-    const [showSignupSnackbar, setShowSignupSnackbar] = React.useState(false);
-    const [showPasswordResetSnackbar, setShowPasswordResetSnackbar] = React.useState(false);
-    const [invalidFormSubmission, setInvalidFormSubmission] = React.useState(false);
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('Kindly enter something in both fields before submitting.');
+    const [showSignupSnackbar, setShowSignupSnackbar] = useState(false);
+    const [showPasswordResetSnackbar, setShowPasswordResetSnackbar] = useState(false);
+    const [invalidFormSubmission, setInvalidFormSubmission] = useState(false);
+    const [showPasswordResetDialog, setShowPasswordResetDialog] = useState(false);
 
     const navigate = useNavigate();
 
@@ -53,7 +55,7 @@ export default function Login() {
         },
     };
 
-    const userContext = React.useContext(UserContext);
+    const userContext = useContext(UserContext);
 
     const postData = async (data) => {
         // New function for subscribing user to push notifications
@@ -90,17 +92,13 @@ export default function Login() {
             }
         }
         try {
-            const response = await axios.post('http://localhost:8080/api/login', data, config);
-            if (response.status === 200) {
-                const { token, user } = response.data;
-                localStorage.setItem('jwt', token);
-                userContext.setUser({ ...user });
-                subscribeUser(user);
-                navigate('/projects');
-            } else {
-                setErrorMessage('Invalid email or password. Please try again.');
-                setInvalidFormSubmission(true); // Add this line
-            }
+            const loginData = JSON.parse(data);
+            const response = await authAPI.login(loginData);
+            const { token, user } = response.data;
+            localStorage.setItem('jwt', token);
+            userContext.setUser({ ...user });
+            subscribeUser(user);
+            navigate('/projects');
         } catch (error) {
             if (error.response) {
                 if (error.response.status === 401) {
@@ -144,7 +142,7 @@ export default function Login() {
 
     const handlePasswordResetAlert = (event) => {
         event.preventDefault();
-        setShowPasswordResetSnackbar(true);
+        setShowPasswordResetDialog(true);
     };
 
 
@@ -218,16 +216,16 @@ export default function Login() {
                                     </Link>
                                 </Grid>
                                 <Grid item xs>
-                                    <Link href="signup" variant="inherit" onClick={handleSignupAlert}>
+                                    <Link href="/signup" variant="inherit" component="button" onClick={(e) => { e.preventDefault(); navigate('/signup'); }}>
                                         Don't have an account? Sign Up
                                     </Link>
                                 </Grid>
                             </Grid>
-                            <Box style={{display: "flex", marginLeft:"1%", marginTop:40}}>
-                            <img style={{height: 60 ,marginLeft: 0, marginTop:10}} src={asiaconnectLogo} alt="asiaconnect logo" />
-                            <img style={{height: 60 ,marginLeft: 25}} src={teinLogo} alt="tein logo" />
-                            <img style={{height: 70 ,marginLeft: 25,  marginTop:6}}src={nustlogo} alt="NUST logo" />
-                        </Box>
+                            <Box style={{ display: "flex", marginLeft: "1%", marginTop: 40 }}>
+                                <img style={{ height: 60, marginLeft: 0, marginTop: 10 }} src={asiaconnectLogo} alt="asiaconnect logo" />
+                                <img style={{ height: 60, marginLeft: 25 }} src={teinLogo} alt="tein logo" />
+                                <img style={{ height: 70, marginLeft: 25, marginTop: 6 }} src={nustlogo} alt="NUST logo" />
+                            </Box>
                             <Copyright sx={{ mt: 1 }} />
                         </Box>
                     </Box>
@@ -283,10 +281,15 @@ export default function Login() {
                             }
                         />
                     </Snackbar>
-
+                    <PasswordResetDialog
+                        open={showPasswordResetDialog}
+                        onClose={() => setShowPasswordResetDialog(false)}
+                    />
 
                 </Grid>
             </Grid>
         </ThemeProvider>
     );
 }
+
+export default Login;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Grid, Card, Skeleton, Stack } from "@mui/material";
+import { Container, Grid, Card, Skeleton, Stack, Typography } from "@mui/material";
 import ProjectCard from './ProjectCard';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,9 +32,19 @@ const Projects = ({ projects, loading }) => {
     );
   }
 
+  if (projects.length === 0) {
+    return (
+      <Container maxWidth="lg" sx={{ marginBottom: '2.3rem', textAlign: 'center', py: 4 }}>
+        <Typography variant="h6" color="textSecondary">
+          No projects found. Create a new project to get started.
+        </Typography>
+      </Container>
+    );
+  }
+
   return (
-    <Container maxWidth="lg" sx={{ marginBottom: '2.3rem' }}>
-      <Grid container spacing={2}>
+    <Container maxWidth="lg" sx={{ marginBottom: '2.3rem', px: { xs: 1, sm: 2 } }}>
+      <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
         {projects.map((project) => (
           <Grid item key={project.Id} xs={12} sm={6} md={4} lg={3}>
             <ProjectCard project={project} onCardClick={handleCardClick} />

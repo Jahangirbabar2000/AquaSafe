@@ -1,62 +1,83 @@
-import React, { useEffect, useState } from "react";
-import { Container, Typography, Grid, Chip } from "@mui/material";
+import React, { useEffect, useState, useMemo } from "react";
+import { Container, Typography, Grid } from "@mui/material";
+import MainLayout from "../Layout/MainLayout";
 import Parameter from "./parameter";
-import Navbar from "../navbar/navbar";
-import Sidebar2 from "../sidebar/Sidebar2";
-import axios from "axios";
-import { Box } from '@mui/system';
+import { parametersAPI } from "../../services/api";
+
+/**
+ * WaterQualityPage - Displays all water quality parameters with their descriptions and units
+ */
 const WaterQualityPage = () => {
   const [parameters, setParameters] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch data from the backend API
-    axios
-      .get("http://localhost:8080/parameters")
-      .then((response) => setParameters(response.data))
-      .catch((error) => console.log(error));
+    const fetchParameters = async () => {
+      try {
+        const response = await parametersAPI.getAll();
+        setParameters(response.data);
+      } catch (error) {
+        console.error("Error fetching parameters:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchParameters();
   }, []);
 
-  const renderParameters = () => {
-    const uniqueParameters = [];
-    parameters.forEach((parameter) => {
-      const existingParameter = uniqueParameters.find(
-        (p) => p.Name === parameter.Name
-      );
-      if (!existingParameter) {
-        uniqueParameters.push(parameter);
+  // Get unique parameters
+  const uniqueParameters = useMemo(() => {
+    const seen = new Set();
+    return parameters.filter((param) => {
+      if (seen.has(param.Name)) {
+        return false;
       }
+      seen.add(param.Name);
+      return true;
     });
+  }, [parameters]);
 
-    return uniqueParameters.map((parameter) => (
-      <Parameter
-        key={parameter.Name}
-        title={parameter.Name}
-        description={parameter.Description}
-        units={getUnitsForParameter(parameter.Name)}
-      />
-    ));
-  };
-
+  // Get units for a specific parameter
   const getUnitsForParameter = (parameterName) => {
-    const units = parameters
-      .filter((parameter) => parameter.Name === parameterName)
-      .map((parameter) => parameter.Unit);
-    return [...new Set(units)];
+    return [
+      ...new Set(
+        parameters
+          .filter((param) => param.Name === parameterName)
+          .map((param) => param.Unit)
+      ),
+    ];
   };
 
-  return (  
-      <Box sx={{ backgroundColor: (theme) => theme.palette.grey[200], minHeight: '100vh' }}>
-        <Navbar />
-        <Sidebar2 name="Parameters" />
-        <Container sx={{ ml: "43vh", mt: "25px", pb: "50px" }}>
-          <Typography variant="h4" sx={{ mb: 3 }} align="center">
-            Water Quality Parameters
-          </Typography>
-          <Grid container spacing={6} rowSpacing={10}>
-            {renderParameters()}
-          </Grid>
-        </Container>
-      </Box>    
+  if (loading) {
+    return (
+      <MainLayout sidebarName="Parameters">
+        <Typography variant="h4" sx={{ mb: 3 }} align="center">
+          Loading parameters...
+        </Typography>
+      </MainLayout>
+    );
+  }
+
+  return (
+    <MainLayout sidebarName="Parameters">
+      <Container maxWidth="lg" sx={{ pb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 4 }} align="center">
+          Water Quality Parameters
+        </Typography>
+        <Grid container spacing={{ xs: 3, md: 4, lg: 6 }}>
+          {uniqueParameters.map((parameter) => (
+            <Grid item xs={12} sm={6} md={4} key={parameter.Name}>
+              <Parameter
+                title={parameter.Name}
+                description={parameter.Description}
+                units={getUnitsForParameter(parameter.Name)}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </MainLayout>
   );
 };
 

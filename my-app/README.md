@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+## AquaSafe – IoT‑driven Water Quality Monitoring Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+AquaSafe is a full‑stack web application for monitoring surface‑water quality using deployed IoT sensor devices.  
+It combines a Node.js/Express backend, a MySQL database, and a React + Material‑UI frontend to give operators a single place to manage projects, devices, parameters, and real‑time readings.
 
-## Available Scripts
+### High‑level capabilities
 
-In the project directory, you can run:
+- **Projects & Sites**
+  - Manage monitoring projects (name, location, country, description, coordinates).
+  - Visualize project locations on an interactive Leaflet map.
+  - Jump from a site directly into its device dashboard.
 
-### `npm start`
+- **IoT Device Management**
+  - Deploy devices at specific coordinates via the **Device Deployment** page.
+  - Configure sensing frequency and time units.
+  - Attach one or more sensors (parameters + units) to each device.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Water Quality Parameters**
+  - Define and manage water‑quality parameters (e.g., pH, DO, Temperature).
+  - Configure acceptable min/max thresholds and units for each parameter.
+  - View a catalog of all parameters and their descriptions.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Readings & Dashboard**
+  - Visualize readings per device / station on the **Dashboard**.
+  - Filter readings by date range with a date picker.
+  - Show line and bar charts (Recharts) for sensor values against configured thresholds.
+  - Display summary “Average Readings” cards that highlight whether parameters are within range.
+  - Show deployed devices on a map and select a device from either the map or a dropdown.
 
-### `npm test`
+- **Notifications**
+  - Persist notifications in MySQL when parameters breach thresholds or device events occur.
+  - Show **Sensor** vs **Device** notifications with a toggle.
+  - Track per‑user notification read state and mark notifications as viewed.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **User Management & Auth**
+  - JWT‑based authentication with login, signup and password‑reset endpoints.
+  - Role/Designation support (e.g., Local Admin) with route‑level protection for admin pages.
+  - Users can be linked to projects (via the backend `WorksOn` table).
 
-### `npm run build`
+- **Frontend UX**
+  - Responsive layout using Material‑UI and a custom `MainLayout` (fixed top navbar + left sidebar).
+  - Modern, card‑based project grid with embedded mini‑maps.
+  - Clean, centered partner logos (AsiaConnect, TEIN, NUST) in the navbar.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Tech stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Frontend**
+  - React (Create React App)
+  - React Router
+  - Material‑UI (MUI)
+  - React‑Leaflet + Leaflet (maps)
+  - Recharts (graphs)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Backend**
+  - Node.js + Express (`backend/index.js`)
+  - MySQL (local dev; originally compatible with AWS RDS)
+  - JWT authentication, bcrypt for password hashing
 
-### `npm run eject`
+### Running the project
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+From the `backend` folder:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `npm install`
+- Start the API server:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+node index.js
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+From the `my-app` folder:
 
-## Learn More
+- `npm install`
+- Start the React app (the project is commonly run on port `3001` in development):
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+PORT=3001 npm start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Make sure MySQL is running and the `AquaSafe` schema has been created and seeded using the provided SQL files (`Schema.sql`, `InitialData.sql`).
